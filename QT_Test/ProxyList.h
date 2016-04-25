@@ -1,9 +1,10 @@
 #pragma once
-#include <map>
+#include <unordered_set>
 
 #include <QtCore/QObject>
 #include <QListWidget>
-
+#include <QLineEdit>
+#include <QPushButton>
 #include "ProxyEntry.h"
 
 class ProxyList : public QObject
@@ -11,9 +12,15 @@ class ProxyList : public QObject
 	Q_OBJECT
 private:
 	QListWidget* list_view_;
-	std::map<ProxyEntry*, size_t> entries_;
+	QLineEdit* input_area_;
+	QPushButton* input_submit_;
+
+	std::unordered_set<ProxyEntry*> entries_;
+
+	void InputSubmit(bool checked = false);
 public:
-	ProxyList(QListWidget* proxy_entry_item_list_widget, QObject *parent = Q_NULLPTR);
+
+	ProxyList(QListWidget* proxy_entry_item_list_widget, QLineEdit* proxy_entries_textedit, QPushButton* proxy_entries_submit_button, QObject *parent = Q_NULLPTR);
 	~ProxyList();
 
 	bool Add(ProxyEntry* entry);

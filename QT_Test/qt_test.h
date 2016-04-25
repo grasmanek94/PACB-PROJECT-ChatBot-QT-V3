@@ -6,6 +6,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_qt_test.h"
 #include "PAChatClient.h"
+#include "ProxyList.h"
 
 class QT_Test : public QMainWindow
 {
@@ -17,7 +18,6 @@ public:
 
 private:
 	Ui::QT_TestClass ui;
-	std::shared_ptr<PAChatClient> client;
 };
 
 #endif // QT_TEST_H

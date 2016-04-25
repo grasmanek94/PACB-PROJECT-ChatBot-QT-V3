@@ -5,7 +5,7 @@ QT_Test::QT_Test(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	client = std::make_shared<PAChatClient>("", 1080, this);
+	//client = std::make_shared<PAChatClient>("", 1080, this);
 
 	QPalette p = ui.chatBoxTexts->palette();
 
@@ -33,6 +33,7 @@ This is a very long message that will span multiple lines so this should be take
 	c.movePosition(QTextCursor::End);
 	ui.chatBoxTexts->setTextCursor(c);
 
+	//proxy_list_ = std::make_shared<ProxyList>(ui.chatProxyList, ui.chatProxyInput, ui.chatProxySubmit, this);
 	//ui.chatBoxPeers->addItem()
 }
 

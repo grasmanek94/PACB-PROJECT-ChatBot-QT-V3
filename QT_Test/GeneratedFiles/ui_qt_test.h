@@ -31,7 +31,6 @@ public:
     QWidget *centralWidget;
     QGridLayout *gridLayout_2;
     QGridLayout *gridLayout;
-    QPlainTextEdit *chatProxyInput;
     QHBoxLayout *horizontalLayout;
     QPushButton *pushButton_4;
     QPushButton *pushButton_3;
@@ -42,13 +41,14 @@ public:
     QPlainTextEdit *chatBoxTexts;
     QLineEdit *chatBoxMessage;
     QListWidget *chatProxyList;
+    QLineEdit *chatProxyInput;
     QListWidget *chatBoxPeers;
 
     void setupUi(QMainWindow *QT_TestClass)
     {
         if (QT_TestClass->objectName().isEmpty())
             QT_TestClass->setObjectName(QStringLiteral("QT_TestClass"));
-        QT_TestClass->resize(843, 430);
+        QT_TestClass->resize(721, 291);
         QIcon icon;
         icon.addFile(QStringLiteral("../../../ChatBot/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);
         QT_TestClass->setWindowIcon(icon);
@@ -64,13 +64,6 @@ public:
         gridLayout = new QGridLayout();
         gridLayout->setSpacing(6);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        chatProxyInput = new QPlainTextEdit(centralWidget);
-        chatProxyInput->setObjectName(QStringLiteral("chatProxyInput"));
-        chatProxyInput->setMinimumSize(QSize(152, 0));
-        chatProxyInput->setMaximumSize(QSize(201, 21));
-
-        gridLayout->addWidget(chatProxyInput, 2, 1, 1, 1);
-
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
@@ -105,7 +98,7 @@ public:
         chatProxySubmit = new QPushButton(centralWidget);
         chatProxySubmit->setObjectName(QStringLiteral("chatProxySubmit"));
         chatProxySubmit->setMinimumSize(QSize(152, 0));
-        chatProxySubmit->setMaximumSize(QSize(201, 16777215));
+        chatProxySubmit->setMaximumSize(QSize(152, 23));
 
         gridLayout->addWidget(chatProxySubmit, 3, 1, 1, 1);
 
@@ -124,9 +117,15 @@ public:
         chatProxyList = new QListWidget(centralWidget);
         chatProxyList->setObjectName(QStringLiteral("chatProxyList"));
         chatProxyList->setMinimumSize(QSize(152, 213));
-        chatProxyList->setMaximumSize(QSize(201, 16777215));
+        chatProxyList->setMaximumSize(QSize(152, 16777215));
 
         gridLayout->addWidget(chatProxyList, 1, 1, 1, 1);
+
+        chatProxyInput = new QLineEdit(centralWidget);
+        chatProxyInput->setObjectName(QStringLiteral("chatProxyInput"));
+        chatProxyInput->setMaximumSize(QSize(152, 16777215));
+
+        gridLayout->addWidget(chatProxyInput, 2, 1, 1, 1);
 
 
         gridLayout_2->addLayout(gridLayout, 0, 1, 1, 1);
