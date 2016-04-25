@@ -1,14 +1,9 @@
 #pragma once
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
-#include <QListView>
-#include <QMap>
+#include <QListWidget>
 #include "PAChatClient.h"
-
-class PAChatClientViewItem : public QAbstractItemView
-{
-
-};
+#include "ProxyList.h"
 
 class PAChatManager : public QObject
 {
@@ -17,4 +12,3 @@ public:
 	PAChatManager(QObject *parent = Q_NULLPTR);
 	~PAChatManager();
 };
-

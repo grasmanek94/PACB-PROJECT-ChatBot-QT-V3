@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>877</width>
-    <height>483</height>
+    <width>843</width>
+    <height>430</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,11 +30,38 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="1">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="2" column="0">
-       <widget class="QLineEdit" name="chatBoxMessage"/>
+      <item row="2" column="1">
+       <widget class="QPlainTextEdit" name="chatProxyInput">
+        <property name="minimumSize">
+         <size>
+          <width>152</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>201</width>
+          <height>21</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="pushButton_4">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QPushButton" name="pushButton_2">
           <property name="text">
@@ -58,17 +85,69 @@
         </item>
        </layout>
       </item>
+      <item row="3" column="1">
+       <widget class="QPushButton" name="chatProxySubmit">
+        <property name="minimumSize">
+         <size>
+          <width>152</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>201</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Add Proxies</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
-       <widget class="QPlainTextEdit" name="chatBoxTexts"/>
+       <widget class="QPlainTextEdit" name="chatBoxTexts">
+        <property name="minimumSize">
+         <size>
+          <width>401</width>
+          <height>213</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLineEdit" name="chatBoxMessage">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QListWidget" name="chatProxyList">
+        <property name="minimumSize">
+         <size>
+          <width>152</width>
+          <height>213</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>201</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
     <item row="0" column="0">
-     <widget class="QListView" name="chatBoxPeers">
+     <widget class="QListWidget" name="chatBoxPeers">
       <property name="minimumSize">
        <size>
         <width>136</width>
-        <height>0</height>
+        <height>273</height>
        </size>
       </property>
       <property name="maximumSize">

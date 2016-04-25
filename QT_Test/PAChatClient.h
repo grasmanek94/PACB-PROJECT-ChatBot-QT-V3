@@ -3,6 +3,8 @@
 #include <QtWebSockets/QWebSocket>
 #include <QtCore/QProcess>
 #include <QtCore/QTimer>
+#include <QListWidget>
+#include <array>
 
 enum PAChatClientState
 {
@@ -10,12 +12,29 @@ enum PAChatClientState
 	PAChatClientState_GeneratingSID,
 	PAChatClientState_SocketConnecting,
 	PAChatClientState_ChatConnecting,
-	PAChatClientState_Searching,
-	PAChatClientState_Chatting,
 	PAChatClientState_Idle,
+	PAChatClientState_Searching,
+	PAChatClientState_Chatting
 };
 
-class PAChatClient : public QObject
+const std::array<unsigned int, 8> PAChatClientStateColors
+{
+	0x000000FF,
+	0x222222FF,
+	0x444444FF,
+	0x666666FF,
+	0x00FF6EFF,
+	0x00EEFFFF,
+	0xFFA200FF,
+	0xFF0000FF,
+};
+
+constexpr unsigned int GetStateColor(PAChatClientState state, bool newMessageAvailable)
+{
+	return state == PAChatClientState_Chatting ? PAChatClientStateColors[state + (int)newMessageAvailable] : PAChatClientStateColors[state];
+}
+
+class PAChatClient : public QObject, public QListWidgetItem
 {
 	Q_OBJECT
 private:

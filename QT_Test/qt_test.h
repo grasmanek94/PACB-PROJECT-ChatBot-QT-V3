@@ -4,9 +4,6 @@
 #include <memory>
 
 #include <QtWidgets/QMainWindow>
-#include <QListView>
-#include <QStringListModel>
-
 #include "ui_qt_test.h"
 #include "PAChatClient.h"
 
