@@ -27,13 +27,13 @@ private:
 	QPushButton* chat_manager_keep_chat_;
 	QPushButton* chat_manager_end_chat_;
 	QPushButton* chat_manager_send_;
-	QPlainTextEdit* chat_box_text_messages_;
+	QTextEdit* chat_box_text_messages_;
 	QLineEdit* chat_box_text_input_message_;
 
 	QTabWidget* tabs_container_;
 public:
 	PAChatClientUI(QTabWidget* tabs_container, QObject *parent = Q_NULLPTR);
-	~PAChatClientUI();// TODO : figure out how to properly clenaup this shit....
+	~PAChatClientUI(); // TODO : figure out how to properly clenaup this shit....
 
 	void ScrollToBottom();
 	void ScrollToTop();
