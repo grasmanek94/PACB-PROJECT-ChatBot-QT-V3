@@ -15,9 +15,6 @@ private:
 	ProxyList proxy_list_;
 	std::map<PAChatClient*, ProxyEntry*> clients;
 
-	QPushButton* add_new_client_button_;
-	QPushButton* remove_client_button_;
-
 	void PushClient();
 	void PopClient();
 public:
@@ -25,8 +22,6 @@ public:
 		QListWidget* proxy_entry_item_list_widget, 
 		QLineEdit* proxy_entries_textedit, 
 		QPushButton* proxy_entries_submit_button, 
-		QPushButton* add_new_client_button,
-		QPushButton* remove_client_button,
 
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();

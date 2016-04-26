@@ -21,6 +21,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -29,117 +30,166 @@ class Ui_QT_TestClass
 {
 public:
     QWidget *centralWidget;
-    QGridLayout *gridLayout_2;
-    QGridLayout *gridLayout;
-    QHBoxLayout *horizontalLayout;
-    QPushButton *pushButton_4;
-    QPushButton *pushButton_3;
-    QPushButton *pushButton_2;
-    QPushButton *pushButton;
-    QPushButton *pushButton_5;
+    QHBoxLayout *horizontalLayout_2;
+    QGridLayout *proxyListContainerGrid;
     QPushButton *chatProxySubmit;
+    QLineEdit *chatProxyInput;
+    QListWidget *chatProxyList;
+    QGridLayout *botListContainerGrid;
+    QListWidget *chatBoxPeers;
+    QPushButton *chatManagerAddBot;
+    QTabWidget *chatBotTabs;
+    QWidget *tab;
+    QGridLayout *gridLayout_4;
+    QGridLayout *chatContainerGrid;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *chatManagerRemoveBot;
+    QPushButton *chatManagerKeepChat;
+    QPushButton *chatManagerEndChat;
+    QPushButton *pushButton_5;
     QPlainTextEdit *chatBoxTexts;
     QLineEdit *chatBoxMessage;
-    QListWidget *chatProxyList;
-    QLineEdit *chatProxyInput;
-    QListWidget *chatBoxPeers;
 
     void setupUi(QMainWindow *QT_TestClass)
     {
         if (QT_TestClass->objectName().isEmpty())
             QT_TestClass->setObjectName(QStringLiteral("QT_TestClass"));
-        QT_TestClass->resize(721, 291);
+        QT_TestClass->resize(1010, 300);
+        QT_TestClass->setMinimumSize(QSize(1010, 300));
         QIcon icon;
-        icon.addFile(QStringLiteral("../../../ChatBot/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QStringLiteral("C:/Users/ChatBot/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);
         QT_TestClass->setWindowIcon(icon);
         QT_TestClass->setToolButtonStyle(Qt::ToolButtonIconOnly);
         QT_TestClass->setDocumentMode(false);
         QT_TestClass->setTabShape(QTabWidget::Rounded);
         centralWidget = new QWidget(QT_TestClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        gridLayout_2 = new QGridLayout(centralWidget);
-        gridLayout_2->setSpacing(6);
-        gridLayout_2->setContentsMargins(11, 11, 11, 11);
-        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        gridLayout = new QGridLayout();
-        gridLayout->setSpacing(6);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        horizontalLayout_2 = new QHBoxLayout(centralWidget);
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        proxyListContainerGrid = new QGridLayout();
+        proxyListContainerGrid->setSpacing(6);
+        proxyListContainerGrid->setObjectName(QStringLiteral("proxyListContainerGrid"));
+        proxyListContainerGrid->setSizeConstraint(QLayout::SetMinimumSize);
+        chatProxySubmit = new QPushButton(centralWidget);
+        chatProxySubmit->setObjectName(QStringLiteral("chatProxySubmit"));
+        chatProxySubmit->setMinimumSize(QSize(159, 23));
+        chatProxySubmit->setMaximumSize(QSize(159, 16777215));
+
+        proxyListContainerGrid->addWidget(chatProxySubmit, 2, 0, 1, 1);
+
+        chatProxyInput = new QLineEdit(centralWidget);
+        chatProxyInput->setObjectName(QStringLiteral("chatProxyInput"));
+        chatProxyInput->setMinimumSize(QSize(159, 20));
+        chatProxyInput->setMaximumSize(QSize(159, 16777215));
+
+        proxyListContainerGrid->addWidget(chatProxyInput, 1, 0, 1, 1);
+
+        chatProxyList = new QListWidget(centralWidget);
+        chatProxyList->setObjectName(QStringLiteral("chatProxyList"));
+        chatProxyList->setMinimumSize(QSize(159, 224));
+        chatProxyList->setMaximumSize(QSize(159, 16777215));
+
+        proxyListContainerGrid->addWidget(chatProxyList, 0, 0, 1, 1);
+
+
+        horizontalLayout_2->addLayout(proxyListContainerGrid);
+
+        botListContainerGrid = new QGridLayout();
+        botListContainerGrid->setSpacing(6);
+        botListContainerGrid->setObjectName(QStringLiteral("botListContainerGrid"));
+        botListContainerGrid->setSizeConstraint(QLayout::SetMinimumSize);
+        chatBoxPeers = new QListWidget(centralWidget);
+        chatBoxPeers->setObjectName(QStringLiteral("chatBoxPeers"));
+        chatBoxPeers->setMinimumSize(QSize(289, 250));
+        chatBoxPeers->setMaximumSize(QSize(301, 16777215));
+
+        botListContainerGrid->addWidget(chatBoxPeers, 0, 0, 1, 1);
+
+        chatManagerAddBot = new QPushButton(centralWidget);
+        chatManagerAddBot->setObjectName(QStringLiteral("chatManagerAddBot"));
+        chatManagerAddBot->setMinimumSize(QSize(289, 23));
+        chatManagerAddBot->setMaximumSize(QSize(301, 16777215));
+
+        botListContainerGrid->addWidget(chatManagerAddBot, 1, 0, 1, 1);
+
+
+        horizontalLayout_2->addLayout(botListContainerGrid);
+
+        chatBotTabs = new QTabWidget(centralWidget);
+        chatBotTabs->setObjectName(QStringLiteral("chatBotTabs"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(255);
+        sizePolicy.setVerticalStretch(255);
+        sizePolicy.setHeightForWidth(chatBotTabs->sizePolicy().hasHeightForWidth());
+        chatBotTabs->setSizePolicy(sizePolicy);
+        chatBotTabs->setMinimumSize(QSize(521, 281));
+        tab = new QWidget();
+        tab->setObjectName(QStringLiteral("tab"));
+        gridLayout_4 = new QGridLayout(tab);
+        gridLayout_4->setSpacing(6);
+        gridLayout_4->setContentsMargins(11, 11, 11, 11);
+        gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
+        chatContainerGrid = new QGridLayout();
+        chatContainerGrid->setSpacing(6);
+        chatContainerGrid->setObjectName(QStringLiteral("chatContainerGrid"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        pushButton_4 = new QPushButton(centralWidget);
-        pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
+        chatManagerRemoveBot = new QPushButton(tab);
+        chatManagerRemoveBot->setObjectName(QStringLiteral("chatManagerRemoveBot"));
+        chatManagerRemoveBot->setMinimumSize(QSize(119, 23));
 
-        horizontalLayout->addWidget(pushButton_4);
+        horizontalLayout->addWidget(chatManagerRemoveBot);
 
-        pushButton_3 = new QPushButton(centralWidget);
-        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+        chatManagerKeepChat = new QPushButton(tab);
+        chatManagerKeepChat->setObjectName(QStringLiteral("chatManagerKeepChat"));
+        chatManagerKeepChat->setMinimumSize(QSize(119, 23));
 
-        horizontalLayout->addWidget(pushButton_3);
+        horizontalLayout->addWidget(chatManagerKeepChat);
 
-        pushButton_2 = new QPushButton(centralWidget);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        chatManagerEndChat = new QPushButton(tab);
+        chatManagerEndChat->setObjectName(QStringLiteral("chatManagerEndChat"));
+        chatManagerEndChat->setMinimumSize(QSize(118, 23));
 
-        horizontalLayout->addWidget(pushButton_2);
+        horizontalLayout->addWidget(chatManagerEndChat);
 
-        pushButton = new QPushButton(centralWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-
-        horizontalLayout->addWidget(pushButton);
-
-        pushButton_5 = new QPushButton(centralWidget);
+        pushButton_5 = new QPushButton(tab);
         pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
+        pushButton_5->setMinimumSize(QSize(119, 23));
 
         horizontalLayout->addWidget(pushButton_5);
 
 
-        gridLayout->addLayout(horizontalLayout, 3, 0, 1, 1);
+        chatContainerGrid->addLayout(horizontalLayout, 3, 0, 1, 1);
 
-        chatProxySubmit = new QPushButton(centralWidget);
-        chatProxySubmit->setObjectName(QStringLiteral("chatProxySubmit"));
-        chatProxySubmit->setMinimumSize(QSize(152, 0));
-        chatProxySubmit->setMaximumSize(QSize(152, 23));
-
-        gridLayout->addWidget(chatProxySubmit, 3, 1, 1, 1);
-
-        chatBoxTexts = new QPlainTextEdit(centralWidget);
+        chatBoxTexts = new QPlainTextEdit(tab);
         chatBoxTexts->setObjectName(QStringLiteral("chatBoxTexts"));
-        chatBoxTexts->setMinimumSize(QSize(401, 213));
+        chatBoxTexts->setMinimumSize(QSize(495, 178));
 
-        gridLayout->addWidget(chatBoxTexts, 1, 0, 1, 1);
+        chatContainerGrid->addWidget(chatBoxTexts, 1, 0, 1, 1);
 
-        chatBoxMessage = new QLineEdit(centralWidget);
+        chatBoxMessage = new QLineEdit(tab);
         chatBoxMessage->setObjectName(QStringLiteral("chatBoxMessage"));
+        chatBoxMessage->setMinimumSize(QSize(495, 20));
         chatBoxMessage->setMaximumSize(QSize(16777215, 16777215));
 
-        gridLayout->addWidget(chatBoxMessage, 2, 0, 1, 1);
-
-        chatProxyList = new QListWidget(centralWidget);
-        chatProxyList->setObjectName(QStringLiteral("chatProxyList"));
-        chatProxyList->setMinimumSize(QSize(152, 213));
-        chatProxyList->setMaximumSize(QSize(152, 16777215));
-
-        gridLayout->addWidget(chatProxyList, 1, 1, 1, 1);
-
-        chatProxyInput = new QLineEdit(centralWidget);
-        chatProxyInput->setObjectName(QStringLiteral("chatProxyInput"));
-        chatProxyInput->setMaximumSize(QSize(152, 16777215));
-
-        gridLayout->addWidget(chatProxyInput, 2, 1, 1, 1);
+        chatContainerGrid->addWidget(chatBoxMessage, 2, 0, 1, 1);
 
 
-        gridLayout_2->addLayout(gridLayout, 0, 1, 1, 1);
+        gridLayout_4->addLayout(chatContainerGrid, 0, 0, 1, 1);
 
-        chatBoxPeers = new QListWidget(centralWidget);
-        chatBoxPeers->setObjectName(QStringLiteral("chatBoxPeers"));
-        chatBoxPeers->setMinimumSize(QSize(136, 273));
-        chatBoxPeers->setMaximumSize(QSize(271, 16777215));
+        chatBotTabs->addTab(tab, QString());
 
-        gridLayout_2->addWidget(chatBoxPeers, 0, 0, 1, 1);
+        horizontalLayout_2->addWidget(chatBotTabs);
 
         QT_TestClass->setCentralWidget(centralWidget);
 
         retranslateUi(QT_TestClass);
+
+        chatBotTabs->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(QT_TestClass);
     } // setupUi
@@ -147,12 +197,13 @@ public:
     void retranslateUi(QMainWindow *QT_TestClass)
     {
         QT_TestClass->setWindowTitle(QApplication::translate("QT_TestClass", "PA ChatBot", 0));
-        pushButton_4->setText(QApplication::translate("QT_TestClass", "PushButton", 0));
-        pushButton_3->setText(QApplication::translate("QT_TestClass", "PushButton", 0));
-        pushButton_2->setText(QApplication::translate("QT_TestClass", "PushButton", 0));
-        pushButton->setText(QApplication::translate("QT_TestClass", "PushButton", 0));
-        pushButton_5->setText(QApplication::translate("QT_TestClass", "PushButton", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
+        chatManagerAddBot->setText(QApplication::translate("QT_TestClass", "Add New Bot", 0));
+        chatManagerRemoveBot->setText(QApplication::translate("QT_TestClass", "Remove Bot", 0));
+        chatManagerKeepChat->setText(QApplication::translate("QT_TestClass", "Keep Chat", 0));
+        chatManagerEndChat->setText(QApplication::translate("QT_TestClass", "End Chat", 0));
+        pushButton_5->setText(QApplication::translate("QT_TestClass", "Send", 0));
+        chatBotTabs->setTabText(chatBotTabs->indexOf(tab), QApplication::translate("QT_TestClass", "Tab 1", 0));
     } // retranslateUi
 
 };
