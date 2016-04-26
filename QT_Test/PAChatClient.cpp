@@ -25,11 +25,11 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 	connect(&webSocket_, &QWebSocket::connected, this, &PAChatClient::onConnected);
 	connect(&webSocket_, &QWebSocket::disconnected, this, &PAChatClient::onDisconnected);
 
-	connect(&pinger_, SIGNAL(timeout()), this, SLOT(onPing()));
-	connect(&online_count_update_, SIGNAL(timeout()), this, SLOT(onOnlineCountUpdate()));
+	connect(&pinger_, &QTimer::timeout, this, &PAChatClient::onPing);
+	connect(&online_count_update_, &QTimer::timeout, this, &PAChatClient::onOnlineCountUpdate);
 
-	connect(&process_, SIGNAL(readyReadStandardOutput()), this, SLOT(onProcessInput()));  // connect process signals with your code
-	connect(&process_, SIGNAL(readyReadStandardError()), this, SLOT(onProcessInput()));  // same here
+	connect(&process_, &QProcess::readyReadStandardOutput, this, &PAChatClient::onProcessInput);  // connect process signals with your code
+	connect(&process_, &QProcess::readyReadStandardError, this, &PAChatClient::onProcessInput);  // same here
 
 	QDir dir = QFileInfo(QCoreApplication::applicationFilePath()).absoluteDir();
 
