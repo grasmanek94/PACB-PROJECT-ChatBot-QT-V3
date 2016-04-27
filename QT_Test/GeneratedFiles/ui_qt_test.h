@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -37,6 +38,8 @@ public:
     QGridLayout *botListContainerGrid;
     QListWidget *chatBoxPeers;
     QPushButton *chatManagerAddBot;
+    QPushButton *chatManagerRequestNewChat;
+    QCheckBox *autoSearchCheckBox;
     QTabWidget *chatBotTabs;
 
     void setupUi(QMainWindow *QT_TestClass)
@@ -103,6 +106,17 @@ public:
 
         botListContainerGrid->addWidget(chatManagerAddBot, 1, 0, 1, 1);
 
+        chatManagerRequestNewChat = new QPushButton(centralWidget);
+        chatManagerRequestNewChat->setObjectName(QStringLiteral("chatManagerRequestNewChat"));
+
+        botListContainerGrid->addWidget(chatManagerRequestNewChat, 2, 0, 1, 1);
+
+        autoSearchCheckBox = new QCheckBox(centralWidget);
+        autoSearchCheckBox->setObjectName(QStringLiteral("autoSearchCheckBox"));
+        autoSearchCheckBox->setChecked(true);
+
+        botListContainerGrid->addWidget(autoSearchCheckBox, 3, 0, 1, 1);
+
 
         horizontalLayout_2->addLayout(botListContainerGrid);
 
@@ -132,6 +146,8 @@ public:
         QT_TestClass->setWindowTitle(QApplication::translate("QT_TestClass", "PA ChatBot", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
         chatManagerAddBot->setText(QApplication::translate("QT_TestClass", "Add New Bot", 0));
+        chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));
+        autoSearchCheckBox->setText(QApplication::translate("QT_TestClass", "Automatic Search", 0));
     } // retranslateUi
 
 };

@@ -85,7 +85,7 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 	connect(chat_manager_end_chat_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerEndChatButtonClicked);
 	connect(chat_manager_bot_remove_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerBotRemoveButtonClicked);
 	connect(chat_manager_keep_chat_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerKeepChatButtonClicked);
-	connect(chat_box_text_input_message_, &QLineEdit::textEdited, this, &PAChatClientUI::onChatManagerTextEdited)
+	connect(chat_box_text_input_message_, &QLineEdit::textEdited, this, &PAChatClientUI::onChatManagerTextEdited);
 }
 
 void PAChatClientUI::AddMessage(bool me, const QString& message)
@@ -126,7 +126,10 @@ void PAChatClientUI::ScrollToTop()
 
 PAChatClientUI::~PAChatClientUI()
 {
-	tabs_container_->removeTab(tab_number_);
+	if (tabs_container_)
+	{
+		tabs_container_->removeTab(tab_number_);
+	}
 	//delete tab_;//?
 	//tab_ = nullptr;//?
 }

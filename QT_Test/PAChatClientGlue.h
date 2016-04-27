@@ -1,6 +1,8 @@
 #pragma once
 #include <QListWidget>
 
+#include <QPointer>
+
 #include "PAChatClient.h"
 #include "PAChatClientUI.h"
 #include "ProxyEntry.h"
@@ -9,10 +11,10 @@ class PAChatClientGlue: public QObject, public QListWidgetItem
 {
 	Q_OBJECT
 private:
-	PAChatClient* client;
-	PAChatClientUI* ui;
-	ProxyEntry* proxy_;
-	QTabWidget* tabs_container_;
+	QPointer<PAChatClient> client;
+	QPointer<PAChatClientUI> ui;
+	QPointer<ProxyEntry> proxy_;
+	QPointer<QTabWidget> tabs_container_;
 
 	int int_id_;
 	QString string_id_;
@@ -27,9 +29,12 @@ public:
 
 	bool ReadyForSearch();
 	bool Search();
-
+	
 Q_SIGNALS:
 	void onSearchDone();
+
+	void onRequestRemove();
+	void onOnlineCountUpdate(int online_count);
 
 private Q_SLOTS:
 	void onSocketConnected();

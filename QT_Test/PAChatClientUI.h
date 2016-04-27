@@ -14,24 +14,25 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
+#include <QPointer>
 
 class PAChatClientUI : public QObject
 {
 	Q_OBJECT
 private:
-	QWidget* tab_;
-	QGridLayout* tab_grid_layout_;
-	QGridLayout* chat_container_grid_;
-	QHBoxLayout* chat_container_button_grid_;
-	QPushButton* chat_manager_bot_remove_;
-	QPushButton* chat_manager_keep_chat_;
-	QPushButton* chat_manager_end_chat_;
-	QPushButton* chat_manager_send_;
-	//QTextEdit* chat_box_text_messages_;
-	QPlainTextEdit* chat_box_text_messages_;
-	QLineEdit* chat_box_text_input_message_;
+	QPointer<QWidget> tab_;
+	QPointer<QGridLayout> tab_grid_layout_;
+	QPointer<QGridLayout> chat_container_grid_;
+	QPointer<QHBoxLayout> chat_container_button_grid_;
+	QPointer<QPushButton> chat_manager_bot_remove_;
+	QPointer<QPushButton> chat_manager_keep_chat_;
+	QPointer<QPushButton> chat_manager_end_chat_;
+	QPointer<QPushButton> chat_manager_send_;
+	//QPointer<QTextEdit> chat_box_text_messages_;
+	QPointer<QPlainTextEdit> chat_box_text_messages_;
+	QPointer<QLineEdit> chat_box_text_input_message_;
 
-	QTabWidget* tabs_container_;
+	QPointer<QTabWidget> tabs_container_;
 	int tab_number_;
 public:
 	PAChatClientUI(QTabWidget* tabs_container, QObject *parent = Q_NULLPTR);

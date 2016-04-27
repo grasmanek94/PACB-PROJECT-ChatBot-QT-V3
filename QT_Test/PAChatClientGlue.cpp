@@ -39,7 +39,10 @@ void PAChatClientGlue::SetStateColor(bool newmessage)
 
 PAChatClientGlue::~PAChatClientGlue()
 {
-	proxy_->PopUseCount();
+	if (proxy_)
+	{
+		proxy_->PopUseCount();
+	}
 }
 
 void PAChatClientGlue::onSocketConnected()
@@ -87,13 +90,11 @@ void PAChatClientGlue::onChatMessage(bool me, QString message)
 {
 	if (!me)
 	{
-		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");
-		SetStateColor(true);
+		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");		
 	}
-	else
-	{
-		SetStateColor(false);
-	}
+
+	SetStateColor(!me);
+	ui->AddMessage(me, message);
 }
 
 void PAChatClientGlue::onChatEnd()
@@ -104,7 +105,7 @@ void PAChatClientGlue::onChatEnd()
 
 void PAChatClientGlue::onChatOnlineCount(int online_count)
 {
-
+	emit onOnlineCountUpdate(online_count);
 }
 
 void PAChatClientGlue::onTextInputChanged(QString text)
@@ -120,7 +121,7 @@ void PAChatClientGlue::onSocketDisconnected()
 
 void PAChatClientGlue::onRequestRemoveBot()
 {
-
+	emit onRequestRemove();
 }
 
 void PAChatClientGlue::onRequestChatSendMessage(QString message)

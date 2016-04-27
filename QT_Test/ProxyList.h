@@ -5,15 +5,16 @@
 #include <QListWidget>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QPointer>
 #include "ProxyEntry.h"
 
 class ProxyList : public QObject
 {
 	Q_OBJECT
 private:
-	QListWidget* list_view_;
-	QLineEdit* input_area_;
-	QPushButton* input_submit_;
+	QPointer<QListWidget> list_view_;
+	QPointer<QLineEdit> input_area_;
+	QPointer<QPushButton> input_submit_;
 
 	std::unordered_set<ProxyEntry*> entries_;
 

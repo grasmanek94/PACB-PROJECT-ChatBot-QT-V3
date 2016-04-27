@@ -69,11 +69,11 @@ bool ProxyList::IsFull(size_t max_count)
 	{
 		if (i->GetUseCount() >= max_count)
 		{
-			return false;
+			return true;
 		}
 	}
 
-	return true;
+	return false;
 }
 
 void ProxyList::InputSubmit(bool checked)
