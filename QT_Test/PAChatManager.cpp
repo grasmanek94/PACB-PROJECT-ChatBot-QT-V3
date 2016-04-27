@@ -13,6 +13,10 @@ PAChatManager::PAChatManager(
 	QPushButton* add_new_bot_button,
 	QPushButton* request_new_chat_button,
 	QCheckBox* automatic_search_check_box,
+
+	QCheckBox* send_intro_message_check_box,
+	QCheckBox* story_mode_check_box,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -23,7 +27,9 @@ PAChatManager::PAChatManager(
 	  list_view_(chats_list_widget),
 	  tabs_container_(tabs_container),
 	  auto_search_enabled(true),
-	  current_searching_(nullptr)
+	  current_searching_(nullptr),
+	  send_intro_message_check_box_(send_intro_message_check_box),
+	  story_mode_check_box_(story_mode_check_box)
 {
 	connect(add_new_bot_button, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
 	connect(automatic_search_check_box_, &QCheckBox::stateChanged, this, &PAChatManager::onAutoSearcherStateChange);
@@ -35,7 +41,7 @@ PAChatManager::PAChatManager(
 	ProxyEntry* entry = new ProxyEntry("", 0, &proxy_list_);
 	proxy_list_.Add(entry);
 
-	search_timer.start(100);
+	search_timer.start(50);
 }
 
 PAChatManager::~PAChatManager()
@@ -51,6 +57,7 @@ void PAChatManager::onItemSelected(QListWidgetItem* item)
 		QWidget* tab = glue->GetTab();
 		tabs_container_->setCurrentWidget(tab);
 		tab->show();
+		glue->FocusInputText();
 	}
 }
 

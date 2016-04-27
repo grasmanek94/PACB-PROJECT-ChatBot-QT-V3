@@ -35,7 +35,7 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 
 	chat_manager_end_chat_ = new QPushButton(tab_);
 	chat_manager_end_chat_->setObjectName("chat_manager_end_chat_" + suffix);
-	chat_manager_end_chat_->setMinimumSize(QSize(118, 23));
+	chat_manager_end_chat_->setMinimumSize(QSize(119, 23));
 
 	chat_container_button_grid_->addWidget(chat_manager_end_chat_);
 
@@ -44,6 +44,12 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 	chat_manager_send_->setMinimumSize(QSize(119, 23));
 
 	chat_container_button_grid_->addWidget(chat_manager_send_);
+
+	chat_manager_stop_auto_sender_ = new QPushButton(tab_);
+	chat_manager_stop_auto_sender_->setObjectName("chat_manager_stop_auto_sender_" + suffix);
+	chat_manager_stop_auto_sender_->setMinimumSize(QSize(119, 23));
+
+	chat_container_button_grid_->addWidget(chat_manager_stop_auto_sender_);
 
 	chat_container_grid_->addLayout(chat_container_button_grid_, 3, 0, 1, 1);
 
@@ -85,6 +91,7 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 	connect(chat_manager_end_chat_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerEndChatButtonClicked);
 	connect(chat_manager_bot_remove_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerBotRemoveButtonClicked);
 	connect(chat_manager_keep_chat_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerKeepChatButtonClicked);
+	connect(chat_manager_stop_auto_sender_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerAutoSenderStop);
 	connect(chat_box_text_input_message_, &QLineEdit::textEdited, this, &PAChatClientUI::onChatManagerTextEdited);
 }
 
@@ -167,4 +174,14 @@ void PAChatClientUI::onChatManagerTextEdited(QString text)
 QWidget* PAChatClientUI::GetTab()
 {
 	return tab_;
+}
+
+void PAChatClientUI::FocusInputText()
+{
+	chat_box_text_input_message_->setFocus();
+}
+
+void PAChatClientUI::onChatManagerAutoSenderStop()
+{
+	emit onRequestStopAutoSender();
 }

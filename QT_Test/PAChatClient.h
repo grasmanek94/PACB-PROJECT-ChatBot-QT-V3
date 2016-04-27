@@ -29,9 +29,9 @@ const std::array<unsigned int, 8> PAChatClientStateColors
 	0x00FFE5,
 };
 
-constexpr unsigned int GetStateColor(PAChatClientState state, bool newMessageAvailable)
+constexpr unsigned int GetStateColor(PAChatClientState state, bool newMessageAvailable, bool force_red)
 {
-	return state == PAChatClientState_Chatting ? PAChatClientStateColors[state + (int)newMessageAvailable] : PAChatClientStateColors[state];
+	return state == PAChatClientState_Chatting ? (force_red ? 0xFF5959 : PAChatClientStateColors[state + (int)newMessageAvailable]) : PAChatClientStateColors[state];
 }
 
 class PAChatClient : public QObject

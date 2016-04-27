@@ -24,6 +24,9 @@ private:
 	QPointer<QPushButton> request_new_chat_button_;
 	QPointer<QCheckBox> automatic_search_check_box_;
 
+	QPointer<QCheckBox> send_intro_message_check_box_;
+	QPointer<QCheckBox> story_mode_check_box_;
+
 	QPointer<QTabWidget> tabs_container_;
 
 	bool auto_search_enabled;
@@ -46,6 +49,9 @@ public:
 		QPushButton* add_new_bot_button,
 		QPushButton* request_new_chat_button,
 		QCheckBox* automatic_search_check_box,
+
+		QCheckBox* send_intro_message_check_box,
+		QCheckBox* story_mode_check_box,
 
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();

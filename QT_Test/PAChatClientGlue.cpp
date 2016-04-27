@@ -1,13 +1,14 @@
 #include "PAChatClientGlue.h"
 #include "PAChatGlobalId.h"
 
-PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container, QObject *parent)
-	: QObject(parent), proxy_(proxy), tabs_container_(tabs_container)
+PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container, QCheckBox* send_intro_message_check_box, QCheckBox* story_mode_check_box, QObject *parent)
+	: QObject(parent), proxy_(proxy), tabs_container_(tabs_container), force_red(false), send_intro_message_check_box_(send_intro_message_check_box), story_mode_check_box_(story_mode_check_box)
 {
 	proxy_->PushUseCount();
 
 	client = new PAChatClient(proxy_->GetHost(), proxy_->GetPort(), this);
 	ui = new PAChatClientUI(tabs_container_, this);
+	auto_sender = new PAChatClientAutoSender(this);
 
 	connect(client, &PAChatClient::onSocketConnected, this, &PAChatClientGlue::onSocketConnected);
 	connect(client, &PAChatClient::onChatConnected, this, &PAChatClientGlue::onChatConnected);
@@ -23,8 +24,12 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 	connect(ui, &PAChatClientUI::onRequestChatSendMessage, this, &PAChatClientGlue::onRequestChatSendMessage);
 	connect(ui, &PAChatClientUI::onRequestChatEnd, this, &PAChatClientGlue::onRequestChatEnd);
 	connect(ui, &PAChatClientUI::onRequestChatKeep, this, &PAChatClientGlue::onRequestChatKeep);
+	connect(ui, &PAChatClientUI::onRequestStopAutoSender, this, &PAChatClientGlue::onRequestStopAutoSender);
 	connect(ui, &PAChatClientUI::onTextInputChanged, this, &PAChatClientGlue::onTextInputChanged);
 	
+	connect(&silence_timer, &QTimer::timeout, this, &PAChatClientGlue::onSilenceTimerHit);
+	connect(auto_sender, &PAChatClientAutoSender::onRequestNewMessage, this, &PAChatClientGlue::onAutoSenderMessage);
+
 	int_id_ = PAChatGlobalId::Get();
 	string_id_ = "(" + QString::number(int_id_) + ") ";
 
@@ -34,7 +39,7 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 
 void PAChatClientGlue::SetStateColor(bool newmessage)
 {
-	QListWidgetItem::setBackgroundColor(QColor::fromRgb(GetStateColor(client->State(), newmessage)));
+	QListWidgetItem::setBackgroundColor(QColor::fromRgb(GetStateColor(client->State(), newmessage, force_red)));
 }
 
 PAChatClientGlue::~PAChatClientGlue()
@@ -65,10 +70,24 @@ void PAChatClientGlue::onChatSearch()
 
 void PAChatClientGlue::onChatBegin()
 {
+	force_red = false;
+	silence_timer.start(300000);
 	QListWidgetItem::setText(string_id_ + "Chatting: No Unread Messages");
 	SetStateColor();
 
 	ui->RemoveMessages();
+
+	if (send_intro_message_check_box_->checkState())
+	{
+		client->SendTyping(true);
+		client->SendMessage(auto_sender->GetIntroMessage());
+	}
+
+	if (story_mode_check_box_->checkState())
+	{
+		client->SendTyping(true);
+		auto_sender->Start();
+	}
 
 	emit onSearchDone();
 }
@@ -95,12 +114,15 @@ void PAChatClientGlue::onChatMessage(bool me, QString message)
 		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");		
 	}
 
+	silence_timer.setInterval(300000);
 	SetStateColor(!me);
 	ui->AddMessage(me, message);
 }
 
 void PAChatClientGlue::onChatEnd()
 {
+	auto_sender->Stop();
+	silence_timer.stop();
 	QListWidgetItem::setText(string_id_ + "Idle: Chat ended, ready for new chat");
 	SetStateColor();
 }
@@ -145,10 +167,31 @@ void PAChatClientGlue::onRequestChatEnd()
 
 void PAChatClientGlue::onRequestChatKeep()
 {
-
+	silence_timer.stop();
 }
 
 QWidget* PAChatClientGlue::GetTab()
 {
 	return ui->GetTab();
+}
+
+void PAChatClientGlue::FocusInputText()
+{
+	ui->FocusInputText();
+}
+
+void PAChatClientGlue::onSilenceTimerHit()
+{
+	onRequestChatEnd();
+}
+
+void PAChatClientGlue::onRequestStopAutoSender()
+{
+	auto_sender->Stop();
+}
+
+void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
+{
+	client->SendMessage(string);
+	client->SendTyping(!last_message);
 }

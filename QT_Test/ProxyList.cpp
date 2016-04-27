@@ -19,6 +19,14 @@ bool ProxyList::Add(ProxyEntry* entry)
 
 	if (exists == entries_.end())
 	{
+		for (auto& i : entries_)
+		{
+			if (entry->GetPort() == i->GetPort() && entry->GetHost().toLower() == entry->GetHost().toLower())
+			{
+				return false;
+			}
+		}
+
 		entries_.insert(entry);
 		list_view_->addItem(entry);
 		return true;

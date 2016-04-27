@@ -1,10 +1,11 @@
 #pragma once
 #include <QListWidget>
-
+#include <QTimer>
 #include <QPointer>
-
+#include <QCheckBox>
 #include "PAChatClient.h"
 #include "PAChatClientUI.h"
+#include "PAChatClientAutoSender.h"
 #include "ProxyEntry.h"
 
 class PAChatClientGlue: public QObject, public QListWidgetItem
@@ -13,13 +14,21 @@ class PAChatClientGlue: public QObject, public QListWidgetItem
 private:
 	QPointer<PAChatClient> client;
 	QPointer<PAChatClientUI> ui;
+	QPointer<PAChatClientAutoSender> auto_sender;
 	QPointer<ProxyEntry> proxy_;
 	QPointer<QTabWidget> tabs_container_;
 
+	QPointer<QCheckBox> send_intro_message_check_box_;
+	QPointer<QCheckBox> story_mode_check_box_;
+
+	bool force_red;
 	int int_id_;
 	QString string_id_;
+
+	QTimer silence_timer;
 public:
-	PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container_, QObject *parent = Q_NULLPTR);
+	
+	PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container_, QCheckBox* send_intro_message_check_box, QCheckBox* story_mode_check_box, QObject *parent = Q_NULLPTR);
 	~PAChatClientGlue();
 
 private:
@@ -30,6 +39,7 @@ public:
 	bool ReadyForSearch();
 	bool Search();
 	QWidget* GetTab();
+	void FocusInputText();
 
 Q_SIGNALS:
 	void onSearchDone();
@@ -52,5 +62,8 @@ private Q_SLOTS:
 	void onRequestChatEnd();
 	void onRequestChatKeep();
 	void onTextInputChanged(QString text);
+	void onSilenceTimerHit();
+	void onRequestStopAutoSender();
+	void onAutoSenderMessage(QString string, bool last_message);
 };
  

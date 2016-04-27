@@ -14,6 +14,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
+#include <QCheckBox>
 #include <QPointer>
 
 class PAChatClientUI : public QObject
@@ -28,6 +29,7 @@ private:
 	QPointer<QPushButton> chat_manager_keep_chat_;
 	QPointer<QPushButton> chat_manager_end_chat_;
 	QPointer<QPushButton> chat_manager_send_;
+	QPointer<QPushButton> chat_manager_stop_auto_sender_;
 	//QPointer<QTextEdit> chat_box_text_messages_;
 	QPointer<QPlainTextEdit> chat_box_text_messages_;
 	QPointer<QLineEdit> chat_box_text_input_message_;
@@ -46,6 +48,7 @@ public:
 	void RemoveMessages();
 	void ClearMessageInput();
 	QWidget* GetTab();
+	void FocusInputText();
 
 Q_SIGNALS:
 	void onRequestRemoveBot();
@@ -53,6 +56,7 @@ Q_SIGNALS:
 	void onRequestChatEnd();
 	void onRequestChatKeep();
 	void onTextInputChanged(QString text);
+	void onRequestStopAutoSender();
 
 private Q_SLOTS:
 	void onChatManagerBotRemoveButtonClicked();
@@ -60,4 +64,5 @@ private Q_SLOTS:
 	void onChatManagerEndChatButtonClicked();
 	void onChatManagerSendChatButtonClicked();
 	void onChatManagerTextEdited(QString text);
+	void onChatManagerAutoSenderStop();
 };
