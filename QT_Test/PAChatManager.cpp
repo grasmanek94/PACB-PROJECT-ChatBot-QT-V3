@@ -69,7 +69,7 @@ void PAChatManager::PushClient()
 		return;
 	}
 
-	PAChatClientGlue* glue = new PAChatClientGlue(entry, tabs_container_, this);
+	PAChatClientGlue* glue = new PAChatClientGlue(entry, tabs_container_, send_intro_message_check_box_, story_mode_check_box_, this);
 	clients.insert(glue);
 	list_view_->addItem(glue);
 
