@@ -1,13 +1,36 @@
 #include <QTextStream>
+#include <QFile>
 #include "PAChatClientAutoSender.h"
 
-QString introduction_message = QTextStream("berichten/introductie.txt").readAll();
-QStringList story_messages = QTextStream("berichten/story_mode.txt").readAll().split('\n');
+QString introduction_message;
+QStringList story_messages;
+
+static void ReadData()
+{
+	static bool loaded = false;
+	if (!loaded)
+	{
+		loaded = true;
+
+		QFile f1("berichten/introductie.txt");
+		QFile f2("berichten/story_mode.txt");
+
+		f1.open(QIODevice::ReadOnly | QIODevice::Text);
+		f2.open(QIODevice::ReadOnly | QIODevice::Text);
+
+		QTextStream s1(&f1);
+		QTextStream s2(&f2);
+
+		introduction_message = s1.readAll();
+		story_messages = s2.readAll().split('\n');
+	}
+}
 
 PAChatClientAutoSender::PAChatClientAutoSender(QObject *parent)
 	: QObject(parent)
 {
-
+	ReadData();
+	connect(&message_sender_, &QTimer::timeout, this, &PAChatClientAutoSender::processNextMessage);
 }
 
 PAChatClientAutoSender::~PAChatClientAutoSender()
