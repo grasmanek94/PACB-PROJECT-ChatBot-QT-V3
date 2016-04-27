@@ -163,3 +163,8 @@ void PAChatClientUI::onChatManagerTextEdited(QString text)
 {
 	emit onTextInputChanged(text);
 }
+
+QWidget* PAChatClientUI::GetTab()
+{
+	return tab_;
+}

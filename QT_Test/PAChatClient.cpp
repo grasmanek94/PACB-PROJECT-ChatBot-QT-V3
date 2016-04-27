@@ -30,7 +30,7 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 
 	connect(&process_, &QProcess::readyReadStandardOutput, this, &PAChatClient::onProcessInput);  // connect process signals with your code
 	connect(&process_, &QProcess::readyReadStandardError, this, &PAChatClient::onProcessInput);  // same here
-
+	
 	QDir dir = QFileInfo(QCoreApplication::applicationFilePath()).absoluteDir();
 
 	process_.setProcessChannelMode(QProcess::MergedChannels);

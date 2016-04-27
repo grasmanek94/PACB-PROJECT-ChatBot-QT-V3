@@ -45,6 +45,7 @@ public:
 	void AddChatSeparator();
 	void RemoveMessages();
 	void ClearMessageInput();
+	QWidget* GetTab();
 
 Q_SIGNALS:
 	void onRequestRemoveBot();

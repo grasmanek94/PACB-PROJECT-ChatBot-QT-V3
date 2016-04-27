@@ -46,8 +46,8 @@ public:
     {
         if (QT_TestClass->objectName().isEmpty())
             QT_TestClass->setObjectName(QStringLiteral("QT_TestClass"));
-        QT_TestClass->resize(1010, 300);
-        QT_TestClass->setMinimumSize(QSize(1010, 300));
+        QT_TestClass->resize(1113, 477);
+        QT_TestClass->setMinimumSize(QSize(1113, 477));
         QIcon icon;
         icon.addFile(QStringLiteral("C:/Users/ChatBot/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);
         QT_TestClass->setWindowIcon(icon);
@@ -94,25 +94,30 @@ public:
         botListContainerGrid->setSizeConstraint(QLayout::SetMinimumSize);
         chatBoxPeers = new QListWidget(centralWidget);
         chatBoxPeers->setObjectName(QStringLiteral("chatBoxPeers"));
-        chatBoxPeers->setMinimumSize(QSize(289, 250));
-        chatBoxPeers->setMaximumSize(QSize(301, 16777215));
+        chatBoxPeers->setMinimumSize(QSize(400, 250));
+        chatBoxPeers->setMaximumSize(QSize(500, 16777215));
+        QFont font;
+        font.setPointSize(11);
+        chatBoxPeers->setFont(font);
 
         botListContainerGrid->addWidget(chatBoxPeers, 0, 0, 1, 1);
 
         chatManagerAddBot = new QPushButton(centralWidget);
         chatManagerAddBot->setObjectName(QStringLiteral("chatManagerAddBot"));
         chatManagerAddBot->setMinimumSize(QSize(289, 23));
-        chatManagerAddBot->setMaximumSize(QSize(301, 16777215));
+        chatManagerAddBot->setMaximumSize(QSize(500, 16777215));
 
         botListContainerGrid->addWidget(chatManagerAddBot, 1, 0, 1, 1);
 
         chatManagerRequestNewChat = new QPushButton(centralWidget);
         chatManagerRequestNewChat->setObjectName(QStringLiteral("chatManagerRequestNewChat"));
+        chatManagerRequestNewChat->setMaximumSize(QSize(500, 16777215));
 
         botListContainerGrid->addWidget(chatManagerRequestNewChat, 2, 0, 1, 1);
 
         autoSearchCheckBox = new QCheckBox(centralWidget);
         autoSearchCheckBox->setObjectName(QStringLiteral("autoSearchCheckBox"));
+        autoSearchCheckBox->setMaximumSize(QSize(500, 16777215));
         autoSearchCheckBox->setChecked(true);
 
         botListContainerGrid->addWidget(autoSearchCheckBox, 3, 0, 1, 1);

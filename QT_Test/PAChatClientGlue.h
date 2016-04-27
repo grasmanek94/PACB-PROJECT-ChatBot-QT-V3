@@ -29,7 +29,8 @@ public:
 
 	bool ReadyForSearch();
 	bool Search();
-	
+	QWidget* GetTab();
+
 Q_SIGNALS:
 	void onSearchDone();
 

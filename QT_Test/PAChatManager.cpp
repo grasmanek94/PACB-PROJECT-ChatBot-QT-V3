@@ -28,16 +28,30 @@ PAChatManager::PAChatManager(
 	connect(add_new_bot_button, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
 	connect(automatic_search_check_box_, &QCheckBox::stateChanged, this, &PAChatManager::onAutoSearcherStateChange);
 	connect(&search_timer, &QTimer::timeout, this, &PAChatManager::StartSearch);
+	connect(list_view_, &QListWidget::itemClicked, this, &PAChatManager::onItemSelected);
+	connect(list_view_, &QListWidget::itemPressed, this, &PAChatManager::onItemSelected);
+	connect(list_view_, &QListWidget::itemActivated, this, &PAChatManager::onItemSelected);
 
 	ProxyEntry* entry = new ProxyEntry("", 0, &proxy_list_);
 	proxy_list_.Add(entry);
 
-	search_timer.start(500);
+	search_timer.start(100);
 }
 
 PAChatManager::~PAChatManager()
 {
 
+}
+
+void PAChatManager::onItemSelected(QListWidgetItem* item)
+{
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(item);
+	if (glue)
+	{
+		QWidget* tab = glue->GetTab();
+		tabs_container_->setCurrentWidget(tab);
+		tab->show();
+	}
 }
 
 void PAChatManager::PushClient()

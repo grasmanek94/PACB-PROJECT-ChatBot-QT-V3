@@ -53,4 +53,5 @@ public:
 private Q_SLOTS:
 	void onSearchDone();
 	void onAutoSearcherStateChange(int state);
+	void onItemSelected(QListWidgetItem * item);
 };

@@ -147,3 +147,8 @@ void PAChatClientGlue::onRequestChatKeep()
 {
 
 }
+
+QWidget* PAChatClientGlue::GetTab()
+{
+	return ui->GetTab();
+}
