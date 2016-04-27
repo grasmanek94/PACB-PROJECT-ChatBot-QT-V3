@@ -276,9 +276,12 @@ bool PAChatClient::SendMessage(QString message)
 		return false;
 	}
 
+	QString format("42[\"message\",{\"message\":\"%1\"}]");
+
+	webSocket_.sendTextMessage(format.arg(message.replace("\"", "\\\"").replace("\\", "\\\\")));
+
 	emit onChatMessage(true, message);
 
-	webSocket_.sendTextMessage("42[\"message\"]{\"message\":\"" + message.replace("\"", "\\\"").replace("\\", "\\\\") + "\"}]");
 	SendTyping(false);
 
 	return true;

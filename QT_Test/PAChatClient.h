@@ -19,14 +19,14 @@ enum PAChatClientState
 
 const std::array<unsigned int, 8> PAChatClientStateColors
 {
-	0x000000FF,
-	0x222222FF,
-	0x444444FF,
-	0x666666FF,
-	0x00FF6EFF,
-	0x00EEFFFF,
-	0xFFA200FF,
-	0xFF0000FF,
+	0xFFFFFF,
+	0xC2C2C2,
+	0xC2C2C2,
+	0xC2C2C2,
+	0xC2C2C2,
+	0xD9FF00,
+	0x00FF40,
+	0x00FFE5,
 };
 
 constexpr unsigned int GetStateColor(PAChatClientState state, bool newMessageAvailable)

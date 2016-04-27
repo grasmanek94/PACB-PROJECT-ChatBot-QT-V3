@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1010</width>
-    <height>300</height>
+    <height>477</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -101,13 +101,13 @@
        <widget class="QListWidget" name="chatBoxPeers">
         <property name="minimumSize">
          <size>
-          <width>289</width>
+          <width>400</width>
           <height>250</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>301</width>
+          <width>500</width>
           <height>16777215</height>
          </size>
         </property>
@@ -123,7 +123,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>301</width>
+          <width>500</width>
           <height>16777215</height>
          </size>
         </property>
@@ -134,6 +134,12 @@
       </item>
       <item row="2" column="0">
        <widget class="QPushButton" name="chatManagerRequestNewChat">
+        <property name="maximumSize">
+         <size>
+          <width>500</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
          <string>New Chat</string>
         </property>
@@ -141,6 +147,12 @@
       </item>
       <item row="3" column="0">
        <widget class="QCheckBox" name="autoSearchCheckBox">
+        <property name="maximumSize">
+         <size>
+          <width>500</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
          <string>Automatic Search</string>
         </property>

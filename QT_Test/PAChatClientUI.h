@@ -42,6 +42,7 @@ public:
 	void ScrollToTop();
 
 	void AddMessage(bool me, const QString& message);
+	void AddChatSeparator();
 	void RemoveMessages();
 	void ClearMessageInput();
 

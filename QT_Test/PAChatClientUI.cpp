@@ -100,6 +100,11 @@ void PAChatClientUI::AddMessage(bool me, const QString& message)
 	chat_box_text_messages_->appendHtml(htmlText);
 }
 
+void PAChatClientUI::AddChatSeparator()
+{
+	chat_box_text_messages_->appendHtml("<div style='background-color:rgb(0,0,255);font-size:14px;color:rgb(0,0,255);'> &zwnj; </div> <div style='font-size:3px;'> &zwnj; </div>");
+}
+
 void PAChatClientUI::RemoveMessages()
 {
 	chat_box_text_messages_->clear();

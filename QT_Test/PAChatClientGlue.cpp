@@ -34,7 +34,7 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 
 void PAChatClientGlue::SetStateColor(bool newmessage)
 {
-	QListWidgetItem::setBackgroundColor(QColor::fromRgba(GetStateColor(client->State(), newmessage)));
+	QListWidgetItem::setBackgroundColor(QColor::fromRgb(GetStateColor(client->State(), newmessage)));
 }
 
 PAChatClientGlue::~PAChatClientGlue()
@@ -67,6 +67,8 @@ void PAChatClientGlue::onChatBegin()
 {
 	QListWidgetItem::setText(string_id_ + "Chatting: No Unread Messages");
 	SetStateColor();
+
+	ui->RemoveMessages();
 
 	emit onSearchDone();
 }
