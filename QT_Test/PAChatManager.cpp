@@ -74,7 +74,7 @@ void PAChatManager::PushClient()
 
 void PAChatManager::PopClient()
 {
-	PAChatClientGlue* glue = reinterpret_cast<PAChatClientGlue*>(QObject::sender());
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
 	clients.erase(glue);
 	list_view_->removeItemWidget(glue);
 	//delete glue;
