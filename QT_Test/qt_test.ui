@@ -132,6 +132,20 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="chatManagerRequestNewChat">
+        <property name="text">
+         <string>New Chat</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="autoSearchCheckBox">
+        <property name="text">
+         <string>Automatic Search</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>

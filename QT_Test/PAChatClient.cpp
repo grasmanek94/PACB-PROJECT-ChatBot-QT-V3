@@ -186,8 +186,8 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 		{
 			webSocket_.sendTextMessage(QStringLiteral("5"));
 
-			pinger_.start(30000);
-			online_count_update_.start(15133);
+			pinger_.start(26000);
+			online_count_update_.start(10000);
 
 			connected_ = true;
 
@@ -279,6 +279,8 @@ bool PAChatClient::SendMessage(QString message)
 	emit onChatMessage(true, message);
 
 	webSocket_.sendTextMessage("42[\"message\"]{\"message\":\"" + message.replace("\"", "\\\"").replace("\\", "\\\\") + "\"}]");
+	SendTyping(false);
+
 	return true;
 }
 
@@ -290,4 +292,39 @@ int PAChatClient::OnlineCount()
 PAChatClientState PAChatClient::State()
 {
 	return state_;
+}
+
+bool PAChatClient::SendTyping(bool typing)
+{
+	if (!connected_ || searching_ || !chatting_ || typing == is_typing_)
+	{
+		return false;
+	}
+
+	is_typing_ = typing;
+
+	webSocket_.sendTextMessage("42[\"typing\",{\"typing\":" + QString(is_typing_ ? "true" : "false") +"}]");
+	emit onChatTyping(true, is_typing_);
+
+	return true;
+}
+
+bool PAChatClient::EndChat()
+{
+	if (!connected_ || searching_ || !chatting_)
+	{
+		return false;
+	}
+
+	searching_ = false;
+	chatting_ = false;
+	is_typing_ = false;
+	is_other_typing_ = false;
+
+	state_ = PAChatClientState_Idle;
+
+	webSocket_.sendTextMessage("42[\"end\"]");
+	emit onChatEnd();
+
+	return true;	
 }

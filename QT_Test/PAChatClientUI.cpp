@@ -48,8 +48,8 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 	chat_container_grid_->addLayout(chat_container_button_grid_, 3, 0, 1, 1);
 
 	chat_box_text_messages_ =
-		//new QPlainTextEdit(tab_);
-		new QTextEdit(tab_);
+		new QPlainTextEdit(tab_);
+		//new QTextEdit(tab_);
 	chat_box_text_messages_->setObjectName("chat_box_text_messages_" + suffix);
 	chat_box_text_messages_->setMinimumSize(QSize(495, 178));
 
@@ -78,18 +78,14 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 	chat_box_text_messages_->setWordWrapMode(QTextOption::WordWrap);
 	chat_box_text_messages_->setReadOnly(true);
 
-	//Add nice html messages:
-	AddMessage(true, "Some message");
+	tab_number_ = tabs_container_->addTab(tab_, "");
 
-	AddMessage(false, "Some message");
-
-	AddMessage(true, "Some message");
-
-	AddMessage(false, "Some message");
-
-	ScrollToBottom();
-
-	tabs_container_->addTab(tab_, " 6");
+	connect(chat_box_text_input_message_, &QLineEdit::returnPressed, this, &PAChatClientUI::onChatManagerSendChatButtonClicked);
+	connect(chat_manager_send_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerSendChatButtonClicked);
+	connect(chat_manager_end_chat_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerEndChatButtonClicked);
+	connect(chat_manager_bot_remove_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerBotRemoveButtonClicked);
+	connect(chat_manager_keep_chat_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerKeepChatButtonClicked);
+	connect(chat_box_text_input_message_, &QLineEdit::textEdited, this, &PAChatClientUI::onChatManagerTextEdited)
 }
 
 void PAChatClientUI::AddMessage(bool me, const QString& message)
@@ -99,15 +95,19 @@ void PAChatClientUI::AddMessage(bool me, const QString& message)
 		"background-color:rgb(249,86,79);font-size:14px;color:rgb(255,255,255);";
 
 	QString format("<div style='%1'> %2 </div> <div style='font-size:3px;'> &zwnj; </div>");
-	QString safe_msg = format.arg(style).arg(message.toHtmlEscaped());
-	//qDebug() << "Writing: " << safe_msg;
-	chat_box_text_messages_->append(safe_msg);
-	//qDebug() << "HTML: " << chat_box_text_messages_->toHtml();
+	QString htmlText = format.arg(style).arg(message.toHtmlEscaped());
+
+	chat_box_text_messages_->appendHtml(htmlText);
 }
 
 void PAChatClientUI::RemoveMessages()
 {
 	chat_box_text_messages_->clear();
+}
+
+void PAChatClientUI::ClearMessageInput()
+{
+	chat_box_text_input_message_->clear();
 }
 
 void PAChatClientUI::ScrollToBottom()
@@ -126,6 +126,32 @@ void PAChatClientUI::ScrollToTop()
 
 PAChatClientUI::~PAChatClientUI()
 {
-	//delete tab_;
-	//tab_ = nullptr;
+	tabs_container_->removeTab(tab_number_);
+	//delete tab_;//?
+	//tab_ = nullptr;//?
+}
+
+void PAChatClientUI::onChatManagerBotRemoveButtonClicked()
+{
+	emit onRequestRemoveBot();
+}
+
+void PAChatClientUI::onChatManagerKeepChatButtonClicked()
+{
+	emit onRequestChatKeep();
+}
+
+void PAChatClientUI::onChatManagerEndChatButtonClicked()
+{
+	emit onRequestChatEnd();
+}
+
+void PAChatClientUI::onChatManagerSendChatButtonClicked()
+{
+	emit onRequestChatSendMessage(chat_box_text_input_message_->text());
+}
+
+void PAChatClientUI::onChatManagerTextEdited(QString text)
+{
+	emit onTextInputChanged(text);
 }

@@ -34,7 +34,7 @@ constexpr unsigned int GetStateColor(PAChatClientState state, bool newMessageAva
 	return state == PAChatClientState_Chatting ? PAChatClientStateColors[state + (int)newMessageAvailable] : PAChatClientStateColors[state];
 }
 
-class PAChatClient : public QObject, public QListWidgetItem
+class PAChatClient : public QObject
 {
 	Q_OBJECT
 private:
@@ -65,6 +65,8 @@ public:
 	bool Connected();
 	bool Chatting();
 	bool SendMessage(QString messge);
+	bool SendTyping(bool typing);
+	bool EndChat();
 	int OnlineCount();
 
 	PAChatClientState State();
