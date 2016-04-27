@@ -46,7 +46,7 @@ QString PAChatClientAutoSender::GetIntroMessage()
 void PAChatClientAutoSender::Start()
 {
 	current_index_ = 0;
-	message_sender_.start(4000);
+	message_sender_.start(3500);
 }
 
 void PAChatClientAutoSender::Stop()

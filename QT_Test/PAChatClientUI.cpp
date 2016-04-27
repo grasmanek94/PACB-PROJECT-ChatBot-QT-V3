@@ -23,31 +23,31 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 
 	chat_manager_bot_remove_ = new QPushButton(tab_);
 	chat_manager_bot_remove_->setObjectName("chat_manager_bot_remove_" + suffix);
-	chat_manager_bot_remove_->setMinimumSize(QSize(119, 23));
+	chat_manager_bot_remove_->setMinimumSize(QSize(100, 23));
 
 	chat_container_button_grid_->addWidget(chat_manager_bot_remove_);
 
 	chat_manager_keep_chat_ = new QPushButton(tab_);
 	chat_manager_keep_chat_->setObjectName("chat_manager_keep_chat_" + suffix);
-	chat_manager_keep_chat_->setMinimumSize(QSize(119, 23));
+	chat_manager_keep_chat_->setMinimumSize(QSize(100, 23));
 
 	chat_container_button_grid_->addWidget(chat_manager_keep_chat_);
 
 	chat_manager_end_chat_ = new QPushButton(tab_);
 	chat_manager_end_chat_->setObjectName("chat_manager_end_chat_" + suffix);
-	chat_manager_end_chat_->setMinimumSize(QSize(119, 23));
+	chat_manager_end_chat_->setMinimumSize(QSize(100, 23));
 
 	chat_container_button_grid_->addWidget(chat_manager_end_chat_);
 
 	chat_manager_send_ = new QPushButton(tab_);
 	chat_manager_send_->setObjectName("chat_manager_send_" + suffix);
-	chat_manager_send_->setMinimumSize(QSize(119, 23));
+	chat_manager_send_->setMinimumSize(QSize(100, 23));
 
 	chat_container_button_grid_->addWidget(chat_manager_send_);
 
 	chat_manager_stop_auto_sender_ = new QPushButton(tab_);
 	chat_manager_stop_auto_sender_->setObjectName("chat_manager_stop_auto_sender_" + suffix);
-	chat_manager_stop_auto_sender_->setMinimumSize(QSize(119, 23));
+	chat_manager_stop_auto_sender_->setMinimumSize(QSize(100, 23));
 
 	chat_container_button_grid_->addWidget(chat_manager_stop_auto_sender_);
 
@@ -74,6 +74,7 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 	chat_manager_keep_chat_->setText("Keep Chat");
 	chat_manager_end_chat_->setText("End Chat");
 	chat_manager_send_->setText("Send");
+	chat_manager_stop_auto_sender_->setText("Stop Story");
 
 	QPalette p = chat_box_text_messages_->palette();
 
