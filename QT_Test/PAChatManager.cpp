@@ -29,7 +29,8 @@ PAChatManager::PAChatManager(
 	  auto_search_enabled(true),
 	  current_searching_(nullptr),
 	  send_intro_message_check_box_(send_intro_message_check_box),
-	  story_mode_check_box_(story_mode_check_box)
+	  story_mode_check_box_(story_mode_check_box),
+	  current_active_(nullptr)
 {
 	connect(add_new_bot_button, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
 	connect(automatic_search_check_box_, &QCheckBox::stateChanged, this, &PAChatManager::onAutoSearcherStateChange);
@@ -58,6 +59,7 @@ void PAChatManager::onItemSelected(QListWidgetItem* item)
 		tabs_container_->setCurrentWidget(tab);
 		tab->show();
 		glue->FocusInputText();
+		current_active_ = glue;
 	}
 }
 
@@ -76,6 +78,11 @@ void PAChatManager::PushClient()
 	connect(glue, &PAChatClientGlue::onRequestRemove, this, &PAChatManager::PopClient);	//plz kill     `me`
 	connect(glue, &PAChatClientGlue::onSearchDone, this, &PAChatManager::onSearchDone);
 
+	if (!current_active_)
+	{
+		current_active_ = glue;
+	}
+
 	StartSearch();
 }
 
@@ -84,7 +91,8 @@ void PAChatManager::PopClient()
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
 	clients.erase(glue);
 	list_view_->removeItemWidget(glue);
-	//delete glue;
+	tabs_container_->removeTab(tabs_container_->indexOf(glue->GetTab()));
+	delete glue;
 }
 
 void PAChatManager::onAutoSearcherStateChange(int state)

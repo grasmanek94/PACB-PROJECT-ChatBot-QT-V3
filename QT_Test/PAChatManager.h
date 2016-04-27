@@ -17,6 +17,7 @@ private:
 	ProxyList proxy_list_;
 	std::unordered_set<PAChatClientGlue*> clients;
 	QPointer<PAChatClientGlue> current_searching_;
+	QPointer<PAChatClientGlue> current_active_;
 
 	QPointer<QListWidget> list_view_;
 
