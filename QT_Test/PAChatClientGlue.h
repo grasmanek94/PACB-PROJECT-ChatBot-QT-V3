@@ -15,6 +15,8 @@ private:
 	QPointer<PAChatClient> client;
 	QPointer<PAChatClientUI> ui;
 	QPointer<PAChatClientAutoSender> auto_sender;
+
+
 	QPointer<ProxyEntry> proxy_;
 	QPointer<QTabWidget> tabs_container_;
 

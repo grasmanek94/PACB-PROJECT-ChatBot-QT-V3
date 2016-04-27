@@ -89,10 +89,17 @@ void PAChatManager::PushClient()
 void PAChatManager::PopClient()
 {
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	bool eq = current_active_ == glue;
+
 	clients.erase(glue);
 	list_view_->removeItemWidget(glue);
 	tabs_container_->removeTab(tabs_container_->indexOf(glue->GetTab()));
 	delete glue;
+
+	if (eq)
+	{
+		onItemSelected(*clients.begin());
+	}
 }
 
 void PAChatManager::onAutoSearcherStateChange(int state)
