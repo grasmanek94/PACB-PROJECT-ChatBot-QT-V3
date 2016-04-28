@@ -39,6 +39,8 @@ PAChatClientFilter::~PAChatClientFilter()
 
 bool PAChatClientFilter::IsMessageFiltered(QString message)
 {
+	message = message.toLower();
+
 	for (char i = '0'; i <= '9'; ++i)
 	{
 		message = message.replace(i, '@');
@@ -55,7 +57,7 @@ bool PAChatClientFilter::IsMessageFiltered(QString message)
 	for (auto& forbidden_content : disallowed_contents)
 	{
 		int index = message.indexOf(forbidden_content);
-		for (int i = 0; i < message.length() <= 3 ? message.length() : 3; ++i)
+		for (int i = 0; i < (message.length() <= 3 ? message.length() : 3); ++i)
 		{
 			if (message[i].isLetterOrNumber() && index == i)
 			{
