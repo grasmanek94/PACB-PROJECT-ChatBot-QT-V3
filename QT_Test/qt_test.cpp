@@ -15,6 +15,7 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.autoSearchCheckBox,
 		ui.autoSendIntroductionMessage, 
 		ui.autoSenderState, 
+		ui.preparedTextsBox,
 		this);
 }
 

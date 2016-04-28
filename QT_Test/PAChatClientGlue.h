@@ -42,6 +42,7 @@ public:
 	bool Search();
 	QWidget* GetTab();
 	void FocusInputText();
+	void SendMessage(QString string);
 
 Q_SIGNALS:
 	void onSearchDone();

@@ -18,7 +18,6 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QListView>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
@@ -41,9 +40,9 @@ public:
     QCheckBox *autoSearchCheckBox;
     QPushButton *chatManagerAddBot;
     QListWidget *chatBoxPeers;
-    QListView *preparedTextsBox;
     QCheckBox *autoSendIntroductionMessage;
     QCheckBox *autoSenderState;
+    QListWidget *preparedTextsBox;
     QTabWidget *chatBotTabs;
 
     void setupUi(QMainWindow *QT_TestClass)
@@ -127,14 +126,6 @@ public:
 
         botListContainerGrid->addWidget(chatBoxPeers, 0, 0, 1, 1);
 
-        preparedTextsBox = new QListView(centralWidget);
-        preparedTextsBox->setObjectName(QStringLiteral("preparedTextsBox"));
-        preparedTextsBox->setMinimumSize(QSize(252, 0));
-        preparedTextsBox->setMaximumSize(QSize(252, 16777215));
-        preparedTextsBox->setFont(font);
-
-        botListContainerGrid->addWidget(preparedTextsBox, 0, 1, 1, 1);
-
         autoSendIntroductionMessage = new QCheckBox(centralWidget);
         autoSendIntroductionMessage->setObjectName(QStringLiteral("autoSendIntroductionMessage"));
         autoSendIntroductionMessage->setChecked(true);
@@ -146,6 +137,14 @@ public:
         autoSenderState->setChecked(true);
 
         botListContainerGrid->addWidget(autoSenderState, 2, 1, 1, 1);
+
+        preparedTextsBox = new QListWidget(centralWidget);
+        preparedTextsBox->setObjectName(QStringLiteral("preparedTextsBox"));
+        preparedTextsBox->setMinimumSize(QSize(252, 0));
+        preparedTextsBox->setMaximumSize(QSize(252, 16777215));
+        preparedTextsBox->setFont(font);
+
+        botListContainerGrid->addWidget(preparedTextsBox, 0, 1, 1, 1);
 
 
         horizontalLayout_2->addLayout(botListContainerGrid);

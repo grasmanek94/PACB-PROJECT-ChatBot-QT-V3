@@ -17,6 +17,8 @@ PAChatManager::PAChatManager(
 	QCheckBox* send_intro_message_check_box,
 	QCheckBox* story_mode_check_box,
 
+	QListWidget* macro_list,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -30,7 +32,8 @@ PAChatManager::PAChatManager(
 	  current_searching_(nullptr),
 	  send_intro_message_check_box_(send_intro_message_check_box),
 	  story_mode_check_box_(story_mode_check_box),
-	  current_active_(nullptr)
+	  current_active_(nullptr),
+	  macro_list_(macro_list)
 {
 	connect(add_new_bot_button, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
 	connect(automatic_search_check_box_, &QCheckBox::stateChanged, this, &PAChatManager::onAutoSearcherStateChange);
@@ -41,6 +44,9 @@ PAChatManager::PAChatManager(
 
 	ProxyEntry* entry = new ProxyEntry("", 0, &proxy_list_);
 	proxy_list_.Add(entry);
+
+	chat_macros_ = new PAChatClientMacro(macro_list_, this);
+	connect(chat_macros_, &PAChatClientMacro::onMacroRequested, this, &PAChatManager::onMacroRequested);
 
 	search_timer.start(50);
 }
@@ -126,5 +132,13 @@ void PAChatManager::StartSearch()
 				current_searching_ = client;
 			}
 		}
+	}
+}
+
+void PAChatManager::onMacroRequested(QString text)
+{
+	if (current_active_)
+	{
+		current_active_->SendMessage(text);
 	}
 }

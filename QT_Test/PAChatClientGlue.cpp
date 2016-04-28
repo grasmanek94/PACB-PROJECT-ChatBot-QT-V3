@@ -195,3 +195,8 @@ void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
 	client->SendMessage(string);
 	client->SendTyping(!last_message);
 }
+
+void PAChatClientGlue::SendMessage(QString string)
+{
+	client->SendMessage(string);
+}

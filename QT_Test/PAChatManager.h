@@ -8,6 +8,7 @@
 #include <QTabWidget>
 
 #include "PAChatClientGlue.h"
+#include "PAChatClientMacro.h"
 #include "ProxyList.h"
 
 class PAChatManager : public QObject
@@ -15,6 +16,10 @@ class PAChatManager : public QObject
 	Q_OBJECT
 private:
 	ProxyList proxy_list_;
+
+	QPointer<QListWidget> macro_list_;
+	QPointer<PAChatClientMacro> chat_macros_;
+
 	std::unordered_set<PAChatClientGlue*> clients;
 	QPointer<PAChatClientGlue> current_searching_;
 	QPointer<PAChatClientGlue> current_active_;
@@ -54,6 +59,8 @@ public:
 		QCheckBox* send_intro_message_check_box,
 		QCheckBox* story_mode_check_box,
 
+		QListWidget* macro_list,
+
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();
 
@@ -61,4 +68,5 @@ private Q_SLOTS:
 	void onSearchDone();
 	void onAutoSearcherStateChange(int state);
 	void onItemSelected(QListWidgetItem * item);
+	void onMacroRequested(QString text);
 };

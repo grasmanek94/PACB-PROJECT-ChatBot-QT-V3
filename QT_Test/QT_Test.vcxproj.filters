@@ -122,6 +122,12 @@
     <ClCompile Include="PAChatClientFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PAChatClientMacro.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PAChatClientMacro.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt_test.h">
@@ -154,15 +160,15 @@
     <CustomBuild Include="PAChatClientAutoSender.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="PAChatClientMacro.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_qt_test.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="PAChatGlobalId.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PAChatClientMacro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PAChatClientFilter.h">

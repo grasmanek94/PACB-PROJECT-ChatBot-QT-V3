@@ -5,7 +5,7 @@
 
 QStringList macro_messages;
 
-static void ReadData()
+static bool ReadData()
 {
 	static bool loaded = false;
 	if (!loaded)
@@ -19,15 +19,35 @@ static void ReadData()
 		QTextStream s1(&f1);
 
 		macro_messages = s1.readAll().split('\n');
+
+		return true;
 	}
+	return false;
 }
 
-PAChatClientMacro::PAChatClientMacro()
+PAChatClientMacro::PAChatClientMacro(QListWidget* macro_list, QObject *parent)
+	: QObject(parent), macro_list_(macro_list)
 {
-	ReadData();
+	if (ReadData())
+	{
+		for (auto& message : macro_messages)
+		{
+			macro_list_->addItem(message);
+		}
+	}
+
+	connect(macro_list_, &QListWidget::itemDoubleClicked, this, &PAChatClientMacro::onItemDoubleClicked);
 }
 
 PAChatClientMacro::~PAChatClientMacro()
 {
 
+}
+
+void PAChatClientMacro::onItemDoubleClicked(QListWidgetItem * item)
+{
+	if (item)
+	{
+		emit onMacroRequested(item->text());
+	}
 }
