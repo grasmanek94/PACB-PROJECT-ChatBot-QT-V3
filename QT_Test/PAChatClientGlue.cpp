@@ -4,7 +4,10 @@
 PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container, QCheckBox* send_intro_message_check_box, QCheckBox* story_mode_check_box, QObject *parent)
 	: QObject(parent), proxy_(proxy), tabs_container_(tabs_container), force_red(false), send_intro_message_check_box_(send_intro_message_check_box), story_mode_check_box_(story_mode_check_box)
 {
-	proxy_->PushUseCount();
+	if (proxy_)
+	{
+		proxy_->PushUseCount();
+	}
 
 	client = new PAChatClient(proxy_->GetHost(), proxy_->GetPort(), this);
 
@@ -42,7 +45,7 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 
 void PAChatClientGlue::SetStateColor(bool newmessage)
 {
-	QListWidgetItem::setBackgroundColor(QColor::fromRgb(GetStateColor(client->State(), newmessage, force_red)));
+	QListWidgetItem::setBackgroundColor(QColor::fromRgb(GetStateColor(client ? client->State() : PAChatClientState_Disconnected, newmessage, force_red)));
 }
 
 PAChatClientGlue::~PAChatClientGlue()
@@ -85,18 +88,24 @@ void PAChatClientGlue::onChatBegin()
 	QListWidgetItem::setText(string_id_ + "Chatting: No Unread Messages");
 	SetStateColor();
 
-	ui->RemoveMessages();
-
-	if (send_intro_message_check_box_->checkState())
+	if (ui)
 	{
-		client->SendTyping(true);
-		client->SendMessage(auto_sender->GetIntroMessage());
+		ui->RemoveMessages();
 	}
 
-	if (story_mode_check_box_->checkState())
+	if (client)
 	{
-		client->SendTyping(true);
-		auto_sender->Start();
+		if (send_intro_message_check_box_->checkState())
+		{
+			client->SendTyping(true);
+			client->SendMessage(auto_sender->GetIntroMessage());
+		}
+
+		if (story_mode_check_box_->checkState() && auto_sender)
+		{
+			client->SendTyping(true);
+			auto_sender->Start();
+		}
 	}
 
 	emit onGlueChatBegin();
@@ -104,12 +113,12 @@ void PAChatClientGlue::onChatBegin()
 
 bool PAChatClientGlue::ReadyForSearch()
 {
-	return client->State() == PAChatClientState_Idle;
+	return client && client->State() == PAChatClientState_Idle;
 }
 
 bool PAChatClientGlue::Search()
 {
-	return client->Search();
+	return client && client->Search();
 }
 
 void PAChatClientGlue::onChatTyping(bool me, bool typing)
@@ -123,7 +132,7 @@ void PAChatClientGlue::onChatMessage(bool me, QString message)
 	{
 		++other_message_count_;
 		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");	
-		if (!force_red && other_message_count_ < 5)
+		if (message_filter && !force_red && other_message_count_ < 5)
 		{
 			force_red = message_filter->IsMessageFiltered(message);
 		}
@@ -131,12 +140,18 @@ void PAChatClientGlue::onChatMessage(bool me, QString message)
 
 	silence_timer.setInterval(300000);
 	SetStateColor(!me);
-	ui->AddMessage(me, message);
+	if (ui)
+	{
+		ui->AddMessage(me, message);
+	}
 }
 
 void PAChatClientGlue::onChatEnd()
 {
-	auto_sender->Stop();
+	if (auto_sender)
+	{
+		auto_sender->Stop();
+	}
 	silence_timer.stop();
 	QListWidgetItem::setText(string_id_ + "Idle: Chat ended, ready for new chat");
 	SetStateColor();
@@ -151,7 +166,10 @@ void PAChatClientGlue::onChatOnlineCount(int online_count)
 
 void PAChatClientGlue::onTextInputChanged(QString text)
 {
-	client->SendTyping(text.size() > 0);
+	if (client)
+	{
+		client->SendTyping(text.size() > 0);
+	}
 }
 
 void PAChatClientGlue::onSocketDisconnected()
@@ -169,16 +187,19 @@ void PAChatClientGlue::onRequestRemoveBot()
 
 void PAChatClientGlue::onRequestChatSendMessage(QString message)
 {
-	if (client->Chatting())
+	if (client && client->Chatting())
 	{
-		ui->ClearMessageInput();
+		if (ui)
+		{
+			ui->ClearMessageInput();
+		}
 		client->SendMessage(message);
 	}
 }
 
 void PAChatClientGlue::onRequestChatEnd()
 {
-	if (client->Chatting())
+	if (client && client->Chatting())
 	{
 		client->EndChat();
 	}
@@ -191,12 +212,15 @@ void PAChatClientGlue::onRequestChatKeep()
 
 QWidget* PAChatClientGlue::GetTab()
 {
-	return ui->GetTab();
+	return ui ? ui->GetTab() :nullptr;
 }
 
 void PAChatClientGlue::FocusInputText()
 {
-	ui->FocusInputText();
+	if (ui)
+	{
+		ui->FocusInputText();
+	}
 }
 
 void PAChatClientGlue::onSilenceTimerHit()
@@ -206,30 +230,46 @@ void PAChatClientGlue::onSilenceTimerHit()
 
 void PAChatClientGlue::onRequestStopAutoSender()
 {
-	auto_sender->Stop();
+	if (auto_sender)
+	{
+		auto_sender->Stop();
+	}
 }
 
 void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
 {
-	client->SendMessage(string);
-	client->SendTyping(!last_message);
+	if (client)
+	{
+		client->SendMessage(string);
+		client->SendTyping(!last_message);
+	}
 }
 
 void PAChatClientGlue::SendMessage(QString string)
 {
-	client->SendMessage(string);
+	if (client)
+	{
+		client->SendMessage(string);
+	}
 }
 
 void PAChatClientGlue::Reconnect()
 {
-	auto_sender->Stop();
+	if (auto_sender)
+	{
+		auto_sender->Stop();
+	}
 
 	disconnect(client, 0, 0, 0);
 	//client->Reconnect();
 	delete client;
+	client = nullptr;
 
-	ui->ClearMessageInput();
-	ui->RemoveMessages();
+	if (ui)
+	{
+		ui->ClearMessageInput();
+		ui->RemoveMessages();
+	}
 
 	client = new PAChatClient(proxy_->GetHost(), proxy_->GetPort(), this);
 

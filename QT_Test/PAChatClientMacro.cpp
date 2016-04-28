@@ -28,7 +28,7 @@ static bool ReadData()
 PAChatClientMacro::PAChatClientMacro(QListWidget* macro_list, QObject *parent)
 	: QObject(parent), macro_list_(macro_list)
 {
-	if (ReadData())
+	if (ReadData() && macro_list_)
 	{
 		for (auto& message : macro_messages)
 		{
@@ -36,7 +36,10 @@ PAChatClientMacro::PAChatClientMacro(QListWidget* macro_list, QObject *parent)
 		}
 	}
 
-	connect(macro_list_, &QListWidget::itemDoubleClicked, this, &PAChatClientMacro::onItemDoubleClicked);
+	if (macro_list_)
+	{
+		connect(macro_list_, &QListWidget::itemDoubleClicked, this, &PAChatClientMacro::onItemDoubleClicked);
+	}
 }
 
 PAChatClientMacro::~PAChatClientMacro()

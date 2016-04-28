@@ -57,11 +57,16 @@ ProxyEntry* ProxyList::GetLowestCountEntry()
 	}
 
 	ProxyEntry* lowest = *entries_.begin();
+	if (!lowest)
+	{
+		return nullptr;
+	}
+
 	size_t lowest_count = lowest->GetUseCount();
 
 	for (auto& i : entries_)
 	{
-		if (i->GetUseCount() < lowest_count)
+		if (i && i->GetUseCount() < lowest_count)
 		{
 			lowest_count = i->GetUseCount();
 			lowest = i;
@@ -76,7 +81,7 @@ bool ProxyList::IsFull(size_t max_count)
 	size_t entries_full = 0;
 	for (auto& i : entries_)
 	{
-		if (i->GetUseCount() >= max_count)
+		if (i && i->GetUseCount() >= max_count)
 		{
 			++entries_full;
 		}

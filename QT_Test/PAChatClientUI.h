@@ -30,7 +30,6 @@ private:
 	QPointer<QPushButton> chat_manager_end_chat_;
 	QPointer<QPushButton> chat_manager_send_;
 	QPointer<QPushButton> chat_manager_stop_auto_sender_;
-	//QPointer<QTextEdit> chat_box_text_messages_;
 	QPointer<QPlainTextEdit> chat_box_text_messages_;
 	QPointer<QLineEdit> chat_box_text_input_message_;
 

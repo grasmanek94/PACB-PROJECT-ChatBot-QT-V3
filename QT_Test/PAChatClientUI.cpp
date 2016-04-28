@@ -85,7 +85,14 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 	chat_box_text_messages_->setWordWrapMode(QTextOption::WordWrap);
 	chat_box_text_messages_->setReadOnly(true);
 
-	tab_number_ = tabs_container_->addTab(tab_, "");
+	if (tabs_container_)
+	{
+		tab_number_ = tabs_container_->addTab(tab_, "");
+	}
+	else
+	{
+		tab_number_ = -1;
+	}
 
 	connect(chat_box_text_input_message_, &QLineEdit::returnPressed, this, &PAChatClientUI::onChatManagerSendChatButtonClicked);
 	connect(chat_manager_send_, &QPushButton::clicked, this, &PAChatClientUI::onChatManagerSendChatButtonClicked);

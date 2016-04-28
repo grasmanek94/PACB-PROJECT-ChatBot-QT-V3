@@ -1,11 +1,12 @@
 #pragma once
 #include <QObject>
 #include <QListWidget>
+#include <QPointer>
 class PAChatClientMacro: public QObject
 {
 	Q_OBJECT
 private:
-	QListWidget* macro_list_;
+	QPointer<QListWidget> macro_list_;
 public:
 	PAChatClientMacro(QListWidget* macro_list, QObject *parent = Q_NULLPTR);
 	~PAChatClientMacro();

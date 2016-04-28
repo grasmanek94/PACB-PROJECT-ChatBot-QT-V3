@@ -60,10 +60,13 @@ void PAChatManager::onItemSelected(QListWidgetItem* item)
 	if (glue)
 	{
 		QWidget* tab = glue->GetTab();
-		tabs_container_->setCurrentWidget(tab);
-		tab->show();
-		glue->FocusInputText();
-		current_active_ = glue;
+		if (tab && tabs_container_)
+		{
+			tabs_container_->setCurrentWidget(tab);
+			tab->show();
+			glue->FocusInputText();
+			current_active_ = glue;
+		} 
 	}
 }
 
@@ -155,8 +158,12 @@ void PAChatManager::PrepareSearch(PAChatClientGlue* glue)
 	if (!current_searching_ && auto_search_enabled)
 	{
 		current_searching_ = *ready_to_search.begin();
-		current_searching_->Search();
-		search_timer.start(2000);
+		ready_to_search.erase(current_searching_);
+		if (current_searching_)
+		{
+			current_searching_->Search();
+			search_timer.start(2000);
+		}
 	}
 }
 

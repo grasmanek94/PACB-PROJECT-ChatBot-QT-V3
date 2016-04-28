@@ -45,7 +45,6 @@ private:
 	QTimer search_timer;
 
 	std::set<PAChatClientGlue*> ready_to_search;
-	std::queue<PAChatClientGlue*> ready_to_search_queue;
 
 	void PrepareSearch(PAChatClientGlue* glue);
 public:

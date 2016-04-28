@@ -2,6 +2,7 @@
 #define QT_TEST_H
 
 #include <QtWidgets/QMainWindow>
+#include <QPointer>
 #include "ui_qt_test.h"
 #include "PAChatManager.h"
 
@@ -15,7 +16,7 @@ public:
 
 private:
 	Ui::QT_TestClass ui;
-	PAChatManager* manager;
+	QPointer<PAChatManager> manager;
 };
 
 #endif // QT_TEST_H
