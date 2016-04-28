@@ -61,12 +61,16 @@ void PAChatClientGlue::onChatConnected()
 {
 	QListWidgetItem::setText(string_id_ + "Idle: Ready to chat");
 	SetStateColor();
+
+	emit onGlueChatConnected();
 }
 
 void PAChatClientGlue::onChatSearch()
 {
 	QListWidgetItem::setText(string_id_ + "Searching");
 	SetStateColor();
+
+	emit onGlueChatSearch();
 }
 
 void PAChatClientGlue::onChatBegin()
@@ -91,7 +95,7 @@ void PAChatClientGlue::onChatBegin()
 		auto_sender->Start();
 	}
 
-	emit onSearchDone();
+	emit onGlueChatBegin();
 }
 
 bool PAChatClientGlue::ReadyForSearch()
@@ -132,6 +136,8 @@ void PAChatClientGlue::onChatEnd()
 	silence_timer.stop();
 	QListWidgetItem::setText(string_id_ + "Idle: Chat ended, ready for new chat");
 	SetStateColor();
+
+	emit onGlueChatEnd();
 }
 
 void PAChatClientGlue::onChatOnlineCount(int online_count)
@@ -148,6 +154,8 @@ void PAChatClientGlue::onSocketDisconnected()
 {
 	QListWidgetItem::setText(string_id_ + "~");
 	SetStateColor();
+
+	emit onRequestRemove();
 }
 
 void PAChatClientGlue::onRequestRemoveBot()

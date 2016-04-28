@@ -37,7 +37,7 @@ PAChatManager::PAChatManager(
 {
 	connect(add_new_bot_button, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
 	connect(automatic_search_check_box_, &QCheckBox::stateChanged, this, &PAChatManager::onAutoSearcherStateChange);
-	connect(&search_timer, &QTimer::timeout, this, &PAChatManager::StartSearch);
+	connect(&search_timer, &QTimer::timeout, this, &PAChatManager::searchTimeout);
 	connect(list_view_, &QListWidget::itemClicked, this, &PAChatManager::onItemSelected);
 	connect(list_view_, &QListWidget::itemPressed, this, &PAChatManager::onItemSelected);
 	connect(list_view_, &QListWidget::itemActivated, this, &PAChatManager::onItemSelected);
@@ -47,8 +47,6 @@ PAChatManager::PAChatManager(
 
 	chat_macros_ = new PAChatClientMacro(macro_list_, this);
 	connect(chat_macros_, &PAChatClientMacro::onMacroRequested, this, &PAChatManager::onMacroRequested);
-
-	search_timer.start(250);
 }
 
 PAChatManager::~PAChatManager()
@@ -82,21 +80,29 @@ void PAChatManager::PushClient()
 	list_view_->addItem(glue);
 
 	connect(glue, &PAChatClientGlue::onRequestRemove, this, &PAChatManager::PopClient);	//plz kill     `me`
-	connect(glue, &PAChatClientGlue::onSearchDone, this, &PAChatManager::onSearchDone);
+
+	connect(glue, &PAChatClientGlue::onGlueChatConnected, this, &PAChatManager::onChatConnected);
+	connect(glue, &PAChatClientGlue::onGlueChatSearch, this, &PAChatManager::onChatSearch);
+	connect(glue, &PAChatClientGlue::onGlueChatBegin, this, &PAChatManager::onChatBegin);
+	connect(glue, &PAChatClientGlue::onGlueChatEnd, this, &PAChatManager::onChatEnd);
 
 	if (!current_active_)
 	{
 		current_active_ = glue;
 	}
-
-	StartSearch();
 }
 
 void PAChatManager::PopClient()
 {
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	PopClient2(glue);
+}
+
+void PAChatManager::PopClient2(PAChatClientGlue* glue)
+{
 	bool eq = current_active_ == glue;
 
+	ready_to_search.erase(glue);
 	clients.erase(glue);
 	list_view_->removeItemWidget(glue);
 	tabs_container_->removeTab(tabs_container_->indexOf(glue->GetTab()));
@@ -111,28 +117,66 @@ void PAChatManager::PopClient()
 void PAChatManager::onAutoSearcherStateChange(int state)
 {
 	auto_search_enabled = state > 0;
-	StartSearch();
-}
-
-void PAChatManager::onSearchDone()
-{
-	current_searching_ = nullptr;
-	StartSearch();
-}
-
-void PAChatManager::StartSearch()
-{
-	if (auto_search_enabled && !current_searching_)
+	if (auto_search_enabled && ready_to_search.size())
 	{
-		for (auto& client : clients)
+		PrepareSearch(*ready_to_search.begin());
+	}
+}
+
+void PAChatManager::searchTimeout()
+{
+	if (current_searching_)
+	{
+		PopClient2(current_searching_);
+		if (ready_to_search.size())
 		{
-			if (client->ReadyForSearch())
-			{
-				client->Search();
-				current_searching_ = client;
-			}
+			PrepareSearch(*ready_to_search.begin());
 		}
 	}
+}
+
+void PAChatManager::PrepareSearch(PAChatClientGlue* glue)
+{
+	ready_to_search.insert(glue);
+	if (!current_searching_ && auto_search_enabled)
+	{
+		current_searching_ = *ready_to_search.begin();
+		current_searching_->Search();
+		search_timer.start(2000);
+	}
+}
+
+void PAChatManager::onChatConnected()
+{
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	PrepareSearch(glue);
+}
+
+void PAChatManager::onChatSearch()
+{
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	ready_to_search.erase(glue);
+}
+
+void PAChatManager::onChatBegin()
+{
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	ready_to_search.erase(glue);
+	if (current_searching_ == glue)
+	{
+		current_searching_ = nullptr;
+		search_timer.stop();
+		if (ready_to_search.size())
+		{
+			PrepareSearch(*ready_to_search.begin());
+		}
+	}
+}
+
+void PAChatManager::onChatEnd()
+{
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	PrepareSearch(glue);
 }
 
 void PAChatManager::onMacroRequested(QString text)

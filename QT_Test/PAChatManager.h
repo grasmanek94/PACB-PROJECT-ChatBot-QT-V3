@@ -39,10 +39,13 @@ private:
 
 	void PushClient();
 	void PopClient();
-
-	void StartSearch();
+	void PopClient2(PAChatClientGlue*);
 
 	QTimer search_timer;
+
+	std::unordered_set<PAChatClientGlue*> ready_to_search;
+
+	void PrepareSearch(PAChatClientGlue* glue);
 public:
 	PAChatManager(
 		QListWidget* proxy_entry_item_list_widget, 
@@ -65,8 +68,12 @@ public:
 	~PAChatManager();
 
 private Q_SLOTS:
-	void onSearchDone();
 	void onAutoSearcherStateChange(int state);
 	void onItemSelected(QListWidgetItem * item);
 	void onMacroRequested(QString text);
+	void onChatConnected();
+	void onChatSearch();
+	void onChatBegin();
+	void onChatEnd();
+	void searchTimeout();
 };

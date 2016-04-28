@@ -103,7 +103,7 @@ void PAChatClientUI::AddMessage(bool me, const QString& message)
 		"background-color:rgb(249,86,79);font-size:14px;color:rgb(255,255,255);";
 
 	QString format("<div style='%1'> %2 </div> <div style='font-size:3px;'> &zwnj; </div>");
-	QString htmlText = format.arg(style).arg(message.toHtmlEscaped());
+	QString htmlText = format.arg(style).arg(message.toHtmlEscaped()).replace("\\\\", "\\").replace("\\\"", "\"");
 
 	chat_box_text_messages_->appendHtml(htmlText);
 }

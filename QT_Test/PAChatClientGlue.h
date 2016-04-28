@@ -47,7 +47,10 @@ public:
 	void SendMessage(QString string);
 
 Q_SIGNALS:
-	void onSearchDone();
+	void onGlueChatConnected();
+	void onGlueChatSearch();
+	void onGlueChatBegin();
+	void onGlueChatEnd();
 
 	void onRequestRemove();
 	void onOnlineCountUpdate(int online_count);
