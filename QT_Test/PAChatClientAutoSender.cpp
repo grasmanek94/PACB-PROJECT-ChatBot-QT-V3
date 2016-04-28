@@ -54,6 +54,11 @@ void PAChatClientAutoSender::Stop()
 	message_sender_.stop();
 }
 
+bool PAChatClientAutoSender::Stopped()
+{
+	return !message_sender_.isActive();
+}
+
 void PAChatClientAutoSender::processNextMessage()
 {
 	if (current_index_ < story_messages.size())

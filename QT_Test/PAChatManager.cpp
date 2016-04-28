@@ -47,8 +47,17 @@ PAChatManager::PAChatManager(
 
 	connect(fill_with_bots_button_, &QPushButton::clicked, this, &PAChatManager::PushClientsFull);
 	
-	ProxyEntry* entry = new ProxyEntry("", 0, &proxy_list_);
-	proxy_list_.Add(entry);
+	{ ProxyEntry* entry = new ProxyEntry("", 0, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.251.46", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.254.79", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.251.168", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.249.31", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.253.140", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.253.64", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.249.118", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.252.158", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.253.135", 1080, &proxy_list_); proxy_list_.Add(entry); }
+	{ ProxyEntry* entry = new ProxyEntry("13.94.253.245", 1080, &proxy_list_); proxy_list_.Add(entry); }
 
 	chat_macros_ = new PAChatClientMacro(macro_list_, this);
 	connect(chat_macros_, &PAChatClientMacro::onMacroRequested, this, &PAChatManager::onMacroRequested);
@@ -130,7 +139,7 @@ void PAChatManager::PopClient2(PAChatClientGlue* glue)
 	{
 		onItemSelected(*clients.begin());
 	}*/
-	glue->Reconnect();
+	//glue->Reconnect();
 }
 
 void PAChatManager::onSocketConnected()

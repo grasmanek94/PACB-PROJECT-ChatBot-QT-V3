@@ -50,7 +50,7 @@ public:
     {
         if (QT_TestClass->objectName().isEmpty())
             QT_TestClass->setObjectName(QStringLiteral("QT_TestClass"));
-        QT_TestClass->resize(1372, 477);
+        QT_TestClass->resize(1372, 784);
         QT_TestClass->setMinimumSize(QSize(1113, 477));
         QIcon icon;
         icon.addFile(QStringLiteral("C:/Users/ChatBot/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);

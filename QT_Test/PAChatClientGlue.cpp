@@ -126,20 +126,35 @@ void PAChatClientGlue::onChatTyping(bool me, bool typing)
 
 }
 
-void PAChatClientGlue::onChatMessage(bool me, QString message)
+void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 {
 	if (!me)
 	{
 		++other_message_count_;
+
 		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");	
 		if (message_filter && !force_red && other_message_count_ < 5)
 		{
 			force_red = message_filter->IsMessageFiltered(message);
 		}
+
+		if (auto_sender && !auto_sender->Stopped() && message.length() == 5 && message.toLower() == "#stop")
+		{
+			auto_sender->Stop();
+			client->SendMessage("Automatische berichten zijn uitgezet, wat nu?");
+		}
 	}
 
 	silence_timer.setInterval(300000);
-	SetStateColor(!me);
+	switch(sender_id)
+	{
+		case 1: // AutoMessage
+			break;
+		default:
+			SetStateColor(!me);
+			break;
+	}
+
 	if (ui)
 	{
 		ui->AddMessage(me, message);
@@ -240,7 +255,7 @@ void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
 {
 	if (client)
 	{
-		client->SendMessage(string);
+		client->SendMessage(string, 1);
 		client->SendTyping(!last_message);
 	}
 }

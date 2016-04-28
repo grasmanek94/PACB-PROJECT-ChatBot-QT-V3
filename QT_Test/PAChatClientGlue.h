@@ -64,7 +64,7 @@ private Q_SLOTS:
 	void onChatSearch();
 	void onChatBegin();
 	void onChatTyping(bool me, bool typing);
-	void onChatMessage(bool me, QString message);
+	void onChatMessage(bool me, QString message, int sender_id);
 	void onChatEnd();
 	void onChatOnlineCount(int online_count);
 	void onSocketDisconnected();

@@ -4,6 +4,7 @@
 #include <QtCore/QProcess>
 #include <QtCore/QTimer>
 #include <QListWidget>
+#include <QPointer>
 #include <array>
 
 enum PAChatClientState
@@ -45,15 +46,17 @@ private:
 	bool is_other_typing_;
 	int online_count_;
 
-	QWebSocket webSocket_;
-	QProcess process_;
-	QTimer pinger_;
-	QTimer online_count_update_;
+	QPointer<QWebSocket> webSocket_;
+	QPointer<QProcess> process_;
+	QPointer<QTimer> pinger_;
+	QPointer<QTimer> online_count_update_;
 
 	QString proxy_host_;
 	ushort proxy_port_;
 
 	PAChatClientState state_;
+
+	void StartGeneratingSID();
 public:
 	PAChatClient(const QString& proxy_host = "", ushort port = 1080, QObject *parent = Q_NULLPTR);
 	~PAChatClient();
@@ -62,7 +65,7 @@ public:
 	bool Searching();
 	bool Connected();
 	bool Chatting();
-	bool SendMessage(QString messge);
+	bool SendMessage(QString messge, int sender_id = 0);
 	bool SendTyping(bool typing);
 	bool EndChat();
 	int OnlineCount();
@@ -76,7 +79,7 @@ Q_SIGNALS:
 	void onChatSearch();
 	void onChatBegin();
 	void onChatTyping(bool me, bool typing);
-	void onChatMessage(bool me, QString message);
+	void onChatMessage(bool me, QString message, int sender_id);
 	void onChatEnd();
 	void onChatOnlineCount(int online_count);
 	void onSocketDisconnected();

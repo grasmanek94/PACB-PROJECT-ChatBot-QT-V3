@@ -9,9 +9,6 @@ QT_USE_NAMESPACE
 
 PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *parent)
 	: QObject(parent),
-	webSocket_("http://ws.praatanoniem.nl"),
-	pinger_(this),
-	online_count_update_(this),
 	proxy_host_(proxy_host),
 	proxy_port_(port)
 {
@@ -21,28 +18,49 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 	is_typing_ = false;
 	is_other_typing_ = false;
 	online_count_ = 0;
+	process_ = nullptr;
 
-	connect(&webSocket_, &QWebSocket::connected, this, &PAChatClient::onConnected);
-	connect(&webSocket_, &QWebSocket::disconnected, this, &PAChatClient::onDisconnected);
+	webSocket_ = new QWebSocket("http://ws.praatanoniem.nl");
+	pinger_ = new QTimer(this);
+	online_count_update_ = new QTimer(this);
 
-	connect(&pinger_, &QTimer::timeout, this, &PAChatClient::onPing);
-	connect(&online_count_update_, &QTimer::timeout, this, &PAChatClient::onOnlineCountUpdate);
+	connect(webSocket_, &QWebSocket::connected, this, &PAChatClient::onConnected);
+	connect(webSocket_, &QWebSocket::disconnected, this, &PAChatClient::onDisconnected);
+	connect(webSocket_, &QWebSocket::textMessageReceived, this, &PAChatClient::onTextMessageReceived);
 
-	connect(&process_, &QProcess::readyReadStandardOutput, this, &PAChatClient::onProcessInput);  // connect process signals with your code
-	connect(&process_, &QProcess::readyReadStandardError, this, &PAChatClient::onProcessInput);  // same here
-	
+	connect(pinger_, &QTimer::timeout, this, &PAChatClient::onPing);
+	connect(online_count_update_, &QTimer::timeout, this, &PAChatClient::onOnlineCountUpdate);
+
+	StartGeneratingSID();
+}
+
+void PAChatClient::StartGeneratingSID()
+{
+	if (process_)
+	{
+		disconnect(process_, 0, 0, 0);
+		process_->kill();
+		process_->close();
+		delete process_;
+	}
+
+	process_ = new QProcess(this);
+
+	connect(process_, &QProcess::readyReadStandardOutput, this, &PAChatClient::onProcessInput);
+	connect(process_, &QProcess::readyReadStandardError, this, &PAChatClient::onProcessInput);
+
 	QDir dir = QFileInfo(QCoreApplication::applicationFilePath()).absoluteDir();
 
-	process_.setProcessChannelMode(QProcess::MergedChannels);
-	process_.setWorkingDirectory(dir.absolutePath());
+	process_->setProcessChannelMode(QProcess::MergedChannels);
+	process_->setWorkingDirectory(dir.absolutePath());
 
 	if (proxy_host_.length())
 	{
-		process_.start(dir.absolutePath() + "/sid_alive.exe -t socks5 -h " + proxy_host_ + ":" + QString::number(proxy_port_));
+		process_->start(dir.absolutePath() + "/sid_alive.exe -t socks5 -h " + proxy_host_ + ":" + QString::number(proxy_port_));
 	}
 	else
 	{
-		process_.start(dir.absolutePath() + "/sid_alive.exe");
+		process_->start(dir.absolutePath() + "/sid_alive.exe");
 	}
 
 	state_ = PAChatClientState_GeneratingSID;
@@ -52,7 +70,7 @@ void PAChatClient::onProcessInput()
 {
 	bool done = false;
 
-	QString out = process_.readAllStandardOutput();
+	QString out = process_->readAllStandardOutput();
 	QString process_read_buffer_;
 
 	for (int i = 0; i < out.size(); ++i)
@@ -83,10 +101,10 @@ void PAChatClient::onProcessInput()
 				proxy.setHostName(proxy_host_);
 				proxy.setPort(proxy_port_);
 				proxy.setType(QNetworkProxy::ProxyType::Socks5Proxy);
-				webSocket_.setProxy(proxy);
+				webSocket_->setProxy(proxy);
 			}
 
-			webSocket_.open(url);
+			webSocket_->open(url);
 
 			state_ = PAChatClientState_SocketConnecting;
 		}
@@ -100,29 +118,28 @@ void PAChatClient::onProcessInput()
 
 PAChatClient::~PAChatClient()
 {
-	disconnect(&webSocket_);
-	disconnect(&process_);
+	disconnect(webSocket_);
+	disconnect(process_);
 	disconnect(this, 0, 0, 0);
-	webSocket_.disconnect();
-	process_.kill();
+	//webSocket_.disconnect();
+	process_->kill();
 }
 
 void PAChatClient::onPing()
 {
-	webSocket_.sendTextMessage(QStringLiteral("2"));
+	webSocket_->sendTextMessage(QStringLiteral("2"));
 }
 
 void PAChatClient::onOnlineCountUpdate()
 {
-	webSocket_.sendTextMessage(QStringLiteral("42[\"count\"]"));
+	webSocket_->sendTextMessage(QStringLiteral("42[\"count\"]"));
 }
 
 void PAChatClient::onConnected()
 {
 	qDebug() << "WebSocket connected";
 
-	connect(&webSocket_, &QWebSocket::textMessageReceived, this, &PAChatClient::onTextMessageReceived);
-	webSocket_.sendTextMessage(QStringLiteral("2probe"));
+	webSocket_->sendTextMessage(QStringLiteral("2probe"));
 
 	state_ = PAChatClientState_ChatConnecting;
 
@@ -139,10 +156,14 @@ void PAChatClient::onDisconnected()
 	is_typing_ = false;
 	is_other_typing_ = false;
 	online_count_ = 0;
-	pinger_.stop();
-	online_count_update_.stop();
-	process_.kill();
+	pinger_->stop();
+	online_count_update_->stop();
+	process_->kill();
+
 	emit onSocketDisconnected();
+
+	//Reconnect?
+	StartGeneratingSID();
 }
 
 void PAChatClient::onTextMessageReceived(QString incomming_message)
@@ -189,10 +210,10 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 		}
 		else if (!connected_ && incomming_message == "3probe")
 		{
-			webSocket_.sendTextMessage(QStringLiteral("5"));
+			webSocket_->sendTextMessage(QStringLiteral("5"));
 
-			pinger_.start(26000);
-			online_count_update_.start(10000);
+			pinger_->start(26000);
+			online_count_update_->start(10000);
 
 			connected_ = true;
 
@@ -237,7 +258,7 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 				QString recvd_message = json.mid(start_message, end_message - start_message);
 
 				//OnChatMessage
-				emit onChatMessage(false, recvd_message);
+				emit onChatMessage(false, recvd_message, -1);
 			}
 			break;
 		}
@@ -252,7 +273,7 @@ bool PAChatClient::Search()
 	}
 
 	searching_ = true;
-	webSocket_.sendTextMessage(QStringLiteral("42[\"start\"]"));
+	webSocket_->sendTextMessage(QStringLiteral("42[\"start\"]"));
 	state_ = PAChatClientState_Searching;
 	emit onChatSearch();
 
@@ -274,7 +295,7 @@ bool PAChatClient::Chatting()
 	return chatting_;
 }
 
-bool PAChatClient::SendMessage(QString message)
+bool PAChatClient::SendMessage(QString message, int sender_id)
 {
 	if (!connected_ || searching_ || !chatting_)
 	{
@@ -283,9 +304,9 @@ bool PAChatClient::SendMessage(QString message)
 
 	QString format("42[\"message\",{\"message\":\"%1\"}]");
 
-	webSocket_.sendTextMessage(format.arg(message.replace("\"", "\\\"").replace("\\", "\\\\")));
+	webSocket_->sendTextMessage(format.arg(message.replace("\"", "\\\"").replace("\\", "\\\\")));
 
-	emit onChatMessage(true, message);
+	emit onChatMessage(true, message, sender_id);
 
 	SendTyping(false);
 
@@ -311,7 +332,7 @@ bool PAChatClient::SendTyping(bool typing)
 
 	is_typing_ = typing;
 
-	webSocket_.sendTextMessage("42[\"typing\",{\"typing\":" + QString(is_typing_ ? "true" : "false") +"}]");
+	webSocket_->sendTextMessage("42[\"typing\",{\"typing\":" + QString(is_typing_ ? "true" : "false") +"}]");
 	emit onChatTyping(true, is_typing_);
 
 	return true;
@@ -331,7 +352,7 @@ bool PAChatClient::EndChat()
 
 	state_ = PAChatClientState_Idle;
 
-	webSocket_.sendTextMessage("42[\"end\"]");
+	webSocket_->sendTextMessage("42[\"end\"]");
 	emit onChatEnd();
 
 	return true;	
@@ -340,7 +361,7 @@ bool PAChatClient::EndChat()
 //doesn't work...
 void PAChatClient::Reconnect()
 {
-	webSocket_.disconnect();
+	webSocket_->disconnect();
 
 	state_ = PAChatClientState_Disconnected;
 	connected_ = false;
@@ -349,9 +370,9 @@ void PAChatClient::Reconnect()
 	is_typing_ = false;
 	is_other_typing_ = false;
 	online_count_ = 0;
-	pinger_.stop();
-	online_count_update_.stop();
-	process_.kill();
+	pinger_->stop();
+	online_count_update_->stop();
+	process_->kill();
 
 	connected_ = false;
 	searching_ = false;
@@ -360,21 +381,5 @@ void PAChatClient::Reconnect()
 	is_other_typing_ = false;
 	online_count_ = 0;
 
-	process_.close();
-
-	QDir dir = QFileInfo(QCoreApplication::applicationFilePath()).absoluteDir();
-
-	process_.setProcessChannelMode(QProcess::MergedChannels);
-	process_.setWorkingDirectory(dir.absolutePath());
-
-	if (proxy_host_.length())
-	{
-		process_.start(dir.absolutePath() + "/sid_alive.exe -t socks5 -h " + proxy_host_ + ":" + QString::number(proxy_port_));
-	}
-	else
-	{
-		process_.start(dir.absolutePath() + "/sid_alive.exe");
-	}
-
-	state_ = PAChatClientState_GeneratingSID;
+	StartGeneratingSID();
 }

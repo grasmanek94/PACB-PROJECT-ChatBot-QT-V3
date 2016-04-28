@@ -15,6 +15,7 @@ public:
 
 	void Start();
 	void Stop();
+	bool Stopped();
 	QString GetIntroMessage();
 
 Q_SIGNALS:
