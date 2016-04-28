@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QPointer>
 #include "ProxyEntry.h"
+#include <QString>
+#include <QStringList>
 
 class ProxyList : public QObject
 {

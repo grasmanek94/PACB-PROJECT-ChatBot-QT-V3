@@ -21,7 +21,7 @@ bool ProxyList::Add(ProxyEntry* entry)
 	{
 		for (auto& i : entries_)
 		{
-			if (entry->GetPort() == i->GetPort() && entry->GetHost().toLower() == entry->GetHost().toLower())
+			if (entry->GetPort() == i->GetPort() && entry->GetHost().toLower() == i->GetHost().toLower())
 			{
 				return false;
 			}
@@ -87,14 +87,13 @@ bool ProxyList::IsFull(size_t max_count)
 void ProxyList::InputSubmit(bool checked)
 {
 	QString data(input_area_->text());
-	auto proxy_list = data.split(';');
+	QStringList proxy_list = data.split(";");
 	for (auto& entry : proxy_list)
 	{
 		auto proxy_entry = entry.split(':');
 		bool succeeded = false;
 		if (proxy_entry.size() == 2)
 		{
-
 			QString host = proxy_entry[0];
 			ushort port = proxy_entry[1].toInt(&succeeded);
 			if (succeeded)
