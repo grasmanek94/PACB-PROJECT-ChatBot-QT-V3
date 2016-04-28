@@ -1,5 +1,6 @@
 #pragma once
-#include <unordered_set>
+#include <set>
+#include <queue>
 
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
@@ -20,7 +21,7 @@ private:
 	QPointer<QListWidget> macro_list_;
 	QPointer<PAChatClientMacro> chat_macros_;
 
-	std::unordered_set<PAChatClientGlue*> clients;
+	std::set<PAChatClientGlue*> clients;
 	QPointer<PAChatClientGlue> current_searching_;
 	QPointer<PAChatClientGlue> current_active_;
 
@@ -43,7 +44,8 @@ private:
 
 	QTimer search_timer;
 
-	std::unordered_set<PAChatClientGlue*> ready_to_search;
+	std::set<PAChatClientGlue*> ready_to_search;
+	std::queue<PAChatClientGlue*> ready_to_search_queue;
 
 	void PrepareSearch(PAChatClientGlue* glue);
 public:
@@ -75,5 +77,7 @@ private Q_SLOTS:
 	void onChatSearch();
 	void onChatBegin();
 	void onChatEnd();
+	void onSocketConnected();
+	void onSocketDisconnected();
 	void searchTimeout();
 };

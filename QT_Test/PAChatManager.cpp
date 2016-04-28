@@ -85,6 +85,8 @@ void PAChatManager::PushClient()
 	connect(glue, &PAChatClientGlue::onGlueChatSearch, this, &PAChatManager::onChatSearch);
 	connect(glue, &PAChatClientGlue::onGlueChatBegin, this, &PAChatManager::onChatBegin);
 	connect(glue, &PAChatClientGlue::onGlueChatEnd, this, &PAChatManager::onChatEnd);
+	connect(glue, &PAChatClientGlue::onGlueSocketConnected, this, &PAChatManager::onSocketConnected);
+	connect(glue, &PAChatClientGlue::onGlueSocketDisconnected, this, &PAChatManager::onSocketDisconnected);
 
 	if (!current_active_)
 	{
@@ -100,7 +102,7 @@ void PAChatManager::PopClient()
 
 void PAChatManager::PopClient2(PAChatClientGlue* glue)
 {
-	bool eq = current_active_ == glue;
+	/*bool eq = current_active_ == glue;
 
 	ready_to_search.erase(glue);
 	clients.erase(glue);
@@ -111,7 +113,18 @@ void PAChatManager::PopClient2(PAChatClientGlue* glue)
 	if (eq)
 	{
 		onItemSelected(*clients.begin());
-	}
+	}*/
+	glue->Reconnect();
+}
+
+void PAChatManager::onSocketConnected()
+{
+	onChatBegin();
+}
+
+void PAChatManager::onSocketDisconnected()
+{
+	onChatBegin();
 }
 
 void PAChatManager::onAutoSearcherStateChange(int state)
@@ -146,18 +159,6 @@ void PAChatManager::PrepareSearch(PAChatClientGlue* glue)
 	}
 }
 
-void PAChatManager::onChatConnected()
-{
-	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
-	PrepareSearch(glue);
-}
-
-void PAChatManager::onChatSearch()
-{
-	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
-	ready_to_search.erase(glue);
-}
-
 void PAChatManager::onChatBegin()
 {
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
@@ -172,6 +173,19 @@ void PAChatManager::onChatBegin()
 		}
 	}
 }
+
+void PAChatManager::onChatConnected()
+{
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	PrepareSearch(glue);
+}
+
+void PAChatManager::onChatSearch()
+{
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	ready_to_search.erase(glue);
+}
+
 
 void PAChatManager::onChatEnd()
 {

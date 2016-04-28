@@ -45,12 +45,15 @@ public:
 	QWidget* GetTab();
 	void FocusInputText();
 	void SendMessage(QString string);
+	void Reconnect();
 
 Q_SIGNALS:
+	void onGlueSocketConnected();
 	void onGlueChatConnected();
 	void onGlueChatSearch();
 	void onGlueChatBegin();
 	void onGlueChatEnd();
+	void onGlueSocketDisconnected();
 
 	void onRequestRemove();
 	void onOnlineCountUpdate(int online_count);

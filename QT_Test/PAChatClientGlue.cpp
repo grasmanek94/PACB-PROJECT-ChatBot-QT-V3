@@ -7,9 +7,6 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 	proxy_->PushUseCount();
 
 	client = new PAChatClient(proxy_->GetHost(), proxy_->GetPort(), this);
-	ui = new PAChatClientUI(tabs_container_, this);
-	auto_sender = new PAChatClientAutoSender(this);
-	message_filter = new PAChatClientFilter(this);
 
 	connect(client, &PAChatClient::onSocketConnected, this, &PAChatClientGlue::onSocketConnected);
 	connect(client, &PAChatClient::onChatConnected, this, &PAChatClientGlue::onChatConnected);
@@ -21,6 +18,8 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 	connect(client, &PAChatClient::onChatOnlineCount, this, &PAChatClientGlue::onChatOnlineCount);
 	connect(client, &PAChatClient::onSocketDisconnected, this, &PAChatClientGlue::onSocketDisconnected);
 
+	ui = new PAChatClientUI(tabs_container_, this);
+
 	connect(ui, &PAChatClientUI::onRequestRemoveBot, this, &PAChatClientGlue::onRequestRemoveBot);
 	connect(ui, &PAChatClientUI::onRequestChatSendMessage, this, &PAChatClientGlue::onRequestChatSendMessage);
 	connect(ui, &PAChatClientUI::onRequestChatEnd, this, &PAChatClientGlue::onRequestChatEnd);
@@ -28,6 +27,9 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 	connect(ui, &PAChatClientUI::onRequestStopAutoSender, this, &PAChatClientGlue::onRequestStopAutoSender);
 	connect(ui, &PAChatClientUI::onTextInputChanged, this, &PAChatClientGlue::onTextInputChanged);
 	
+	auto_sender = new PAChatClientAutoSender(this);
+	message_filter = new PAChatClientFilter(this);
+
 	connect(&silence_timer, &QTimer::timeout, this, &PAChatClientGlue::onSilenceTimerHit);
 	connect(auto_sender, &PAChatClientAutoSender::onRequestNewMessage, this, &PAChatClientGlue::onAutoSenderMessage);
 
@@ -55,6 +57,8 @@ void PAChatClientGlue::onSocketConnected()
 {
 	QListWidgetItem::setText(string_id_ + "New Bot: Opening Chat");
 	SetStateColor();
+
+	emit onGlueSocketConnected();
 }
 
 void PAChatClientGlue::onChatConnected()
@@ -155,7 +159,7 @@ void PAChatClientGlue::onSocketDisconnected()
 	QListWidgetItem::setText(string_id_ + "~");
 	SetStateColor();
 
-	emit onRequestRemove();
+	emit onGlueSocketDisconnected();
 }
 
 void PAChatClientGlue::onRequestRemoveBot()
@@ -214,4 +218,30 @@ void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
 void PAChatClientGlue::SendMessage(QString string)
 {
 	client->SendMessage(string);
+}
+
+void PAChatClientGlue::Reconnect()
+{
+	auto_sender->Stop();
+
+	//client->Reconnect();
+	delete client;
+
+	ui->ClearMessageInput();
+	ui->RemoveMessages();
+
+	client = new PAChatClient(proxy_->GetHost(), proxy_->GetPort(), this);
+
+	connect(client, &PAChatClient::onSocketConnected, this, &PAChatClientGlue::onSocketConnected);
+	connect(client, &PAChatClient::onChatConnected, this, &PAChatClientGlue::onChatConnected);
+	connect(client, &PAChatClient::onChatSearch, this, &PAChatClientGlue::onChatSearch);
+	connect(client, &PAChatClient::onChatBegin, this, &PAChatClientGlue::onChatBegin);
+	connect(client, &PAChatClient::onChatTyping, this, &PAChatClientGlue::onChatTyping);
+	connect(client, &PAChatClient::onChatMessage, this, &PAChatClientGlue::onChatMessage);
+	connect(client, &PAChatClient::onChatEnd, this, &PAChatClientGlue::onChatEnd);
+	connect(client, &PAChatClient::onChatOnlineCount, this, &PAChatClientGlue::onChatOnlineCount);
+	connect(client, &PAChatClient::onSocketDisconnected, this, &PAChatClientGlue::onSocketDisconnected);
+
+	QListWidgetItem::setText(string_id_ + "New Bot: Connecting Socket");
+	SetStateColor();
 }

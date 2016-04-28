@@ -36,9 +36,9 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 	process_.setProcessChannelMode(QProcess::MergedChannels);
 	process_.setWorkingDirectory(dir.absolutePath());
 
-	if (proxy_host.length())
+	if (proxy_host_.length())
 	{
-		process_.start(dir.absolutePath() + "/sid_alive.exe -t socks5 -h " + proxy_host + ":" + QString::number(port));
+		process_.start(dir.absolutePath() + "/sid_alive.exe -t socks5 -h " + proxy_host_ + ":" + QString::number(proxy_port_));
 	}
 	else
 	{
@@ -330,4 +330,46 @@ bool PAChatClient::EndChat()
 	emit onChatEnd();
 
 	return true;	
+}
+
+//doesn't work...
+void PAChatClient::Reconnect()
+{
+	webSocket_.disconnect();
+
+	state_ = PAChatClientState_Disconnected;
+	connected_ = false;
+	searching_ = false;
+	chatting_ = false;
+	is_typing_ = false;
+	is_other_typing_ = false;
+	online_count_ = 0;
+	pinger_.stop();
+	online_count_update_.stop();
+	process_.kill();
+
+	connected_ = false;
+	searching_ = false;
+	chatting_ = false;
+	is_typing_ = false;
+	is_other_typing_ = false;
+	online_count_ = 0;
+
+	process_.close();
+
+	QDir dir = QFileInfo(QCoreApplication::applicationFilePath()).absoluteDir();
+
+	process_.setProcessChannelMode(QProcess::MergedChannels);
+	process_.setWorkingDirectory(dir.absolutePath());
+
+	if (proxy_host_.length())
+	{
+		process_.start(dir.absolutePath() + "/sid_alive.exe -t socks5 -h " + proxy_host_ + ":" + QString::number(proxy_port_));
+	}
+	else
+	{
+		process_.start(dir.absolutePath() + "/sid_alive.exe");
+	}
+
+	state_ = PAChatClientState_GeneratingSID;
 }

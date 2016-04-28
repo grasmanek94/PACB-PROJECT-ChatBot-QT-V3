@@ -69,6 +69,7 @@ public:
 	bool EndChat();
 	int OnlineCount();
 
+	void Reconnect();
 	PAChatClientState State();
 
 Q_SIGNALS:
