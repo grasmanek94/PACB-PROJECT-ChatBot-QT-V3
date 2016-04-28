@@ -6,6 +6,7 @@
 #include "PAChatClient.h"
 #include "PAChatClientUI.h"
 #include "PAChatClientAutoSender.h"
+#include "PAChatClientFilter.h"
 #include "ProxyEntry.h"
 
 class PAChatClientGlue: public QObject, public QListWidgetItem
@@ -15,7 +16,7 @@ private:
 	QPointer<PAChatClient> client;
 	QPointer<PAChatClientUI> ui;
 	QPointer<PAChatClientAutoSender> auto_sender;
-
+	QPointer<PAChatClientFilter> message_filter;
 
 	QPointer<ProxyEntry> proxy_;
 	QPointer<QTabWidget> tabs_container_;
@@ -26,6 +27,7 @@ private:
 	bool force_red;
 	int int_id_;
 	QString string_id_;
+	int other_message_count_;
 
 	QTimer silence_timer;
 public:

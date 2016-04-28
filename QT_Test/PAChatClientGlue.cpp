@@ -9,6 +9,7 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 	client = new PAChatClient(proxy_->GetHost(), proxy_->GetPort(), this);
 	ui = new PAChatClientUI(tabs_container_, this);
 	auto_sender = new PAChatClientAutoSender(this);
+	message_filter = new PAChatClientFilter(this);
 
 	connect(client, &PAChatClient::onSocketConnected, this, &PAChatClientGlue::onSocketConnected);
 	connect(client, &PAChatClient::onChatConnected, this, &PAChatClientGlue::onChatConnected);
@@ -70,6 +71,7 @@ void PAChatClientGlue::onChatSearch()
 
 void PAChatClientGlue::onChatBegin()
 {
+	other_message_count_ = 0;
 	force_red = false;
 	silence_timer.start(300000);
 	QListWidgetItem::setText(string_id_ + "Chatting: No Unread Messages");
@@ -111,7 +113,12 @@ void PAChatClientGlue::onChatMessage(bool me, QString message)
 {
 	if (!me)
 	{
-		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");		
+		++other_message_count_;
+		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");	
+		if (!force_red && other_message_count_ < 5)
+		{
+			force_red = message_filter->IsMessageFiltered(message);
+		}
 	}
 
 	silence_timer.setInterval(300000);
