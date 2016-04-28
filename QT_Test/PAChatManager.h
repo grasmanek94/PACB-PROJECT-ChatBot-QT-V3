@@ -30,6 +30,7 @@ private:
 	QPointer<QPushButton> add_new_bot_button_;
 	QPointer<QPushButton> request_new_chat_button_;
 	QPointer<QCheckBox> automatic_search_check_box_;
+	QPointer<QPushButton> fill_with_bots_button_;
 
 	QPointer<QCheckBox> send_intro_message_check_box_;
 	QPointer<QCheckBox> story_mode_check_box_;
@@ -38,8 +39,6 @@ private:
 
 	bool auto_search_enabled;
 
-	void PushClient();
-	void PopClient();
 	void PopClient2(PAChatClientGlue*);
 
 	QTimer search_timer;
@@ -65,6 +64,8 @@ public:
 
 		QListWidget* macro_list,
 
+		QPushButton* fill_with_bots_button,
+
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();
 
@@ -79,4 +80,7 @@ private Q_SLOTS:
 	void onSocketConnected();
 	void onSocketDisconnected();
 	void searchTimeout();
+	void PushClient();
+	void PopClient();
+	void PushClientsFull();
 };

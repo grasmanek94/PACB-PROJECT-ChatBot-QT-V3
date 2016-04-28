@@ -50,8 +50,6 @@ private:
 	QTimer pinger_;
 	QTimer online_count_update_;
 
-	QString process_read_buffer_;
-
 	QString proxy_host_;
 	ushort proxy_port_;
 

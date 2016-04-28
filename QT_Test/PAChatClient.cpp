@@ -53,6 +53,8 @@ void PAChatClient::onProcessInput()
 	bool done = false;
 
 	QString out = process_.readAllStandardOutput();
+	QString process_read_buffer_;
+
 	for (int i = 0; i < out.size(); ++i)
 	{
 		if (out[i] != '\r')
@@ -98,6 +100,9 @@ void PAChatClient::onProcessInput()
 
 PAChatClient::~PAChatClient()
 {
+	disconnect(&webSocket_);
+	disconnect(&process_);
+	disconnect(this, 0, 0, 0);
 	webSocket_.disconnect();
 	process_.kill();
 }

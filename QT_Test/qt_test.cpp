@@ -16,6 +16,7 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.autoSendIntroductionMessage, 
 		ui.autoSenderState, 
 		ui.preparedTextsBox,
+		ui.chatManagerFillBots,
 		this);
 }
 

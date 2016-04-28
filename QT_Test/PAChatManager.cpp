@@ -19,6 +19,8 @@ PAChatManager::PAChatManager(
 
 	QListWidget* macro_list,
 
+	QPushButton* fill_with_bots_button,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -33,15 +35,18 @@ PAChatManager::PAChatManager(
 	  send_intro_message_check_box_(send_intro_message_check_box),
 	  story_mode_check_box_(story_mode_check_box),
 	  current_active_(nullptr),
-	  macro_list_(macro_list)
+	  macro_list_(macro_list),
+	  fill_with_bots_button_(fill_with_bots_button)
 {
-	connect(add_new_bot_button, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
+	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
 	connect(automatic_search_check_box_, &QCheckBox::stateChanged, this, &PAChatManager::onAutoSearcherStateChange);
 	connect(&search_timer, &QTimer::timeout, this, &PAChatManager::searchTimeout);
 	connect(list_view_, &QListWidget::itemClicked, this, &PAChatManager::onItemSelected);
 	connect(list_view_, &QListWidget::itemPressed, this, &PAChatManager::onItemSelected);
 	connect(list_view_, &QListWidget::itemActivated, this, &PAChatManager::onItemSelected);
 
+	connect(fill_with_bots_button_, &QPushButton::clicked, this, &PAChatManager::PushClientsFull);
+	
 	ProxyEntry* entry = new ProxyEntry("", 0, &proxy_list_);
 	proxy_list_.Add(entry);
 
@@ -94,6 +99,14 @@ void PAChatManager::PushClient()
 	if (!current_active_)
 	{
 		current_active_ = glue;
+	}
+}
+
+void PAChatManager::PushClientsFull()
+{
+	while (!proxy_list_.IsFull())
+	{
+		PushClient();
 	}
 }
 
