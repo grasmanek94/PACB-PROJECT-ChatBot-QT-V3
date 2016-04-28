@@ -224,6 +224,7 @@ void PAChatClientGlue::Reconnect()
 {
 	auto_sender->Stop();
 
+	disconnect(client, 0, 0, 0);
 	//client->Reconnect();
 	delete client;
 
