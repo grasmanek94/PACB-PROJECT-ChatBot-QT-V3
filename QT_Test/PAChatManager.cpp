@@ -125,6 +125,7 @@ void PAChatManager::onSocketConnected()
 void PAChatManager::onSocketDisconnected()
 {
 	onChatBegin();
+	PopClient();
 }
 
 void PAChatManager::onAutoSearcherStateChange(int state)
