@@ -73,15 +73,16 @@ ProxyEntry* ProxyList::GetLowestCountEntry()
 
 bool ProxyList::IsFull(size_t max_count)
 {
+	size_t entries_full = 0;
 	for (auto& i : entries_)
 	{
 		if (i->GetUseCount() >= max_count)
 		{
-			return true;
+			++entries_full;
 		}
 	}
 
-	return false;
+	return entries_full == entries_.size();
 }
 
 void ProxyList::InputSubmit(bool checked)

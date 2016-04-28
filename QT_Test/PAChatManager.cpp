@@ -48,7 +48,7 @@ PAChatManager::PAChatManager(
 	chat_macros_ = new PAChatClientMacro(macro_list_, this);
 	connect(chat_macros_, &PAChatClientMacro::onMacroRequested, this, &PAChatManager::onMacroRequested);
 
-	search_timer.start(50);
+	search_timer.start(250);
 }
 
 PAChatManager::~PAChatManager()
