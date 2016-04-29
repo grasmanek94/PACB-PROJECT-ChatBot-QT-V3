@@ -74,6 +74,8 @@ public:
 	PAChatClientState State();
 
 Q_SIGNALS:
+	void onGeneratingSID();
+	void onSocketConnecting();
 	void onSocketConnected();
 	void onChatConnected();
 	void onChatSearch();
@@ -83,6 +85,8 @@ Q_SIGNALS:
 	void onChatEnd();
 	void onChatOnlineCount(int online_count);
 	void onSocketDisconnected();
+	void onProcessInputFailed();
+	void onProxyNotWorking();
 
 private Q_SLOTS:
 	void onConnected();

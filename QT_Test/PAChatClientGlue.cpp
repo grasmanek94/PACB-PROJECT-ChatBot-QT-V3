@@ -20,6 +20,9 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 	connect(client, &PAChatClient::onChatEnd, this, &PAChatClientGlue::onChatEnd);
 	connect(client, &PAChatClient::onChatOnlineCount, this, &PAChatClientGlue::onChatOnlineCount);
 	connect(client, &PAChatClient::onSocketDisconnected, this, &PAChatClientGlue::onSocketDisconnected);
+	connect(client, &PAChatClient::onSocketConnecting, this, &PAChatClientGlue::onSocketConnecting);
+	connect(client, &PAChatClient::onGeneratingSID, this, &PAChatClientGlue::onGeneratingSID);
+	connect(client, &PAChatClient::onProcessInputFailed, this, &PAChatClientGlue::onProcessInputFailed);
 
 	ui = new PAChatClientUI(tabs_container_, this);
 
@@ -39,7 +42,7 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 	int_id_ = PAChatGlobalId::Get();
 	string_id_ = "(" + QString::number(int_id_) + ") ";
 
-	QListWidgetItem::setText(string_id_ + "New Bot: Connecting Socket");
+	QListWidgetItem::setText(string_id_ + "New Bot: Created");
 	SetStateColor();
 }
 
@@ -297,7 +300,28 @@ void PAChatClientGlue::Reconnect()
 	connect(client, &PAChatClient::onChatEnd, this, &PAChatClientGlue::onChatEnd);
 	connect(client, &PAChatClient::onChatOnlineCount, this, &PAChatClientGlue::onChatOnlineCount);
 	connect(client, &PAChatClient::onSocketDisconnected, this, &PAChatClientGlue::onSocketDisconnected);
+	connect(client, &PAChatClient::onSocketConnecting, this, &PAChatClientGlue::onSocketConnecting);
+	connect(client, &PAChatClient::onGeneratingSID, this, &PAChatClientGlue::onGeneratingSID);
+	connect(client, &PAChatClient::onProcessInputFailed, this, &PAChatClientGlue::onProcessInputFailed);
 
-	QListWidgetItem::setText(string_id_ + "New Bot: Connecting Socket");
+	QListWidgetItem::setText(string_id_ + "New Bot: Created");
+	SetStateColor();
+}
+
+void PAChatClientGlue::onProcessInputFailed()
+{
+	QListWidgetItem::setText(string_id_ + "New Bot: ProcessInput Failed");
+	SetStateColor();
+}
+
+void PAChatClientGlue::onGeneratingSID()
+{
+	QListWidgetItem::setText(string_id_ + "New Bot: Generating SID");
+	SetStateColor();
+}
+
+void PAChatClientGlue::onSocketConnecting()
+{
+	QListWidgetItem::setText(string_id_ + "New Bot: Opening Socket");
 	SetStateColor();
 }

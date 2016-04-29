@@ -64,6 +64,7 @@ void PAChatClient::StartGeneratingSID()
 	}
 
 	state_ = PAChatClientState_GeneratingSID;
+	emit onGeneratingSID();
 }
 
 void PAChatClient::onProcessInput()
@@ -107,12 +108,18 @@ void PAChatClient::onProcessInput()
 			webSocket_->open(url);
 
 			state_ = PAChatClientState_SocketConnecting;
+			emit onSocketConnecting();
 		}
 		else
 		{
+			emit onProxyNotWorking();
 			onDisconnected();
 		}
 		process_read_buffer_.clear();
+	}
+	else
+	{
+		emit onProcessInputFailed();
 	}
 }
 

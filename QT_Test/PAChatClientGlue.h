@@ -59,6 +59,9 @@ Q_SIGNALS:
 	void onOnlineCountUpdate(int online_count);
 
 private Q_SLOTS:
+	void onProcessInputFailed();
+	void onGeneratingSID();
+	void onSocketConnecting();
 	void onSocketConnected();
 	void onChatConnected();
 	void onChatSearch();
