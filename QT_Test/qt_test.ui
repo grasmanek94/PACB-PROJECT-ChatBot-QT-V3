@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1372</width>
-    <height>784</height>
+    <height>786</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -39,22 +39,10 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetMinimumSize</enum>
       </property>
-      <item row="2" column="0">
-       <widget class="QPushButton" name="chatProxySubmit">
-        <property name="minimumSize">
-         <size>
-          <width>159</width>
-          <height>23</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>159</width>
-          <height>16777215</height>
-         </size>
-        </property>
+      <item row="3" column="0">
+       <widget class="QLabel" name="onlineCountLabel">
         <property name="text">
-         <string>Add Proxies</string>
+         <string>Chatters Online:</string>
         </property>
        </widget>
       </item>
@@ -92,6 +80,25 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="chatProxySubmit">
+        <property name="minimumSize">
+         <size>
+          <width>159</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>159</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Add Proxies</string>
         </property>
        </widget>
       </item>

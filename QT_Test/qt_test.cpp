@@ -17,6 +17,7 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.autoSenderState, 
 		ui.preparedTextsBox,
 		ui.chatManagerFillBots,
+		ui.onlineCountLabel,
 		this);
 }
 

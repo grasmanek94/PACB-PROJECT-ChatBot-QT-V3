@@ -17,6 +17,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
@@ -32,9 +33,10 @@ public:
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout_2;
     QGridLayout *proxyListContainerGrid;
-    QPushButton *chatProxySubmit;
+    QLabel *onlineCountLabel;
     QLineEdit *chatProxyInput;
     QListWidget *chatProxyList;
+    QPushButton *chatProxySubmit;
     QGridLayout *botListContainerGrid;
     QCheckBox *autoSendIntroductionMessage;
     QListWidget *chatBoxPeers;
@@ -50,7 +52,7 @@ public:
     {
         if (QT_TestClass->objectName().isEmpty())
             QT_TestClass->setObjectName(QStringLiteral("QT_TestClass"));
-        QT_TestClass->resize(1372, 784);
+        QT_TestClass->resize(1372, 786);
         QT_TestClass->setMinimumSize(QSize(1113, 477));
         QIcon icon;
         icon.addFile(QStringLiteral("C:/Users/ChatBot/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -68,12 +70,10 @@ public:
         proxyListContainerGrid->setSpacing(6);
         proxyListContainerGrid->setObjectName(QStringLiteral("proxyListContainerGrid"));
         proxyListContainerGrid->setSizeConstraint(QLayout::SetMinimumSize);
-        chatProxySubmit = new QPushButton(centralWidget);
-        chatProxySubmit->setObjectName(QStringLiteral("chatProxySubmit"));
-        chatProxySubmit->setMinimumSize(QSize(159, 23));
-        chatProxySubmit->setMaximumSize(QSize(159, 16777215));
+        onlineCountLabel = new QLabel(centralWidget);
+        onlineCountLabel->setObjectName(QStringLiteral("onlineCountLabel"));
 
-        proxyListContainerGrid->addWidget(chatProxySubmit, 2, 0, 1, 1);
+        proxyListContainerGrid->addWidget(onlineCountLabel, 3, 0, 1, 1);
 
         chatProxyInput = new QLineEdit(centralWidget);
         chatProxyInput->setObjectName(QStringLiteral("chatProxyInput"));
@@ -91,6 +91,13 @@ public:
         chatProxyList->setFont(font);
 
         proxyListContainerGrid->addWidget(chatProxyList, 0, 0, 1, 1);
+
+        chatProxySubmit = new QPushButton(centralWidget);
+        chatProxySubmit->setObjectName(QStringLiteral("chatProxySubmit"));
+        chatProxySubmit->setMinimumSize(QSize(159, 23));
+        chatProxySubmit->setMaximumSize(QSize(159, 16777215));
+
+        proxyListContainerGrid->addWidget(chatProxySubmit, 2, 0, 1, 1);
 
 
         horizontalLayout_2->addLayout(proxyListContainerGrid);
@@ -179,6 +186,7 @@ public:
     void retranslateUi(QMainWindow *QT_TestClass)
     {
         QT_TestClass->setWindowTitle(QApplication::translate("QT_TestClass", "PA ChatBot", 0));
+        onlineCountLabel->setText(QApplication::translate("QT_TestClass", "Chatters Online:", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
         autoSendIntroductionMessage->setText(QApplication::translate("QT_TestClass", "Send Intro Message", 0));
         chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));

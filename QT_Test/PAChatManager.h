@@ -7,7 +7,7 @@
 #include <QListWidget>
 #include <QCheckBox>
 #include <QTabWidget>
-
+#include <QLabel>
 #include "PAChatClientGlue.h"
 #include "PAChatClientMacro.h"
 #include "ProxyList.h"
@@ -35,6 +35,8 @@ private:
 	QPointer<QCheckBox> send_intro_message_check_box_;
 	QPointer<QCheckBox> story_mode_check_box_;
 
+	QPointer<QLabel> online_count_label_;
+
 	QPointer<QTabWidget> tabs_container_;
 
 	bool auto_search_enabled;
@@ -46,6 +48,11 @@ private:
 	std::set<PAChatClientGlue*> ready_to_search;
 
 	void PrepareSearch(PAChatClientGlue* glue);
+
+	int chats_started_;
+	int online_count_;
+
+	void UpdateInfoLabel();
 public:
 	PAChatManager(
 		QListWidget* proxy_entry_item_list_widget, 
@@ -66,6 +73,8 @@ public:
 
 		QPushButton* fill_with_bots_button,
 
+		QLabel* online_count_label,
+
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();
 
@@ -83,4 +92,5 @@ private Q_SLOTS:
 	void PushClient();
 	void PopClient();
 	void PushClientsFull();
+	void onOnlineCountUpdate(int online_count);
 };

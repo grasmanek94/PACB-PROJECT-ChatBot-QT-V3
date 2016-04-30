@@ -21,6 +21,8 @@ PAChatManager::PAChatManager(
 
 	QPushButton* fill_with_bots_button,
 
+	QLabel* online_count_label,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -36,8 +38,12 @@ PAChatManager::PAChatManager(
 	  story_mode_check_box_(story_mode_check_box),
 	  current_active_(nullptr),
 	  macro_list_(macro_list),
-	  fill_with_bots_button_(fill_with_bots_button)
+	  fill_with_bots_button_(fill_with_bots_button),
+	  online_count_label_(online_count_label),
+	  chats_started_(0),
+	  online_count_(0)
 {
+
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
 	connect(automatic_search_check_box_, &QCheckBox::stateChanged, this, &PAChatManager::onAutoSearcherStateChange);
 	connect(&search_timer, &QTimer::timeout, this, &PAChatManager::searchTimeout);
@@ -105,6 +111,7 @@ void PAChatManager::PushClient()
 	connect(glue, &PAChatClientGlue::onGlueChatEnd, this, &PAChatManager::onChatEnd);
 	connect(glue, &PAChatClientGlue::onGlueSocketConnected, this, &PAChatManager::onSocketConnected);
 	connect(glue, &PAChatClientGlue::onGlueSocketDisconnected, this, &PAChatManager::onSocketDisconnected);
+	connect(glue, &PAChatClientGlue::onOnlineCountUpdate, this, &PAChatManager::onOnlineCountUpdate);
 
 	if (!current_active_)
 	{
@@ -193,6 +200,10 @@ void PAChatManager::PrepareSearch(PAChatClientGlue* glue)
 void PAChatManager::onChatBegin()
 {
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+
+	++chats_started_;
+	UpdateInfoLabel();
+
 	ready_to_search.erase(glue);
 	if (current_searching_ == glue)
 	{
@@ -230,4 +241,15 @@ void PAChatManager::onMacroRequested(QString text)
 	{
 		current_active_->SendMessage(text);
 	}
+}
+
+void PAChatManager::onOnlineCountUpdate(int online_count)
+{
+	online_count_ = online_count;
+	UpdateInfoLabel();
+}
+
+void PAChatManager::UpdateInfoLabel()
+{
+	online_count_label_->setText("Chats | " + QString::number(online_count_) + " Online | " + QString::number(chats_started_) + " Started");
 }
