@@ -134,7 +134,15 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 	if (!me)
 	{
 		++other_message_count_;
+	}
 
+	if (ui)
+	{
+		ui->AddMessage(me, message);
+	}
+
+	if (!me)
+	{
 		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");	
 		if (message_filter && !force_red && other_message_count_ < 5)
 		{
@@ -148,7 +156,12 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 		}
 	}
 
-	silence_timer.setInterval(300000);
+	if (silence_timer.isActive())
+	{
+		silence_timer.stop();
+		silence_timer.start(300000);
+	}
+
 	switch(sender_id)
 	{
 		case 1: // AutoMessage
@@ -158,10 +171,6 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 			break;
 	}
 
-	if (ui)
-	{
-		ui->AddMessage(me, message);
-	}
 }
 
 void PAChatClientGlue::onChatEnd()
@@ -219,6 +228,7 @@ void PAChatClientGlue::onRequestChatEnd()
 {
 	if (client && client->Chatting())
 	{
+		ui->ClearMessageInput();
 		client->EndChat();
 	}
 }
@@ -316,7 +326,7 @@ void PAChatClientGlue::onProcessInputFailed()
 
 void PAChatClientGlue::onGeneratingSID()
 {
-	QListWidgetItem::setText(string_id_ + "New Bot: Generating SID");
+	QListWidgetItem::setText(string_id_ + "New Bot: Generating SID (" + client->GetProxy() + ")");
 	SetStateColor();
 }
 

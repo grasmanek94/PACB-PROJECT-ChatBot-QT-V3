@@ -390,3 +390,8 @@ void PAChatClient::Reconnect()
 
 	StartGeneratingSID();
 }
+
+QString PAChatClient::GetProxy()
+{
+	return proxy_host_ + ":" + QString::number(proxy_port_);
+}

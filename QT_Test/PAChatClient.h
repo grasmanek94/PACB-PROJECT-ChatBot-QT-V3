@@ -72,6 +72,7 @@ public:
 
 	void Reconnect();
 	PAChatClientState State();
+	QString GetProxy();
 
 Q_SIGNALS:
 	void onGeneratingSID();
