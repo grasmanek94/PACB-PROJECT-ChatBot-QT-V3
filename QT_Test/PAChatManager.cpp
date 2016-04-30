@@ -251,5 +251,5 @@ void PAChatManager::onOnlineCountUpdate(int online_count)
 
 void PAChatManager::UpdateInfoLabel()
 {
-	online_count_label_->setText("Chats | " + QString::number(online_count_) + " Online | " + QString::number(chats_started_) + " Started");
+	online_count_label_->setText(QString::number(online_count_) + " Online | " + QString::number(chats_started_) + " Started");
 }

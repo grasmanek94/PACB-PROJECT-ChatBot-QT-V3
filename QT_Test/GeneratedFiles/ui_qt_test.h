@@ -186,7 +186,7 @@ public:
     void retranslateUi(QMainWindow *QT_TestClass)
     {
         QT_TestClass->setWindowTitle(QApplication::translate("QT_TestClass", "PA ChatBot", 0));
-        onlineCountLabel->setText(QApplication::translate("QT_TestClass", "Chatters Online:", 0));
+        onlineCountLabel->setText(QApplication::translate("QT_TestClass", "0 Online | 0 Started", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
         autoSendIntroductionMessage->setText(QApplication::translate("QT_TestClass", "Send Intro Message", 0));
         chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));
