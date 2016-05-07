@@ -68,11 +68,34 @@ PAChatManager::PAChatManager(
 	
 	chat_macros_ = new PAChatClientMacro(macro_list_, this);
 	connect(chat_macros_, &PAChatClientMacro::onMacroRequested, this, &PAChatManager::onMacroRequested);
+
+	QFile f1("cc.txt");
+
+	f1.open(QIODevice::ReadOnly | QIODevice::Text);
+
+	QTextStream s1(&f1);
+
+	bool ok = false;
+	int num_saved_chats_count = s1.readAll().toInt(&ok);
+	if (ok && num_saved_chats_count > 0)
+	{
+		chats_started_ = num_saved_chats_count;
+	}
+
+	f1.close();
 }
 
 PAChatManager::~PAChatManager()
 {
+	QFile f1("cc.txt");
 
+	f1.open(QIODevice::Truncate | QIODevice::WriteOnly | QIODevice::Text);
+
+	QTextStream s1(&f1);
+
+	s1 << chats_started_;
+
+	f1.close();
 }
 
 void PAChatManager::onItemSelected(QListWidgetItem* item)
