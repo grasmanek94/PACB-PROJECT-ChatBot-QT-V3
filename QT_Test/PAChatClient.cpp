@@ -263,7 +263,7 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 				int end_message = json.lastIndexOf("\",\"s");
 
 				QString recvd_message = json.mid(start_message, end_message - start_message);
-				recvd_message = recvd_message.replace("\u0081", "");
+				recvd_message = recvd_message.replace("\u0081", "").replace('', "");
 				//OnChatMessage
 				emit onChatMessage(false, recvd_message, -1);
 			}
