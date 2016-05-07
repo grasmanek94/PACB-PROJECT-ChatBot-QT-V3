@@ -54,14 +54,23 @@ bool PAChatClientFilter::IsMessageFiltered(QString message)
 		}
 	}
 
-	for (auto& forbidden_content : disallowed_contents)
+	for (auto& forbidden_content : disallowed_begins)
 	{
 		int index = message.indexOf(forbidden_content);
+		int maxsize = forbidden_content.indexOf(">");
 		for (int i = 0; i < (message.length() <= 3 ? message.length() : 3); ++i)
 		{
-			if (message[i].isLetterOrNumber() && index == i)
+			if (message[i].isLetterOrNumber())
 			{
-				return true;
+				if (index == i)
+				{
+					if (maxsize == -1)
+					{
+						return true;
+					}
+					return (message.length() - i) == maxsize;
+				}
+				return false;
 			}
 		}
 	}
