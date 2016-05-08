@@ -54,23 +54,24 @@ bool PAChatClientFilter::IsMessageFiltered(QString message)
 		}
 	}
 
+	for (int i = 0; i < message.length(); ++i)
+	{
+		if (message[i].isLetterOrNumber())
+		{
+			message = message.mid(i);
+			break;
+		}
+	}
+	
 	for (auto& forbidden_content : disallowed_begins)
 	{
-		int index = message.indexOf(forbidden_content);
 		int maxsize = forbidden_content.indexOf(">");
-		for (int i = 0; i < (message.length() <= 3 ? message.length() : 3); ++i)
-		{
-			if (message[i].isLetterOrNumber())
+		QString forbidden_begin = maxsize == -1 ? forbidden_content : QString(forbidden_content).remove(">");
+		if (message.startsWith(forbidden_begin))
+		{	
+			if (maxsize == -1 || message.length() == maxsize)
 			{
-				if (index == i)
-				{
-					if (maxsize == -1)
-					{
-						return true;
-					}
-					return (message.length() - i) == maxsize;
-				}
-				return false;
+				return true;
 			}
 		}
 	}
