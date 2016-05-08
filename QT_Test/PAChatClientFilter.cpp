@@ -39,6 +39,11 @@ PAChatClientFilter::~PAChatClientFilter()
 
 bool PAChatClientFilter::IsMessageFiltered(QString message)
 {
+	if (message.length() > 1536)
+	{
+		return true;
+	}
+
 	message = message.toLower();
 
 	for (char i = '0'; i <= '9'; ++i)
