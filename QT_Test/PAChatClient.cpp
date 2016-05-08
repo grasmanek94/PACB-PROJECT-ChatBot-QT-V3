@@ -270,6 +270,18 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 				emit onChatMessage(false, recvd_message, -1);
 			}
 			break;
+
+		case 'i': //{"hash":"ad32a067f076eaf409c1776f22c0df9dc28a58fc372c4ea13a7b1205cca0a8a9f895433e21e33b490fbae07e50e953f719c60a966b3176d35f8f98e7","expire":1462710282}
+			{
+				int start_hash = json.indexOf("h\":\"") + 4;
+				int end_hash = json.lastIndexOf("\",\"e");
+
+				QString image_link = "http://www.praatanoniem.nl/image.php?hash=" + json.mid(start_hash, end_hash - start_hash);
+
+				//OnChatMessage
+				emit onChatImage(false, image_link, -1);
+			}
+			break;
 		}
 	}
 }
