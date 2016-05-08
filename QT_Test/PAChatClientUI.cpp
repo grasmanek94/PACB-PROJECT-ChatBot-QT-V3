@@ -109,15 +109,67 @@ void PAChatClientUI::AddMessage(bool me, const QString& message)
 		"background-color:rgb(255,255,255);font-size:14px;color:rgb(10,10,10);" :
 		"background-color:rgb(249,86,79);font-size:14px;color:rgb(255,255,255);";
 
-	QString format("<div style='%1'> %2 </div> <div style='font-size:3px;'> &zwnj; </div>");
-	QString htmlText = format.arg(style).arg(message.toHtmlEscaped()).replace("\\\\", "\\").replace("\\\"", "\"").replace("\\\"", "\"");
 
-	chat_box_text_messages_->appendHtml(htmlText);
+	{
+		QString format("<div style='%1'> %2 </div>");
+		QString htmlText = format.arg(style).arg(message.toHtmlEscaped());
+
+		//QTextCursor cursor = chat_box_text_messages_->textCursor();
+
+		//if (!cursor.atStart())
+		//{
+		//cursor.insertBlock();
+		//}
+		//cursor.insertHtml(htmlText);
+
+		chat_box_text_messages_->appendHtml(htmlText);
+	}
+
+	{
+		QString htmlText("<div style='font-size:3px;'> &zwnj; </div>");
+
+		//QTextCursor cursor = chat_box_text_messages_->textCursor();
+
+		//if (!cursor.atStart())
+		//{
+		//cursor.insertBlock();
+		//}
+		//cursor.insertHtml(htmlText);
+		chat_box_text_messages_->appendHtml(htmlText);
+	}
+
 }
 
 void PAChatClientUI::AddChatSeparator()
 {
-	chat_box_text_messages_->appendHtml("<div style='background-color:rgb(0,0,255);font-size:14px;color:rgb(0,0,255);'> &zwnj; </div> <div style='font-size:3px;'> &zwnj; </div>");
+	{
+		QString htmlText("<div style='background-color:rgb(0,0,255);font-size:14px;color:rgb(0,0,255);'> &zwnj; </div>");
+
+		//QTextCursor cursor = chat_box_text_messages_->textCursor();
+
+		//if (!cursor.atStart())
+		//{
+		//cursor.insertBlock();
+		//}
+		//cursor.insertHtml(htmlText);
+
+		chat_box_text_messages_->appendHtml(htmlText);
+	}
+
+	{
+		QString htmlText("<div style='font-size:3px;'> &zwnj; </div>");
+
+		//QTextCursor cursor = chat_box_text_messages_->textCursor();
+
+		//if (!cursor.atStart())
+		//{
+		//cursor.insertBlock();
+		//}
+		//cursor.insertHtml(htmlText);
+
+		chat_box_text_messages_->appendHtml(htmlText);
+	}
+	//chat_box_text_messages_->appendHtml("<div style='background-color:rgb(0,0,255);font-size:14px;color:rgb(0,0,255);'> &zwnj; </div> <div style='font-size:3px;'> &zwnj; </div>");
 }
 
 void PAChatClientUI::RemoveMessages()

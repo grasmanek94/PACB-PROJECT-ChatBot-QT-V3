@@ -122,6 +122,7 @@ void PAChatClient::onProcessInput()
 	}
 	else
 	{
+		//(probably) unreachable
 		emit onProcessInputFailed();
 	}
 }
@@ -268,7 +269,7 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 				int start_message = json.indexOf("e\":\"") + 4;
 				int end_message = json.lastIndexOf("\",\"s");
 
-				QString recvd_message = json.mid(start_message, end_message - start_message);
+				QString recvd_message = json.mid(start_message, end_message - start_message).replace("\\\"", "\"").replace("\\\\", "\\");
 				
 				//OnChatMessage
 				emit onChatMessage(false, recvd_message, -1);
@@ -329,7 +330,7 @@ bool PAChatClient::SendMessage(QString message, int sender_id)
 
 	QString format("42[\"message\",{\"message\":\"%1\"}]");
 
-	webSocket_->sendTextMessage(format.arg(message.replace("\"", "\\\"").replace("\\", "\\\\")));
+	webSocket_->sendTextMessage(format.arg(QString(message).replace("\\", "\\\\").replace("\"", "\\\"")));
 
 	emit onChatMessage(true, message, sender_id);
 
