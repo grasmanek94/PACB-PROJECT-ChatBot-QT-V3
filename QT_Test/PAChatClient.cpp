@@ -224,6 +224,8 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 
 			connected_ = true;
 
+			process_->kill();
+
 			state_ = PAChatClientState_Idle;
 			//OnConnected
 			emit onChatConnected();
