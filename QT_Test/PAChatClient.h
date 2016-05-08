@@ -48,6 +48,7 @@ private:
 
 	QPointer<QWebSocket> webSocket_;
 	QPointer<QProcess> process_;
+	QPointer<QTimer> process_timeout_;
 	QPointer<QTimer> pinger_;
 	QPointer<QTimer> online_count_update_;
 

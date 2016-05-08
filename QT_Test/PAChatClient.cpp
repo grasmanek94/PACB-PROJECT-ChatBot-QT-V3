@@ -23,6 +23,7 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 	webSocket_ = new QWebSocket("http://ws.praatanoniem.nl");
 	pinger_ = new QTimer(this);
 	online_count_update_ = new QTimer(this);
+	process_timeout_ = new QTimer(this);
 
 	connect(webSocket_, &QWebSocket::connected, this, &PAChatClient::onConnected);
 	connect(webSocket_, &QWebSocket::disconnected, this, &PAChatClient::onDisconnected);
@@ -30,6 +31,7 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 
 	connect(pinger_, &QTimer::timeout, this, &PAChatClient::onPing);
 	connect(online_count_update_, &QTimer::timeout, this, &PAChatClient::onOnlineCountUpdate);
+	connect(process_timeout_, &QTimer::timeout, this, &PAChatClient::onDisconnected);
 
 	StartGeneratingSID();
 }
@@ -63,6 +65,7 @@ void PAChatClient::StartGeneratingSID()
 		process_->start(dir.absolutePath() + "/sid_alive.exe");
 	}
 
+	process_timeout_->start(30000);
 	state_ = PAChatClientState_GeneratingSID;
 	emit onGeneratingSID();
 }
@@ -224,6 +227,7 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 
 			connected_ = true;
 
+			process_timeout_->stop();
 			process_->kill();
 
 			state_ = PAChatClientState_Idle;
@@ -318,7 +322,7 @@ bool PAChatClient::Chatting()
 
 bool PAChatClient::SendMessage(QString message, int sender_id)
 {
-	if (!connected_ || searching_ || !chatting_)
+	if (!connected_ || searching_ || !chatting_ || message.length() < 1)
 	{
 		return false;
 	}
