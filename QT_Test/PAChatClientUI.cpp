@@ -115,6 +115,7 @@ void PAChatClientUI::AddMessage(bool me, const QString& message)
 	format.setForeground(me ? QColor(10, 10, 10) : QColor(255, 255, 255));
 	cursor.insertText(message, format);
 	AddChatSeparator();
+	ScrollToBottom();
 }
 
 void PAChatClientUI::AddChatSeparator()
@@ -133,6 +134,7 @@ void PAChatClientUI::AddChatSeparator()
 void PAChatClientUI::RemoveMessages()
 {
 	chat_box_text_messages_->clear();
+	ClearMessageInput();
 }
 
 void PAChatClientUI::ClearMessageInput()
