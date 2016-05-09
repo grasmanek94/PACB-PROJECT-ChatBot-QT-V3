@@ -82,7 +82,7 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 	p.setColor(QPalette::Inactive, QPalette::Base, Qt::black);
 	chat_box_text_messages_->setPalette(p);
 
-	chat_box_text_messages_->setWordWrapMode(QTextOption::WordWrap);
+	chat_box_text_messages_->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
 	chat_box_text_messages_->setReadOnly(true);
 
 	if (tabs_container_)
