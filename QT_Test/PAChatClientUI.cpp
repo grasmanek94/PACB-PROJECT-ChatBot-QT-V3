@@ -105,71 +105,29 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 
 void PAChatClientUI::AddMessage(bool me, const QString& message)
 {
-	QString style = me ?
-		"background-color:rgb(255,255,255);font-size:14px;color:rgb(10,10,10);" :
-		"background-color:rgb(249,86,79);font-size:14px;color:rgb(255,255,255);";
-
-
-	{
-		QString format("<div style='%1'> %2 </div>");
-		QString htmlText = format.arg(style).arg(message.toHtmlEscaped());
-
-		//QTextCursor cursor = chat_box_text_messages_->textCursor();
-
-		//if (!cursor.atStart())
-		//{
-		//cursor.insertBlock();
-		//}
-		//cursor.insertHtml(htmlText);
-
-		chat_box_text_messages_->appendHtml(htmlText);
-	}
-
-	{
-		QString htmlText("<div style='font-size:3px;'> &zwnj; </div>");
-
-		//QTextCursor cursor = chat_box_text_messages_->textCursor();
-
-		//if (!cursor.atStart())
-		//{
-		//cursor.insertBlock();
-		//}
-		//cursor.insertHtml(htmlText);
-		chat_box_text_messages_->appendHtml(htmlText);
-	}
-
+	QTextCursor cursor(chat_box_text_messages_->document());
+	QTextBlockFormat bf = cursor.blockFormat();
+	bf.setBackground(me ? QColor(255, 255, 255) : QColor(249, 86, 79));
+	cursor.movePosition(QTextCursor::End);
+	cursor.insertBlock(bf);
+	QTextCharFormat format;
+	format.setFont(QFont("Segoe UI", 10));
+	format.setForeground(me ? QColor(10, 10, 10) : QColor(255, 255, 255));
+	cursor.insertText(message, format);
+	AddChatSeparator();
 }
 
 void PAChatClientUI::AddChatSeparator()
 {
-	{
-		QString htmlText("<div style='background-color:rgb(0,0,255);font-size:14px;color:rgb(0,0,255);'> &zwnj; </div>");
-
-		//QTextCursor cursor = chat_box_text_messages_->textCursor();
-
-		//if (!cursor.atStart())
-		//{
-		//cursor.insertBlock();
-		//}
-		//cursor.insertHtml(htmlText);
-
-		chat_box_text_messages_->appendHtml(htmlText);
-	}
-
-	{
-		QString htmlText("<div style='font-size:3px;'> &zwnj; </div>");
-
-		//QTextCursor cursor = chat_box_text_messages_->textCursor();
-
-		//if (!cursor.atStart())
-		//{
-		//cursor.insertBlock();
-		//}
-		//cursor.insertHtml(htmlText);
-
-		chat_box_text_messages_->appendHtml(htmlText);
-	}
-	//chat_box_text_messages_->appendHtml("<div style='background-color:rgb(0,0,255);font-size:14px;color:rgb(0,0,255);'> &zwnj; </div> <div style='font-size:3px;'> &zwnj; </div>");
+	QTextCursor cursor(chat_box_text_messages_->document());
+	QTextBlockFormat bf = cursor.blockFormat();
+	bf.setBackground(QColor(0, 0, 0));
+	cursor.movePosition(QTextCursor::End);
+	cursor.insertBlock(bf);
+	QTextCharFormat format;
+	format.setFont(QFont("Segoe UI", 1));
+	format.setForeground(QColor(0, 0, 0));
+	cursor.insertText("\u200C", format);
 }
 
 void PAChatClientUI::RemoveMessages()
