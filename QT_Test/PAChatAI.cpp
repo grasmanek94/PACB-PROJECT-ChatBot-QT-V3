@@ -208,7 +208,7 @@ void PAChatAI::Start()
 	current_index_ = 0;
 	amount_incomming_messages_ = 0;
 
-
+	AskNextQuestion();
 }
 
 void PAChatAI::Stop()
@@ -220,7 +220,7 @@ void PAChatAI::Stop()
 
 bool PAChatAI::Stopped()
 {
-	return !question_akser_.isActive() && !reaction_sender_.isActive();
+	return !question_akser_.isActive() && !reaction_sender_.isActive() && state_ != PAChatAIState_WaitingForAnswer;
 }
 
 QString PAChatAI::GetQuestion(size_t index)
@@ -250,12 +250,15 @@ bool PAChatAI::IsGoodAnswer(size_t index, QString message)
 void PAChatAI::AskNextQuestion()
 {
 	state_ = PAChatAIState_AskingQuestion;
-	question_akser_.start(500);
+	reaction_sender_.stop();
+	question_akser_.start(std::get<5>(questions_answers[current_index_]));
 }
 
 void PAChatAI::PushNextReaction()
 {
-
+	state_ = PAChatAIState_SendingReaction;
+	question_akser_.stop();
+	reaction_sender_.start(std::get<6>(questions_answers[current_index_]));
 }
 
 
@@ -276,12 +279,44 @@ void PAChatAI::ProcessMessage(QString message)
 		}
 	}
 
+	if (state_ != PAChatAIState_WaitingForAnswer)
+	{
+		return;
+	}
 
+	if (IsPossibleAnswer(current_index_, message))
+	{
+		if (IsGoodAnswer(current_index_, message))
+		{
+			PushNextReaction();
+		}
+		else
+		{
+			state_ = PAChatAIState_Failed;
+			emit requestNextChat();
+			return;
+		}
+	}
 }
 
 void PAChatAI::onAskNextQuestion()
 {
 	question_akser_.stop();
-
 	emit onRequestMessage(GetQuestion(current_index_));
+	state_ = PAChatAIState_WaitingForAnswer;
+}
+
+void PAChatAI::onReactionToAnswer()
+{
+	reaction_sender_.stop();
+	emit onRequestMessage(GetReaction(current_index_));
+
+	if (++current_index_ < questions_answers.size())
+	{
+		AskNextQuestion();
+	}
+	else
+	{
+		Stop();
+	}
 }
