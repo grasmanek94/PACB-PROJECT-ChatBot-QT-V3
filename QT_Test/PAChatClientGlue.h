@@ -15,8 +15,8 @@ class PAChatClientGlue: public QObject, public QListWidgetItem
 private:
 	QPointer<PAChatClient> client;
 	QPointer<PAChatClientUI> ui;
-	QPointer<PAChatClientAutoSender> auto_sender;
-	QPointer<PAChatClientFilter> message_filter;
+	//QPointer<PAChatClientAutoSender> auto_sender;
+	//QPointer<PAChatClientFilter> message_filter;
 
 	QPointer<ProxyEntry> proxy_;
 	QPointer<QTabWidget> tabs_container_;
