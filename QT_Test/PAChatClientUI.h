@@ -14,8 +14,8 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
-#include <QCheckBox>
-#include <QPointer>
+#include <QtWidgets/QCheckBox>
+#include <QtCore/QPointer>
 
 class PAChatClientUI : public QObject
 {

@@ -1,7 +1,7 @@
 #pragma once
-#include <QListWidget>
+#include <QtWidgets/QListWidget>
 #include <QtCore/QObject>
-#include <QString>
+#include <QtCore/QString>
 
 class ProxyEntry : public QObject, public QListWidgetItem
 {

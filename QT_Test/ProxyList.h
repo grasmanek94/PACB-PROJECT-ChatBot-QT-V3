@@ -2,13 +2,13 @@
 #include <unordered_set>
 
 #include <QtCore/QObject>
-#include <QListWidget>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QPointer>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtCore/QPointer>
 #include "ProxyEntry.h"
-#include <QString>
-#include <QStringList>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 class ProxyList : public QObject
 {
