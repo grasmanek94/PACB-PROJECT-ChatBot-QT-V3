@@ -3,8 +3,8 @@
 #include <QtWebSockets/QWebSocket>
 #include <QtCore/QProcess>
 #include <QtCore/QTimer>
-#include <QListWidget>
-#include <QPointer>
+#include <QtWidgets/QListWidget>
+#include <QtCore/QPointer>
 #include <array>
 
 enum PAChatClientState

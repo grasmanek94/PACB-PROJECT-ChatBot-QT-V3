@@ -2,7 +2,7 @@
 #define QT_TEST_H
 
 #include <QtWidgets/QMainWindow>
-#include <QPointer>
+#include <QtCore/QPointer>
 #include "ui_qt_test.h"
 #include "PAChatManager.h"
 

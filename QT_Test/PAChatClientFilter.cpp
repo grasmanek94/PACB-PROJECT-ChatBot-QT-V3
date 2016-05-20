@@ -1,5 +1,5 @@
-#include <QTextStream>
-#include <QFile>
+#include <QtCore/QTextStream>
+#include <QtCore/QFile>
 #include "PAChatClientFilter.h"
 
 QStringList disallowed_contents;

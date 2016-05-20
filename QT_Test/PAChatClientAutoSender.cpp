@@ -1,5 +1,5 @@
-#include <QTextStream>
-#include <QFile>
+#include <QtCore/QTextStream>
+#include <QtCore/QFile>
 #include "PAChatClientAutoSender.h"
 
 QString introduction_message;

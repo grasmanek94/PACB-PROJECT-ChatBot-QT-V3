@@ -1,8 +1,8 @@
 #pragma once
-#include <QListWidget>
-#include <QTimer>
-#include <QPointer>
-#include <QCheckBox>
+#include <QtWidgets/QListWidget>
+#include <QtCore/QTimer>
+#include <QtCore/QPointer>
+#include <QtWidgets/QCheckBox>
 #include "PAChatClient.h"
 #include "PAChatClientUI.h"
 #include "PAChatClientAutoSender.h"

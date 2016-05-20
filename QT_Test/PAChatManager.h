@@ -4,10 +4,10 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
-#include <QListWidget>
-#include <QCheckBox>
-#include <QTabWidget>
-#include <QLabel>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QLabel>
 #include "PAChatClientGlue.h"
 #include "PAChatClientMacro.h"
 #include "ProxyList.h"

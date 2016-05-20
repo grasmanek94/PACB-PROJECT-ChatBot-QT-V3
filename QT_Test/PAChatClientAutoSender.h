@@ -1,7 +1,7 @@
 #pragma once
-#include <QObject>
-#include <QTimer>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
+#include <QtCore/QString>
 class PAChatClientAutoSender : public QObject
 {
 	Q_OBJECT

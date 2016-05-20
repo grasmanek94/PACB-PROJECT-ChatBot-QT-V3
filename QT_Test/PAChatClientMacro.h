@@ -1,7 +1,7 @@
 #pragma once
-#include <QObject>
-#include <QListWidget>
-#include <QPointer>
+#include <QtCore/QObject>
+#include <QtWidgets/QListWidget>
+#include <QtCore/QPointer>
 class PAChatClientMacro: public QObject
 {
 	Q_OBJECT
