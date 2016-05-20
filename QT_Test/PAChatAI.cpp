@@ -4,7 +4,14 @@
 #include "PAChatAI.h"
 
 //random question, random comment after answer received, random adders, is this an possible answer? if yes how to process answer, false = next chat
-using qp = std::tuple< QStringList, QStringList, QStringList, std::function<bool(QString)>, std::function<bool(QString)> >;
+using qp = std::tuple< 
+	QStringList, // 0 - questions
+	QStringList, // 1 - reactions to answers to questions
+	QStringList, // 2 - random adder to both questions and reactions
+	std::function<bool(QString)>, // 3 - check if this is an possible answer, false=ignore, true=invoke answer processing
+	std::function<bool(QString)>  // 4 - process answer, false = disconnect chat, true = next question
+>;
+
 std::vector<qp> questions_answers =
 {
 	qp(
@@ -27,6 +34,7 @@ std::vector<qp> questions_answers =
 		},
 		[&](QString answer)
 		{
+			//filter already filters this
 			return true;
 		}
 	),
@@ -68,8 +76,38 @@ std::vector<qp> questions_answers =
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
-			return true;
+			const static QStringList possible_answers = {"ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo"};
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
 		},
+		[&](QString answer)
+		{
+			const static QStringList possible_answers = { "ja", "yes", "ok", "misschien", "mischien" };
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	),
+
+	qp(
+		QStringList{ "oke :D en vlakbij welke stad woon je?", "en waar woon je?", "en wat is je woonplaats?", "waar woon je?" },
+		QStringList{ "ik vlakbij Eindhoven", "ik in Eindhoven", "ik bij Eindhoven", "ik vlakbij Geldrop", "ik in Geldrop", "ik bij Geldrop", "Ik vlakbij Blixembosch", "Ik in Blixembosch", "Ik bij Blixembosch", "ik vlakbij Meerhoven", "ik in Meerhoven", "ik bij Meerhoven", "ik vlakbij Veldhoven", "ik in Veldhoven", "ik bij Veldhoven", "ik vlakbij Nuenen", "ik in Nuenen", "ik bij Nuenen", "ik vlakbij Nederwetten", "ik in Nederwetten", "ik bij Nederwetten" },
+		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		[&](QString answer)
+		{
+			return true;
+		},	
 		[&](QString answer)
 		{
 			return true;
@@ -77,8 +115,8 @@ std::vector<qp> questions_answers =
 	),
 
 	qp(
-		QStringList{ "oke :D en vlakbij welke stad woon je?", "en waar woon je?", "en wat is je woonplaats?", "waar woon je?" },
-		QStringList{ "ik vlakbij Eindhoven", "ik in Eindhoven", "ik bij Eindhoven", "ik vlakbij Geldrop", "ik in Geldrop", "ik bij Geldrop", "Ik vlakbij Blixembosch", "Ik in Blixembosch", "Ik bij Blixembosch", "ik vlakbij Meerhoven", "ik in Meerhoven", "ik bij Meerhoven", "ik vlakbij Veldhoven", "ik in Veldhoven", "ik bij Veldhoven", "ik vlakbij Nuenen", "ik in Nuenen", "ik bij Nuenen", "ik vlakbij Nederwetten", "ik in Nederwetten", "ik bij Nederwetten" },
+		QStringList{ "wil je verder chatten op whatsapp? ik wel want deze site werkt klote.." },
+		QStringList{ "mijn whatsapp: 06-30269976, ik wacht wel op een appje van je ;) doeei" },
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
