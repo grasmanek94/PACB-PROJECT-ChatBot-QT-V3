@@ -76,7 +76,7 @@ std::vector<qp> questions_answers =
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = {"ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo"};
+			const static QStringList possible_answers = {"ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -115,16 +115,62 @@ std::vector<qp> questions_answers =
 	),
 
 	qp(
-		QStringList{ "wil je verder chatten op whatsapp? ik wel want deze site werkt klote.." },
-		QStringList{ "mijn whatsapp: 06-30269976, ik wacht wel op een appje van je ;) doeei" },
+		QStringList{ "te ver voor je om te ontmoeten?" },
+		QStringList{ "ik kan elke afstand hebben" },
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
-			return true;
+			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
 		},	
 		[&](QString answer)
 		{
-			return true;
+			const static QStringList possible_answers = { "nee", "nah", "niet", "misschien", "waarom", "mischien", "nooit", "niet te ver", "kan", "kunnen" };
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	),
+
+	qp(
+		QStringList{ "wil je verder chatten op whatsapp? ik wel want deze site werkt klote.." },
+		QStringList{ "als je geinterreseerd bent: mijn whatsapp: 06-30269976, ik wacht wel op een appje van je ;) doeei" },
+		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		[&](QString answer)
+		{
+			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
+		},	
+		[&](QString answer)
+		{
+			const static QStringList possible_answers = { "ja", "yes", "ok", "jup", "top", "goed", "prim" };
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	)
 };
