@@ -9,7 +9,9 @@ using qp = std::tuple<
 	QStringList, // 1 - reactions to answers to questions
 	QStringList, // 2 - random adder to both questions and reactions
 	std::function<bool(QString)>, // 3 - check if this is an possible answer, false=ignore, true=invoke answer processing
-	std::function<bool(QString)>  // 4 - process answer, false = disconnect chat, true = next question
+	std::function<bool(QString)>,  // 4 - process answer, false = disconnect chat, true = next question
+	int, // 5 - the question ask time
+	int // 6 - time for typing reaction
 >;
 
 std::vector<qp> questions_answers =
@@ -36,7 +38,9 @@ std::vector<qp> questions_answers =
 		{
 			//filter already filters this
 			return true;
-		}
+		},
+		500,
+		333
 	),
 
 	qp(
@@ -67,7 +71,9 @@ std::vector<qp> questions_answers =
 			bool ok;
 			int age = s_number.toInt(&ok);
 			return ok && age > 16 && age < 21;
-		}
+		},
+		1000,
+		1000
 	),
 
 	qp(
@@ -97,7 +103,9 @@ std::vector<qp> questions_answers =
 				}
 			}
 			return false;
-		}
+		},
+		3000,
+		2000
 	),
 
 	qp(
@@ -111,7 +119,9 @@ std::vector<qp> questions_answers =
 		[&](QString answer)
 		{
 			return true;
-		}
+		},
+		3000,
+		1500
 	),
 
 	qp(
@@ -141,7 +151,9 @@ std::vector<qp> questions_answers =
 				}
 			}
 			return false;
-		}
+		},
+		3000,
+		1500
 	),
 
 	qp(
@@ -171,7 +183,9 @@ std::vector<qp> questions_answers =
 				}
 			}
 			return false;
-		}
+		},
+		4000,
+		3000
 	)
 };
 
@@ -179,7 +193,9 @@ PAChatAI::PAChatAI(QObject *parent)
 	: QObject(parent)
 {
 	filter_ = new PAChatClientFilter(this);
-	connect(&message_sender_, &QTimer::timeout, this, &PAChatAI::processNextMessage);
+
+	connect(&question_akser_, &QTimer::timeout, this, &PAChatAI::onAskNextQuestion);
+	connect(&reaction_sender_, &QTimer::timeout, this, &PAChatAI::onReactionToAnswer);
 }
 
 PAChatAI::~PAChatAI()
@@ -191,26 +207,70 @@ void PAChatAI::Start()
 {
 	current_index_ = 0;
 	amount_incomming_messages_ = 0;
-	message_sender_.start(500);
+
+
 }
 
 void PAChatAI::Stop()
 {
-	message_sender_.stop();
+	question_akser_.stop();
+	reaction_sender_.stop();
+	state_ = PAChatAIState_Done;
 }
 
 bool PAChatAI::Stopped()
 {
-	return !message_sender_.isActive();
+	return !question_akser_.isActive() && !reaction_sender_.isActive();
 }
+
+QString PAChatAI::GetQuestion(size_t index)
+{
+	QStringList& questions = std::get<0>(questions_answers[index]);
+	QStringList& adders = std::get<2>(questions_answers[index]);
+	return questions[qrand() % questions.size()] + adders[qrand() % adders.size()];
+}
+
+QString PAChatAI::GetReaction(size_t index)
+{
+	QStringList& reactions = std::get<1>(questions_answers[index]);
+	QStringList& adders = std::get<2>(questions_answers[index]);
+	return reactions[qrand() % reactions.size()] + adders[qrand() % adders.size()];
+}
+
+bool PAChatAI::IsPossibleAnswer(size_t index, QString message)
+{
+	return std::get<3>(questions_answers[index])(message);
+}
+
+bool PAChatAI::IsGoodAnswer(size_t index, QString message)
+{
+	return std::get<4>(questions_answers[index])(message);
+}
+
+void PAChatAI::AskNextQuestion()
+{
+	state_ = PAChatAIState_AskingQuestion;
+	question_akser_.start(500);
+}
+
+void PAChatAI::PushNextReaction()
+{
+
+}
+
 
 void PAChatAI::ProcessMessage(QString message)
 {
+	if (state_ == PAChatAIState_Done || state_ == PAChatAIState_Failed)
+	{
+		return;
+	}
+
 	if (++amount_incomming_messages_ < 3)
 	{
 		if (filter_->IsMessageFiltered(message))
 		{
-			Stop();
+			state_ = PAChatAIState_Failed;
 			emit requestNextChat();
 			return;
 		}
@@ -219,7 +279,9 @@ void PAChatAI::ProcessMessage(QString message)
 
 }
 
-void PAChatAI::processNextMessage()
+void PAChatAI::onAskNextQuestion()
 {
-	//emit onAnswerMessage(story_messages[l_index], !(current_index_ < story_messages.size()));
+	question_akser_.stop();
+
+	emit onRequestMessage(GetQuestion(current_index_));
 }
