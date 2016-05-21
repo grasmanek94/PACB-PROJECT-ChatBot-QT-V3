@@ -239,6 +239,7 @@ PAChatAI::PAChatAI(QObject *parent)
 
 	connect(&question_akser_, &QTimer::timeout, this, &PAChatAI::onAskNextQuestion);
 	connect(&reaction_sender_, &QTimer::timeout, this, &PAChatAI::onReactionToAnswer);
+	connect(&waiting_answer_timeout_, &QTimer::timeout, this, &PAChatAI::onWaitForAnswerTimeout);
 }
 
 PAChatAI::~PAChatAI()
@@ -257,6 +258,7 @@ void PAChatAI::Start()
 
 void PAChatAI::Stop()
 {
+	waiting_answer_timeout_.stop();
 	question_akser_.stop();
 	reaction_sender_.stop();
 	state_ = PAChatAIState_Done;
@@ -264,7 +266,7 @@ void PAChatAI::Stop()
 
 bool PAChatAI::Stopped()
 {
-	return !question_akser_.isActive() && !reaction_sender_.isActive() && state_ != PAChatAIState_WaitingForAnswer;
+	return !question_akser_.isActive() && !reaction_sender_.isActive() && !waiting_answer_timeout_.isActive();
 }
 
 QString PAChatAI::GetQuestion(size_t index)
@@ -334,6 +336,7 @@ void PAChatAI::ProcessMessage(QString message)
 	{
 		if (IsGoodAnswer(current_index_, message, &got_age_))
 		{
+			waiting_answer_timeout_.stop();
 			PushNextReaction();
 		}
 		else
@@ -350,6 +353,7 @@ void PAChatAI::onAskNextQuestion()
 	question_akser_.stop();
 	emit onRequestMessage(GetQuestion(current_index_), false);
 	state_ = PAChatAIState_WaitingForAnswer;
+	waiting_answer_timeout_.start(30000);
 }
 
 void PAChatAI::onReactionToAnswer()
@@ -357,11 +361,11 @@ void PAChatAI::onReactionToAnswer()
 	reaction_sender_.stop();
 
 	QString reaction = GetReaction(current_index_);
-	bool last = ++current_index_ < questions_answers.size();
+	bool not_last = ++current_index_ < questions_answers.size();
 
-	emit onRequestMessage(reaction, last);
+	emit onRequestMessage(reaction, !not_last);
 
-	if (!last)
+	if (not_last)
 	{
 		if (got_age_ == true && current_index_ == 1)
 		{
@@ -374,4 +378,10 @@ void PAChatAI::onReactionToAnswer()
 	{
 		Stop();
 	}
+}
+
+void PAChatAI::onWaitForAnswerTimeout()
+{
+	state_ = PAChatAIState_Failed;
+	emit requestNextChat();
 }

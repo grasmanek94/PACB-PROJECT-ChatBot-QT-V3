@@ -12,6 +12,7 @@ class PAChatAI : public QObject
 private:
 	QTimer question_akser_;
 	QTimer reaction_sender_;
+	QTimer waiting_answer_timeout_;
 
 	enum PAChatAIState
 	{
@@ -54,4 +55,5 @@ Q_SIGNALS:
 private Q_SLOTS:
 	void onAskNextQuestion();
 	void onReactionToAnswer();
+	void onWaitForAnswerTimeout();
 };
