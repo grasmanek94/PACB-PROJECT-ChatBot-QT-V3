@@ -35,9 +35,12 @@ PAChatClientGlue::PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container
 	
 	//auto_sender = new PAChatClientAutoSender(this);
 	//message_filter = new PAChatClientFilter(this);
+	message_ai = new PAChatAI(this);
 
 	connect(&silence_timer, &QTimer::timeout, this, &PAChatClientGlue::onSilenceTimerHit);
 	//connect(auto_sender, &PAChatClientAutoSender::onRequestNewMessage, this, &PAChatClientGlue::onAutoSenderMessage);
+	connect(message_ai, &PAChatAI::onRequestMessage, this, &PAChatClientGlue::onAutoSenderMessage);
+	connect(message_ai, &PAChatAI::requestNextChat, this, &PAChatClientGlue::onRequestChatEnd);
 
 	int_id_ = PAChatGlobalId::Get();
 	string_id_ = "(" + QString::number(int_id_) + ") ";
@@ -96,20 +99,28 @@ void PAChatClientGlue::onChatBegin()
 		ui->RemoveMessages();
 	}
 
-	/*if (client)
+	if (client)
 	{
-		if (send_intro_message_check_box_->checkState())
+		if (story_mode_check_box_->checkState() && message_ai)
 		{
 			client->SendTyping(true);
-			client->SendMessage(auto_sender->GetIntroMessage());
+			message_ai->Start();
 		}
 
-		if (story_mode_check_box_->checkState() && auto_sender)
+		/*if(auto_sender)
 		{
-			client->SendTyping(true);
-			auto_sender->Start();
-		}
-	}*/
+			if (send_intro_message_check_box_->checkState())
+			{
+				client->SendTyping(true);
+				client->SendMessage(auto_sender->GetIntroMessage());
+			}
+			if (story_mode_check_box_->checkState())
+			{
+				client->SendTyping(true);
+				auto_sender->Start();
+			}
+		}*/
+	}
 
 	emit onGlueChatBegin();
 }
@@ -144,6 +155,7 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 	if (!me)
 	{
 		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");	
+		message_ai->ProcessMessage(message);
 		/*if (message_filter && !force_red && other_message_count_ < 5)
 		{
 			force_red = message_filter->IsMessageFiltered(message);
@@ -179,6 +191,10 @@ void PAChatClientGlue::onChatEnd()
 	{
 		auto_sender->Stop();
 	}*/
+	if (message_ai)
+	{
+		message_ai->Stop();
+	}
 	silence_timer.stop();
 	QListWidgetItem::setText(string_id_ + "Idle: Chat ended, ready for new chat");
 	SetStateColor();
@@ -262,6 +278,10 @@ void PAChatClientGlue::onRequestStopAutoSender()
 	{
 		auto_sender->Stop();
 	}*/
+	if (message_ai)
+	{
+		message_ai->Stop();
+	}
 }
 
 void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
@@ -287,6 +307,10 @@ void PAChatClientGlue::Reconnect()
 	{
 		auto_sender->Stop();
 	}*/
+	if (message_ai)
+	{
+		message_ai->Stop();
+	}
 
 	disconnect(client, 0, 0, 0);
 	//client->Reconnect();

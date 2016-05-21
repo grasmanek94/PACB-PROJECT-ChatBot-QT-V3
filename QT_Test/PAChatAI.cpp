@@ -9,7 +9,7 @@ using qp = std::tuple<
 	QStringList, // 1 - reactions to answers to questions
 	QStringList, // 2 - random adder to both questions and reactions
 	std::function<bool(QString)>, // 3 - check if this is an possible answer, false=ignore, true=invoke answer processing
-	std::function<bool(QString)>,  // 4 - process answer, false = disconnect chat, true = next question
+	std::function<bool(QString,bool*,int*)>,  // 4 - process answer, false = disconnect chat, true = next question
 	int, // 5 - the question ask time
 	int // 6 - time for typing reaction
 >;
@@ -29,23 +29,59 @@ std::vector<qp> questions_answers =
 			"hooi j/m?", "hooi jm?", "hooi Jm?", "hooi JM?", "hooi J/m?", "hooi J/M?", "hooi jongen/meisje?", "hooi jongen of meisje?", "hooi j m?", "hooi J m?", "hooi J M?", "hooi j M?", "hooi jongen/meid?"
 		},
 		QStringList{ "ik J", "ik jongen", "jongen hier", "j hier" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
-		[&](QString answer)
-		{
-			return true;
+		QStringList{ 
+			"21 :)", " bijna 21 :)", " hihi 21 :)", " haha 21 :)", ", al een tijdje 21 :)",
+			"21 :P", " bijna 21 :P", " hihi 21 :P", " haha 21 :P", ", al een tijdje 21 :P",
+			"21 ;)", " bijna 21 ;)", " hihi 21 ;)", " haha 21 ;)", ", al een tijdje 21 ;)",
+			"21 :D", " bijna 21 :D", " hihi 21 :D", " haha 21 :D", ", al een tijdje 21 :D",
+			"21 ;D", " bijna 21 ;D", " hihi 21 ;D", " haha 21 ;D", ", al een tijdje 21 ;D",
+			"21 ;P", " bijna 21 ;P", " hihi 21 ;P", " haha 21 ;P", ", al een tijdje 21 ;P"
 		},
 		[&](QString answer)
 		{
-			//filter already filters this
-			return true;
+			const static QStringList possible_answers = { "m", "v", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
+		},
+		[&](QString answer, bool* got_age, int* determined_age)
+		{
+			//filter already filters this, try determine age here
+			QString s_number;
+			int digits = 0;
+			for (auto& c : answer)
+			{
+				if (c.isDigit())
+				{
+					s_number += c;
+					++digits;
+				}
+			}
+			bool ok;
+			int age = s_number.toInt(&ok);
+			if (got_age)
+			{
+				*got_age = digits != 0 && ok;
+				if (determined_age)
+				{
+					*determined_age = age;
+				}
+			}
+
+			return digits == 0 || (ok && age > 16 && age < 21);
 		},
 		500,
 		333
 	),
 
 	qp(
-		QStringList{ "leeftijd?", "wat is je leeftijd?", "hoe oud ben je?", "hoeveel jaartjes?", "en je leeftijd?" },
-		QStringList{ "ik 21", "ik bijna 21", "hihi 21", "haha 21", "ik 22", "ik bijna 22", "hihi 22", "haha 22", "ik 20", "al een tijdje 20", "hihi 20", "haha 20" },
+		QStringList{ "en jouw leeftijd?", "en wat is je leeftijd?", "en hoe oud ben jij?", "en hoeveel jaartjes heb jij erop zitten?", "en je leeftijd?", "en jou leeftijd?" },
+		QStringList{ "" },
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
@@ -58,7 +94,7 @@ std::vector<qp> questions_answers =
 			}
 			return false;
 		},
-		[&](QString answer)
+		[&](QString answer, bool*, int*)
 		{
 			QString s_number;
 			for (auto& c : answer)
@@ -92,7 +128,7 @@ std::vector<qp> questions_answers =
 			}
 			return false;
 		},
-		[&](QString answer)
+		[&](QString answer, bool*, int*)
 		{
 			const static QStringList possible_answers = { "ja", "yes", "ok", "misschien", "mischien" };
 			for (auto& possible_answer : possible_answers)
@@ -116,7 +152,7 @@ std::vector<qp> questions_answers =
 		{
 			return true;
 		},	
-		[&](QString answer)
+		[&](QString answer, bool*, int*)
 		{
 			return true;
 		},
@@ -140,7 +176,7 @@ std::vector<qp> questions_answers =
 			}
 			return false;
 		},	
-		[&](QString answer)
+		[&](QString answer, bool*, int*)
 		{
 			const static QStringList possible_answers = { "nee", "nah", "niet", "misschien", "waarom", "mischien", "nooit", "niet te ver", "kan", "kunnen" };
 			for (auto& possible_answer : possible_answers)
@@ -172,7 +208,7 @@ std::vector<qp> questions_answers =
 			}
 			return false;
 		},	
-		[&](QString answer)
+		[&](QString answer, bool*, int*)
 		{
 			const static QStringList possible_answers = { "ja", "yes", "ok", "jup", "top", "goed", "prim" };
 			for (auto& possible_answer : possible_answers)
@@ -208,6 +244,7 @@ void PAChatAI::Start()
 	current_index_ = 0;
 	amount_incomming_messages_ = 0;
 
+	got_age_ = false;
 	AskNextQuestion();
 }
 
@@ -242,23 +279,25 @@ bool PAChatAI::IsPossibleAnswer(size_t index, QString message)
 	return std::get<3>(questions_answers[index])(message);
 }
 
-bool PAChatAI::IsGoodAnswer(size_t index, QString message)
+bool PAChatAI::IsGoodAnswer(size_t index, QString message, bool* did_extract_age, int* extracted_age)
 {
-	return std::get<4>(questions_answers[index])(message);
+	return std::get<4>(questions_answers[index])(message, did_extract_age, extracted_age);
 }
 
 void PAChatAI::AskNextQuestion()
 {
 	state_ = PAChatAIState_AskingQuestion;
 	reaction_sender_.stop();
-	question_akser_.start(std::get<5>(questions_answers[current_index_]));
+	int time = std::get<5>(questions_answers[current_index_]);
+	question_akser_.start(time);
 }
 
 void PAChatAI::PushNextReaction()
 {
 	state_ = PAChatAIState_SendingReaction;
 	question_akser_.stop();
-	reaction_sender_.start(std::get<6>(questions_answers[current_index_]));
+	int time = std::get<6>(questions_answers[current_index_]);
+	reaction_sender_.start(time);
 }
 
 
@@ -269,7 +308,7 @@ void PAChatAI::ProcessMessage(QString message)
 		return;
 	}
 
-	if (++amount_incomming_messages_ < 3)
+	if (++amount_incomming_messages_ < 4)
 	{
 		if (filter_->IsMessageFiltered(message))
 		{
@@ -286,7 +325,7 @@ void PAChatAI::ProcessMessage(QString message)
 
 	if (IsPossibleAnswer(current_index_, message))
 	{
-		if (IsGoodAnswer(current_index_, message))
+		if (IsGoodAnswer(current_index_, message, &got_age_))
 		{
 			PushNextReaction();
 		}
@@ -302,17 +341,26 @@ void PAChatAI::ProcessMessage(QString message)
 void PAChatAI::onAskNextQuestion()
 {
 	question_akser_.stop();
-	emit onRequestMessage(GetQuestion(current_index_));
+	emit onRequestMessage(GetQuestion(current_index_), false);
 	state_ = PAChatAIState_WaitingForAnswer;
 }
 
 void PAChatAI::onReactionToAnswer()
 {
 	reaction_sender_.stop();
-	emit onRequestMessage(GetReaction(current_index_));
 
-	if (++current_index_ < questions_answers.size())
+	QString reaction = GetReaction(current_index_);
+	bool last = ++current_index_ < questions_answers.size();
+
+	emit onRequestMessage(reaction, last);
+
+	if (!last)
 	{
+		if (got_age_ == true && current_index_ == 1)
+		{
+			++current_index_;
+		}
+
 		AskNextQuestion();
 	}
 	else
