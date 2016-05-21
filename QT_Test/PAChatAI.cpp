@@ -15,6 +15,231 @@ using qp = std::tuple<
 	int // 7 - time for typing reaction
 >;
 
+QString SmartReplaceNumbers(QString input)
+{
+	using nm = std::pair<QString, int>;
+
+	static const std::vector<nm> number_replace =
+	{
+		nm("een", 1),
+		nm("twee", 2),
+		nm("drie", 3),
+
+		nm("vier", 4),
+		nm("fier", 4),
+
+		nm("vijf", 5),
+		nm("fijf", 5),
+		nm("fijv", 5),
+		nm("vijv", 5),
+		nm("veif", 5),
+		nm("feif", 5),
+		nm("feiv", 5),
+		nm("veiv", 5),
+
+		nm("zes", 6),
+		nm("ses", 6),
+		nm("zez", 6),
+		nm("sez", 6),
+
+		nm("zeven", 7),
+		nm("seven", 7),
+		nm("sven", 7),
+		nm("zven", 7),
+		nm("zvn", 7),
+		nm("svn", 7),
+
+		nm("acht", 8),
+		nm("agt", 8),
+		nm("achd", 8),
+		nm("agd", 8),
+
+		nm("negen", 9),
+		nm("neger", 9),
+		nm("ngen", 9),
+		nm("negn", 9),
+		nm("nein", 9),
+
+	};
+
+	static const std::vector<nm> number_tens_replace =
+	{
+		nm("tien", 10),
+		nm("twin", 20),
+		nm("twnt", 20),
+		nm("der", 30),
+
+		nm("veer", 40),
+
+		nm("vijftig", 50),
+		nm("fijftig", 50),
+		nm("fijvtig", 50),
+		nm("vijvtig", 50),
+		nm("veiftig", 50),
+		nm("feiftig", 50),
+		nm("feivtig", 50),
+		nm("veivtig", 50),
+
+		nm("zestig", 60),
+		nm("sestig", 60),
+		nm("zeztig", 60),
+		nm("seztig", 60),
+
+		nm("zeventig", 70),
+		nm("seventig", 70),
+		nm("sventig", 70),
+		nm("zventig", 70),
+		nm("zvntig", 70),
+		nm("svntig", 70),
+
+		nm("achtig", 80),
+		nm("agtig", 80),
+		nm("achdig", 80),
+		nm("agdig", 80),
+		nm("achttig", 80),
+		nm("agttig", 80),
+		nm("achdtig", 80),
+		nm("agdtig", 80),
+
+		nm("negentig", 90),
+		nm("negertig", 90),
+		nm("ngentig", 90),
+		nm("negntig", 90),
+		nm("neintig", 90),
+
+		nm("vijftg", 50),
+		nm("fijftg", 50),
+		nm("fijvtg", 50),
+		nm("vijvtg", 50),
+		nm("veiftg", 50),
+		nm("feiftg", 50),
+		nm("feivtg", 50),
+		nm("veivtg", 50),
+
+		nm("zestg", 60),
+		nm("sestg", 60),
+		nm("zeztg", 60),
+		nm("seztg", 60),
+
+		nm("zeventg", 70),
+		nm("seventg", 70),
+		nm("sventg", 70),
+		nm("zventg", 70),
+		nm("zvntg", 70),
+		nm("svntg", 70),
+
+		nm("achtg", 80),
+		nm("agtg", 80),
+		nm("achdig", 80),
+		nm("agdig", 80),
+		nm("achttg", 80),
+		nm("agttg", 80),
+		nm("achdtg", 80),
+		nm("agdtg", 80),
+
+		nm("negentg", 90),
+		nm("negertg", 90),
+		nm("ngentg", 90),
+		nm("negntg", 90),
+		nm("neintg", 90),
+
+		nm("vijftich", 50),
+		nm("fijftich", 50),
+		nm("fijvtich", 50),
+		nm("vijvtich", 50),
+		nm("veiftich", 50),
+		nm("feiftich", 50),
+		nm("feivtich", 50),
+		nm("veivtich", 50),
+
+		nm("zestich", 60),
+		nm("sestich", 60),
+		nm("zeztich", 60),
+		nm("seztich", 60),
+
+		nm("zeventich", 70),
+		nm("seventich", 70),
+		nm("sventich", 70),
+		nm("zventich", 70),
+		nm("zvntich", 70),
+		nm("svntich", 70),
+
+		nm("achtich", 80),
+		nm("agtich", 80),
+		nm("achdich", 80),
+		nm("agdich", 80),
+		nm("achttich", 80),
+		nm("agttich", 80),
+		nm("achdtich", 80),
+		nm("agdtich", 80),
+
+		nm("negentich", 90),
+		nm("negertich", 90),
+		nm("ngentich", 90),
+		nm("negntich", 90),
+		nm("neintich", 90),
+
+		nm("vijftch", 50),
+		nm("fijftch", 50),
+		nm("fijvtch", 50),
+		nm("vijvtch", 50),
+		nm("veiftch", 50),
+		nm("feiftch", 50),
+		nm("feivtch", 50),
+		nm("veivtch", 50),
+
+		nm("zestch", 60),
+		nm("sestch", 60),
+		nm("zeztch", 60),
+		nm("seztch", 60),
+
+		nm("zeventch", 70),
+		nm("seventch", 70),
+		nm("sventch", 70),
+		nm("zventch", 70),
+		nm("zvntch", 70),
+		nm("svntch", 70),
+
+		nm("achtch", 80),
+		nm("agtch", 80),
+		nm("achdich", 80),
+		nm("agdich", 80),
+		nm("achttch", 80),
+		nm("agttch", 80),
+		nm("achdtch", 80),
+		nm("agdtch", 80),
+
+		nm("negentch", 90),
+		nm("negertch", 90),
+		nm("ngentch", 90),
+		nm("negntch", 90),
+		nm("neintch", 90),
+	};
+
+	int number = 0;
+	for (auto& replacer : number_tens_replace)
+	{
+		if (input.indexOf(replacer.first) != -1)
+		{
+			input = input.replace(replacer.first, "");
+			number += replacer.second;
+		}
+	}
+
+	for (auto& replacer : number_replace)
+	{
+		if (input.indexOf(replacer.first) != -1)
+		{
+			input = input.replace(replacer.first, "");
+			number += replacer.second;
+		}
+	}
+
+	input = input.append(" (number: " + QString::number(number) + " )");
+
+	return input;
+}
+
 std::vector<qp> questions_answers =
 {
 	qp(
@@ -53,6 +278,7 @@ std::vector<qp> questions_answers =
 		},
 		[&](QString answer)
 		{
+
 			const static QStringList possible_answers = { "d", "m", "v", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 			for (auto& possible_answer : possible_answers)
 			{
@@ -100,6 +326,7 @@ std::vector<qp> questions_answers =
 		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
 		{
+			answer = SmartReplaceNumbers(answer);
 			for (auto& c : answer)
 			{
 				if (c.isDigit())
@@ -112,6 +339,7 @@ std::vector<qp> questions_answers =
 		[&](QString answer, bool*, int*)
 		{
 			QString s_number;
+			answer = SmartReplaceNumbers(answer);
 			for (auto& c : answer)
 			{
 				if (c.isDigit())
