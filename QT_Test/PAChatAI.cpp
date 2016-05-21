@@ -317,6 +317,8 @@ void PAChatAI::ProcessMessage(QString message)
 		return;
 	}
 
+	message = message.toLower();
+
 	if (++amount_incomming_messages_ < 4)
 	{
 		if (filter_->IsMessageFiltered(message))
