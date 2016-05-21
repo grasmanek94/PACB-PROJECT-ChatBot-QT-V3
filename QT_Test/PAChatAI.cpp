@@ -7,11 +7,12 @@
 using qp = std::tuple< 
 	QStringList, // 0 - questions
 	QStringList, // 1 - reactions to answers to questions
-	QStringList, // 2 - random adder to both questions and reactions
-	std::function<bool(QString)>, // 3 - check if this is an possible answer, false=ignore, true=invoke answer processing
-	std::function<bool(QString,bool*,int*)>,  // 4 - process answer, false = disconnect chat, true = next question
-	int, // 5 - the question ask time
-	int // 6 - time for typing reaction
+	QStringList, // 2 - random adder to questions
+	QStringList, // 3 - random adder to answers
+	std::function<bool(QString)>, // 4 - check if this is an possible answer, false=ignore, true=invoke answer processing
+	std::function<bool(QString,bool*,int*)>,  // 5 - process answer, false = disconnect chat, true = next question
+	int, // 6 - the question ask time
+	int // 7 - time for typing reaction
 >;
 
 std::vector<qp> questions_answers =
@@ -29,6 +30,7 @@ std::vector<qp> questions_answers =
 			"hooi j/m?", "hooi jm?", "hooi Jm?", "hooi JM?", "hooi J/m?", "hooi J/M?", "hooi jongen/meisje?", "hooi jongen of meisje?", "hooi j m?", "hooi J m?", "hooi J M?", "hooi j M?", "hooi jongen/meid?"
 		},
 		QStringList{ "ik J", "ik jongen", "jongen hier", "j hier" },
+		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		QStringList{ 
 			"21 :)", " bijna 21 :)", " hihi 21 :)", " haha 21 :)", ", al een tijdje 21 :)",
 			"21 :P", " bijna 21 :P", " hihi 21 :P", " haha 21 :P", ", al een tijdje 21 :P",
@@ -83,6 +85,7 @@ std::vector<qp> questions_answers =
 		QStringList{ "en jouw leeftijd?", "en wat is je leeftijd?", "en hoe oud ben jij?", "en hoeveel jaartjes heb jij erop zitten?", "en je leeftijd?", "en jou leeftijd?" },
 		QStringList{ "" },
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
 			for (auto& c : answer)
@@ -116,6 +119,7 @@ std::vector<qp> questions_answers =
 		QStringList{ "zoek je iemand om mee te daten?", "wil je 'n x in 't echt ontmoeten?", "wil je een keertje echt ontmoeten?", "zou je durven te ontmoeten voor een date?", "zou je mij misschien als vriendje willen?", "wil je misschien een sexdate?" },
 		QStringList{ "want ik wel met jou" },
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
 			const static QStringList possible_answers = {"ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
@@ -148,6 +152,7 @@ std::vector<qp> questions_answers =
 		QStringList{ "oke :D en vlakbij welke stad woon je?", "en waar woon je?", "en wat is je woonplaats?", "waar woon je?" },
 		QStringList{ "ik vlakbij Eindhoven", "ik in Eindhoven", "ik bij Eindhoven", "ik vlakbij Geldrop", "ik in Geldrop", "ik bij Geldrop", "Ik vlakbij Blixembosch", "Ik in Blixembosch", "Ik bij Blixembosch", "ik vlakbij Meerhoven", "ik in Meerhoven", "ik bij Meerhoven", "ik vlakbij Veldhoven", "ik in Veldhoven", "ik bij Veldhoven", "ik vlakbij Nuenen", "ik in Nuenen", "ik bij Nuenen", "ik vlakbij Nederwetten", "ik in Nederwetten", "ik bij Nederwetten" },
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
 			return true;
@@ -163,6 +168,7 @@ std::vector<qp> questions_answers =
 	qp(
 		QStringList{ "te ver voor je om te ontmoeten?" },
 		QStringList{ "ik kan elke afstand hebben" },
+		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
@@ -195,6 +201,7 @@ std::vector<qp> questions_answers =
 	qp(
 		QStringList{ "wil je verder chatten op whatsapp? ik wel want deze site werkt klote.." },
 		QStringList{ "als je geinterreseerd bent: mijn whatsapp: 06-30269976, ik wacht wel op een appje van je ;) doeei" },
+		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
@@ -270,25 +277,25 @@ QString PAChatAI::GetQuestion(size_t index)
 QString PAChatAI::GetReaction(size_t index)
 {
 	QStringList& reactions = std::get<1>(questions_answers[index]);
-	QStringList& adders = std::get<2>(questions_answers[index]);
+	QStringList& adders = std::get<3>(questions_answers[index]);
 	return reactions[qrand() % reactions.size()] + adders[qrand() % adders.size()];
 }
 
 bool PAChatAI::IsPossibleAnswer(size_t index, QString message)
 {
-	return std::get<3>(questions_answers[index])(message);
+	return std::get<4>(questions_answers[index])(message);
 }
 
 bool PAChatAI::IsGoodAnswer(size_t index, QString message, bool* did_extract_age, int* extracted_age)
 {
-	return std::get<4>(questions_answers[index])(message, did_extract_age, extracted_age);
+	return std::get<5>(questions_answers[index])(message, did_extract_age, extracted_age);
 }
 
 void PAChatAI::AskNextQuestion()
 {
 	state_ = PAChatAIState_AskingQuestion;
 	reaction_sender_.stop();
-	int time = std::get<5>(questions_answers[current_index_]);
+	int time = std::get<6>(questions_answers[current_index_]);
 	question_akser_.start(time);
 }
 
@@ -296,7 +303,7 @@ void PAChatAI::PushNextReaction()
 {
 	state_ = PAChatAIState_SendingReaction;
 	question_akser_.stop();
-	int time = std::get<6>(questions_answers[current_index_]);
+	int time = std::get<7>(questions_answers[current_index_]);
 	reaction_sender_.start(time);
 }
 
