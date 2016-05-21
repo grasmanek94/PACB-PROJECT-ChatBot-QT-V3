@@ -331,9 +331,18 @@ void PAChatAI::ProcessMessage(QString message)
 
 	if (!got_age_)
 	{
-		if (IsGoodAnswer(0, message, &got_age_))
+		int got_age_count = 0;
+		IsGoodAnswer(0, message, &got_age_, &got_age_count);
+		if (got_age_)
 		{
-			if (got_age_ && current_index_ == 1)
+			if (got_age_count < 17 || got_age_count > 20)
+			{
+				state_ = PAChatAIState_Failed;
+				emit requestNextChat();
+				return;
+			}
+
+			if (current_index_ == 1)
 			{
 				++current_index_;
 			}
