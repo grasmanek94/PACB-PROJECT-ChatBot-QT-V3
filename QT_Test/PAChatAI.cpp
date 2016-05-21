@@ -356,39 +356,6 @@ std::vector<qp> questions_answers =
 	),
 
 	qp(
-		QStringList{ "zoek je iemand om mee te daten?", "wil je 'n x in 't echt ontmoeten?", "wil je een keertje echt ontmoeten?", "zou je durven te ontmoeten voor een date?", "zou je mij misschien als vriendje willen?", "wil je misschien een sexdate?" },
-		QStringList{ "want ik wel met jou" },
-		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
-		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
-		[&](QString answer)
-		{
-			const static QStringList possible_answers = { "graag", "grag", "ja", "yes", "ok", "nee", "may", "mab", "nah", "niet", "mis", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
-			for (auto& possible_answer : possible_answers)
-			{
-				if (answer.indexOf(possible_answer) != -1)
-				{
-					return true;
-				}
-			}
-			return false;
-		},
-		[&](QString answer, bool*, int*)
-		{
-			const static QStringList possible_answers = { "graag", "grag", "ja", "yes", "ok", "mis", "may", "mab" };
-			for (auto& possible_answer : possible_answers)
-			{
-				if (answer.indexOf(possible_answer) != -1)
-				{
-					return true;
-				}
-			}
-			return false;
-		},
-		3500,
-		3000
-	),
-
-	qp(
 		QStringList{ "oke :D en vlakbij welke stad woon je?", "en waar woon je?", "en wat is je woonplaats?", "waar woon je?" },
 		QStringList{ "ik vlakbij Eindhoven", "ik in Eindhoven", "ik bij Eindhoven", "ik vlakbij Geldrop", "ik in Geldrop", "ik bij Geldrop", "Ik vlakbij Blixembosch", "Ik in Blixembosch", "Ik bij Blixembosch", "ik vlakbij Meerhoven", "ik in Meerhoven", "ik bij Meerhoven", "ik vlakbij Veldhoven", "ik in Veldhoven", "ik bij Veldhoven", "ik vlakbij Nuenen", "ik in Nuenen", "ik bij Nuenen", "ik vlakbij Nederwetten", "ik in Nederwetten", "ik bij Nederwetten" },
 		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
@@ -435,6 +402,39 @@ std::vector<qp> questions_answers =
 			return false;
 		},
 		3000,
+		3000
+	),
+
+	qp(
+		QStringList{ "zoek je iemand om mee te daten?", "wil je 'n x in 't echt ontmoeten?", "wil je een keertje echt ontmoeten?", "zou je durven te ontmoeten voor een date?", "zou je mij misschien als vriendje willen?", "wil je misschien een sexdate?" },
+		QStringList{ "want ik wel met jou" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
+		[&](QString answer)
+		{
+			const static QStringList possible_answers = { "ken", "graag", "grag", "ja", "yes", "ok", "nee", "may", "mab", "nah", "niet", "mis", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
+		},
+		[&](QString answer, bool*, int*)
+		{
+			const static QStringList possible_answers = { "graag", "grag", "ja", "yes", "ok", "mis", "may", "mab" };
+			for (auto& possible_answer : possible_answers)
+			{
+				if (answer.indexOf(possible_answer) != -1)
+				{
+					return true;
+				}
+			}
+			return false;
+		},
+		3500,
 		3000
 	),
 
