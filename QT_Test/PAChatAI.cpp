@@ -329,7 +329,7 @@ void PAChatAI::ProcessMessage(QString message)
 		}
 	}
 
-	if (state_ != PAChatAIState_WaitingForAnswer || current_index_ == 0)
+	if (state_ != PAChatAIState_WaitingForAnswer && current_index_ != 0)
 	{
 		return;
 	}
