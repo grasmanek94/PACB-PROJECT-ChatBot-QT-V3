@@ -355,7 +355,7 @@ void PAChatAI::onAskNextQuestion()
 	question_akser_.stop();
 	emit onRequestMessage(GetQuestion(current_index_), false);
 	state_ = PAChatAIState_WaitingForAnswer;
-	waiting_answer_timeout_.start(30000);
+	waiting_answer_timeout_.start(60000);
 }
 
 void PAChatAI::onReactionToAnswer()
