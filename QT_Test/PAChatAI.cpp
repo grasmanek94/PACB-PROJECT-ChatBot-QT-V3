@@ -329,11 +329,14 @@ void PAChatAI::ProcessMessage(QString message)
 		}
 	}
 
-	if (IsGoodAnswer(0, message, &got_age_))
+	if (!got_age_)
 	{
-		if (got_age_ && current_index_ == 1)
+		if (IsGoodAnswer(0, message, &got_age_))
 		{
-			++current_index_;
+			if (got_age_ && current_index_ == 1)
+			{
+				++current_index_;
+			}
 		}
 	}
 
