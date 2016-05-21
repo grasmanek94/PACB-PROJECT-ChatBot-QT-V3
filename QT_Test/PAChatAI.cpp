@@ -75,7 +75,7 @@ std::vector<qp> questions_answers =
 				}
 			}
 
-			return digits == 0 || (ok && age > 16 && age < 21);
+			return digits == 0 || (ok && age > 15 && age < 21);
 		},
 		2000,
 		3000
@@ -109,7 +109,7 @@ std::vector<qp> questions_answers =
 			}
 			bool ok;
 			int age = s_number.toInt(&ok);
-			return ok && age > 16 && age < 21;
+			return ok && age > 15 && age < 21;
 		},
 		3000,
 		2000
@@ -122,7 +122,7 @@ std::vector<qp> questions_answers =
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = {"ja", "yes", "ok", "nee", "nah", "niet", "mis", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
+			const static QStringList possible_answers = {"ja", "yes", "ok", "nee", "may", "mab", "nah", "niet", "mis", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -134,7 +134,7 @@ std::vector<qp> questions_answers =
 		},
 		[&](QString answer, bool*, int*)
 		{
-			const static QStringList possible_answers = { "ja", "yes", "ok", "mis" };
+			const static QStringList possible_answers = { "ja", "yes", "ok", "mis", "may", "mab" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -172,7 +172,7 @@ std::vector<qp> questions_answers =
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "mis", "jup", "mwah", "waarom", "mis", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
+			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "mis", "may", "mab", "jup", "mwah", "waarom", "mis", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -184,7 +184,7 @@ std::vector<qp> questions_answers =
 		},	
 		[&](QString answer, bool*, int*)
 		{
-			const static QStringList possible_answers = { "nee", "nah", "niet", "misschien", "waarom", "mis", "nooit", "niet te ver", "kan", "kunnen" };
+			const static QStringList possible_answers = { "nee", "nah", "niet", "misschien", "waarom", "mis", "may", "mab", "nooit", "niet te ver", "kan", "kunnen" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -205,7 +205,7 @@ std::vector<qp> questions_answers =
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "mis", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
+			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "mis", "may", "mab", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -217,7 +217,7 @@ std::vector<qp> questions_answers =
 		},	
 		[&](QString answer, bool*, int*)
 		{
-			const static QStringList possible_answers = { "ja", "yes", "ok", "jup", "top", "goed", "prim", "mis" };
+			const static QStringList possible_answers = { "ja", "yes", "ok", "jup", "top", "goed", "prim", "mis", "may", "mab" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -335,7 +335,7 @@ void PAChatAI::ProcessMessage(QString message)
 		IsGoodAnswer(0, message, &got_age_, &got_age_count);
 		if (got_age_)
 		{
-			if (got_age_count < 17 || got_age_count > 20)
+			if (got_age_count < 16 || got_age_count > 20)
 			{
 				state_ = PAChatAIState_Failed;
 				emit requestNextChat();
