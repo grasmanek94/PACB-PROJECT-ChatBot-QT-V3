@@ -19,29 +19,41 @@ std::vector<qp> questions_answers =
 {
 	qp(
 		QStringList{ 
-			"j/m?", "jm?", "Jm?", "JM?", "J/m?", "J/M?", "jongen/meisje?", "jongen of meisje?", "j m?", "J m?", "J M?", "j M?", "jongen/meid?", 
-			"hoi, j/m?", "hoi, jm?", "hoi, Jm?", "hoi, JM?", "hoi, J/m?", "hoi, J/M?", "hoi, jongen/meisje?", "hoi, jongen of meisje?", "hoi, j m?", "hoi, J m?", "hoi, J M?", "hoi, j M?", "hoi, jongen/meid?",
-			"hoi j/m?", "hoi jm?", "hoi Jm?", "hoi JM?", "hoi J/m?", "hoi J/M?", "hoi jongen/meisje?", "hoi jongen of meisje?", "hoi j m?", "hoi J m?", "hoi J M?", "hoi j M?", "hoi jongen/meid?",
-			"hey, j/m?", "hey, jm?", "hey, Jm?", "hey, JM?", "hey, J/m?", "hey, J/M?", "hey, jongen/meisje?", "hey, jongen of meisje?", "hey, j m?", "hey, J m?", "hey, J M?", "hey, j M?", "hey, jongen/meid?",
-			"hey j/m?", "hey jm?", "hey Jm?", "hey JM?", "hey J/m?", "hey J/M?", "hey jongen/meisje?", "hey jongen of meisje?", "hey j m?", "hey J m?", "hey J M?", "hey j M?", "hey jongen/meid?",
-			"haai, j/m?", "haai, jm?", "haai, Jm?", "haai, JM?", "haai, J/m?", "haai, J/M?", "haai, jongen/meisje?", "haai, jongen of meisje?", "haai, j m?", "haai, J m?", "haai, J M?", "haai, j M?", "haai, jongen/meid?",
-			"haai j/m?", "haai jm?", "haai Jm?", "haai JM?", "haai J/m?", "haai J/M?", "haai jongen/meisje?", "haai jongen of meisje?", "haai j m?", "haai J m?", "haai J M?", "haai j M?", "haai jongen/meid?",
-			"hooi, j/m?", "hooi, jm?", "hooi, Jm?", "hooi, JM?", "hooi, J/m?", "hooi, J/M?", "hooi, jongen/meisje?", "hooi, jongen of meisje?", "hooi, j m?", "hooi, J m?", "hooi, J M?", "hooi, j M?", "hooi, jongen/meid?",
-			"hooi j/m?", "hooi jm?", "hooi Jm?", "hooi JM?", "hooi J/m?", "hooi J/M?", "hooi jongen/meisje?", "hooi jongen of meisje?", "hooi j m?", "hooi J m?", "hooi J M?", "hooi j M?", "hooi jongen/meid?"
+			"j/m?", "jm?", "jm?", "jm?", "Jm?", "jm?", "JM?", "jm?", "J/m?", "jm?", "J/M?", "jm?", "jongen/meisje?", "jm?", "jongen of meisje?", "jm?", "j m?", "jm?", "J m?", "jm?", "J M?", "jm?", "j M?", "jm?", "jongen/meid?", "jm?", 
+			"hoi, j/m?", "jm?", "hoi, jm?", "jm?", "hoi, Jm?", "jm?", "hoi, JM?", "jm?", "hoi, J/m?", "jm?", "hoi, J/M?", "jm?", "hoi, jongen/meisje?", "jm?", "hoi, jongen of meisje?", "jm?", "hoi, j m?", "jm?", "hoi, J m?", "jm?", "hoi, J M?", "jm?", "hoi, j M?", "jm?", "hoi, jongen/meid?", "jm?",
+			"hoi j/m?", "jm?", "hoi jm?", "jm?", "hoi Jm?", "jm?", "hoi JM?", "jm?", "hoi J/m?", "jm?", "hoi J/M?", "jm?", "hoi jongen/meisje?", "jm?", "hoi jongen of meisje?", "jm?", "hoi j m?", "jm?", "hoi J m?", "jm?", "hoi J M?", "jm?", "hoi j M?", "jm?", "hoi jongen/meid?", "jm?",
+			"hey, j/m?", "jm?", "hey, jm?", "jm?", "hey, Jm?", "jm?", "hey, JM?", "jm?", "hey, J/m?", "jm?", "hey, J/M?", "jm?", "hey, jongen/meisje?", "jm?", "hey, jongen of meisje?", "jm?", "hey, j m?", "jm?", "hey, J m?", "jm?", "hey, J M?", "jm?", "hey, j M?", "jm?", "hey, jongen/meid?", "jm?",
+			"hey j/m?", "jm?", "hey jm?", "jm?", "hey Jm?", "jm?", "hey JM?", "jm?", "hey J/m?", "jm?", "hey J/M?", "jm?", "hey jongen/meisje?", "jm?", "hey jongen of meisje?", "jm?", "hey j m?", "jm?", "hey J m?", "jm?", "hey J M?", "jm?", "hey j M?", "jm?", "hey jongen/meid?", "jm?",
+			"haai, j/m?", "jm?", "haai, jm?", "jm?", "haai, Jm?", "jm?", "haai, JM?", "jm?", "haai, J/m?", "jm?", "haai, J/M?", "jm?", "haai, jongen/meisje?", "jm?", "haai, jongen of meisje?", "jm?", "haai, j m?", "jm?", "haai, J m?", "jm?", "haai, J M?", "jm?", "haai, j M?", "jm?", "haai, jongen/meid?", "jm?",
+			"haai j/m?", "jm?", "haai jm?", "jm?", "haai Jm?", "jm?", "haai JM?", "jm?", "haai J/m?", "jm?", "haai J/M?", "jm?", "haai jongen/meisje?", "jm?", "haai jongen of meisje?", "jm?", "haai j m?", "jm?", "haai J m?", "jm?", "haai J M?", "jm?", "haai j M?", "jm?", "haai jongen/meid?", "jm?",
+			"hooi, j/m?", "jm?", "hooi, jm?", "jm?", "hooi, Jm?", "jm?", "hooi, JM?", "jm?", "hooi, J/m?", "jm?", "hooi, J/M?", "jm?", "hooi, jongen/meisje?", "jm?", "hooi, jongen of meisje?", "jm?", "hooi, j m?", "jm?", "hooi, J m?", "jm?", "hooi, J M?", "jm?", "hooi, j M?", "jm?", "hooi, jongen/meid?", "jm?",
+			"hooi j/m?", "jm?", "hooi jm?", "jm?", "hooi Jm?", "jm?", "hooi JM?", "jm?", "hooi J/m?", "jm?", "hooi J/M?", "jm?", "hooi jongen/meisje?", "jm?", "hooi jongen of meisje?", "jm?", "hooi j m?", "jm?", "hooi J m?", "jm?", "hooi J M?", "jm?", "hooi j M?", "jm?", "hooi jongen/meid?"
 		},
-		QStringList{ "ik J", "ik jongen", "jongen hier", "j hier" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ "ik J", "ik jongen", "jongen hier", "j hier", "hier j", "hiero j" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		QStringList{ 
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
 			"21 :)", " bijna 21 :)", " hihi 21 :)", " haha 21 :)", ", al een tijdje 21 :)",
 			"21 :P", " bijna 21 :P", " hihi 21 :P", " haha 21 :P", ", al een tijdje 21 :P",
 			"21 ;)", " bijna 21 ;)", " hihi 21 ;)", " haha 21 ;)", ", al een tijdje 21 ;)",
 			"21 :D", " bijna 21 :D", " hihi 21 :D", " haha 21 :D", ", al een tijdje 21 :D",
 			"21 ;D", " bijna 21 ;D", " hihi 21 ;D", " haha 21 ;D", ", al een tijdje 21 ;D",
-			"21 ;P", " bijna 21 ;P", " hihi 21 ;P", " haha 21 ;P", ", al een tijdje 21 ;P"
+			"21 ;P", " bijna 21 ;P", " hihi 21 ;P", " haha 21 ;P", ", al een tijdje 21 ;P",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21",
+			"21", " bijna 21", " hihi 21", " hehe 21", ", al een tijdje 21"
 		},
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = { "m", "v", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+			const static QStringList possible_answers = { "d", "m", "v", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -84,8 +96,8 @@ std::vector<qp> questions_answers =
 	qp(
 		QStringList{ "en jouw leeftijd?", "en wat is je leeftijd?", "en hoe oud ben jij?", "en hoeveel jaartjes heb jij erop zitten?", "en je leeftijd?", "en jou leeftijd?" },
 		QStringList{ "" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
 		{
 			for (auto& c : answer)
@@ -118,8 +130,8 @@ std::vector<qp> questions_answers =
 	qp(
 		QStringList{ "zoek je iemand om mee te daten?", "wil je 'n x in 't echt ontmoeten?", "wil je een keertje echt ontmoeten?", "zou je durven te ontmoeten voor een date?", "zou je mij misschien als vriendje willen?", "wil je misschien een sexdate?" },
 		QStringList{ "want ik wel met jou" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
 		{
 			const static QStringList possible_answers = {"ja", "yes", "ok", "nee", "may", "mab", "nah", "niet", "mis", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
@@ -151,8 +163,8 @@ std::vector<qp> questions_answers =
 	qp(
 		QStringList{ "oke :D en vlakbij welke stad woon je?", "en waar woon je?", "en wat is je woonplaats?", "waar woon je?" },
 		QStringList{ "ik vlakbij Eindhoven", "ik in Eindhoven", "ik bij Eindhoven", "ik vlakbij Geldrop", "ik in Geldrop", "ik bij Geldrop", "Ik vlakbij Blixembosch", "Ik in Blixembosch", "Ik bij Blixembosch", "ik vlakbij Meerhoven", "ik in Meerhoven", "ik bij Meerhoven", "ik vlakbij Veldhoven", "ik in Veldhoven", "ik bij Veldhoven", "ik vlakbij Nuenen", "ik in Nuenen", "ik bij Nuenen", "ik vlakbij Nederwetten", "ik in Nederwetten", "ik bij Nederwetten" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
 		{
 			return true;
@@ -168,8 +180,8 @@ std::vector<qp> questions_answers =
 	qp(
 		QStringList{ "te ver voor je om te ontmoeten?" },
 		QStringList{ "ik kan elke afstand hebben" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
 		{
 			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "mis", "may", "mab", "jup", "mwah", "waarom", "mis", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
@@ -201,8 +213,8 @@ std::vector<qp> questions_answers =
 	qp(
 		QStringList{ "wil je verder chatten op whatsapp? ik wel want deze site werkt klote.." },
 		QStringList{ "als je geinterreseerd bent: mijn whatsapp: 06-30269976, ik wacht wel op een appje van je ;) doeei" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
-		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
+		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
 		{
 			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "mis", "may", "mab", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
