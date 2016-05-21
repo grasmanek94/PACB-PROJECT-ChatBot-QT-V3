@@ -329,7 +329,13 @@ void PAChatAI::ProcessMessage(QString message)
 		}
 	}
 
-	IsGoodAnswer(0, message, &got_age_);
+	if (IsGoodAnswer(0, message, &got_age_))
+	{
+		if (got_age_ && current_index_ == 1)
+		{
+			++current_index_;
+		}
+	}
 
 	if (state_ != PAChatAIState_WaitingForAnswer && current_index_ != 0) // skip if first question (asking gender, mostly they do tell it themselves)
 	{
@@ -371,11 +377,6 @@ void PAChatAI::onReactionToAnswer()
 
 	if (not_last)
 	{
-		if (got_age_ == true && current_index_ == 1)
-		{
-			++current_index_;
-		}
-
 		AskNextQuestion();
 	}
 	else
