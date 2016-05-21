@@ -377,6 +377,10 @@ void PAChatAI::onReactionToAnswer()
 
 	if (not_last)
 	{
+		if (got_age_ && current_index_ == 1)
+		{
+			++current_index_;
+		}
 		AskNextQuestion();
 	}
 	else
