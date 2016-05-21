@@ -172,7 +172,7 @@ std::vector<qp> questions_answers =
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
+			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mis", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -184,7 +184,7 @@ std::vector<qp> questions_answers =
 		},	
 		[&](QString answer, bool*, int*)
 		{
-			const static QStringList possible_answers = { "nee", "nah", "niet", "misschien", "waarom", "mischien", "nooit", "niet te ver", "kan", "kunnen" };
+			const static QStringList possible_answers = { "nee", "nah", "niet", "misschien", "waarom", "mis", "mischien", "nooit", "niet te ver", "kan", "kunnen" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -205,7 +205,7 @@ std::vector<qp> questions_answers =
 		QStringList{ " :)", " :P", " ;)", " :D", " ;D", " ;P" },
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
+			const static QStringList possible_answers = { "ja", "yes", "ok", "nee", "nah", "niet", "mis", "misschien", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -217,7 +217,7 @@ std::vector<qp> questions_answers =
 		},	
 		[&](QString answer, bool*, int*)
 		{
-			const static QStringList possible_answers = { "ja", "yes", "ok", "jup", "top", "goed", "prim" };
+			const static QStringList possible_answers = { "ja", "yes", "ok", "jup", "top", "goed", "prim", "mis" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
