@@ -77,7 +77,7 @@ std::vector<qp> questions_answers =
 
 			return digits == 0 || (ok && age > 16 && age < 21);
 		},
-		500,
+		2000,
 		3000
 	),
 
@@ -329,7 +329,7 @@ void PAChatAI::ProcessMessage(QString message)
 		}
 	}
 
-	if (state_ != PAChatAIState_WaitingForAnswer)
+	if (state_ != PAChatAIState_WaitingForAnswer || current_index_ == 0)
 	{
 		return;
 	}
