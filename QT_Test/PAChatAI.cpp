@@ -78,7 +78,7 @@ std::vector<qp> questions_answers =
 			return digits == 0 || (ok && age > 16 && age < 21);
 		},
 		500,
-		333
+		3000
 	),
 
 	qp(
@@ -111,8 +111,8 @@ std::vector<qp> questions_answers =
 			int age = s_number.toInt(&ok);
 			return ok && age > 16 && age < 21;
 		},
-		1000,
-		1000
+		3000,
+		2000
 	),
 
 	qp(
@@ -144,8 +144,8 @@ std::vector<qp> questions_answers =
 			}
 			return false;
 		},
-		3000,
-		2000
+		3500,
+		3000
 	),
 
 	qp(
@@ -161,8 +161,8 @@ std::vector<qp> questions_answers =
 		{
 			return true;
 		},
-		3000,
-		1500
+		3500,
+		4000
 	),
 
 	qp(
@@ -195,7 +195,7 @@ std::vector<qp> questions_answers =
 			return false;
 		},
 		3000,
-		1500
+		3000
 	),
 
 	qp(
