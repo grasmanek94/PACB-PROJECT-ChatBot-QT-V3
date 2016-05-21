@@ -341,11 +341,6 @@ void PAChatAI::ProcessMessage(QString message)
 				emit requestNextChat();
 				return;
 			}
-
-			if (current_index_ == 1)
-			{
-				++current_index_;
-			}
 		}
 	}
 
