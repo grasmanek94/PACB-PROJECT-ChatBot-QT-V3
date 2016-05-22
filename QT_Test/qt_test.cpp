@@ -18,6 +18,8 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.preparedTextsBox,
 		ui.chatManagerFillBots,
 		ui.onlineCountLabel,
+		ui.autoAIModeCheckBox,
+		ui.endFilteredChatsState,
 		this);
 }
 

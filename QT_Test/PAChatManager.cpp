@@ -23,6 +23,9 @@ PAChatManager::PAChatManager(
 
 	QLabel* online_count_label,
 
+	QCheckBox* ai_mode_check_box,
+	QCheckBox* filtered_chat_end_mode_check_box,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -41,7 +44,9 @@ PAChatManager::PAChatManager(
 	  fill_with_bots_button_(fill_with_bots_button),
 	  online_count_label_(online_count_label),
 	  chats_started_(0),
-	  online_count_(0)
+	  online_count_(0),
+	  ai_mode_check_box_(ai_mode_check_box),
+	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box)
 {
 
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
@@ -109,7 +114,7 @@ void PAChatManager::PushClient()
 		return;
 	}
 
-	PAChatClientGlue* glue = new PAChatClientGlue(entry, tabs_container_, send_intro_message_check_box_, story_mode_check_box_, this);
+	PAChatClientGlue* glue = new PAChatClientGlue(entry, tabs_container_, send_intro_message_check_box_, story_mode_check_box_, ai_mode_check_box_, filtered_chat_end_mode_check_box_, this);
 	clients.insert(glue);
 	list_view_->addItem(glue);
 
@@ -262,4 +267,9 @@ void PAChatManager::onOnlineCountUpdate(int online_count)
 void PAChatManager::UpdateInfoLabel()
 {
 	online_count_label_->setText(QString::number(online_count_) + " Online | " + QString::number(chats_started_) + " Started");
+}
+
+size_t PAChatManager::GetReadyToSearchSize()
+{
+	return ready_to_search.size();
 }

@@ -134,6 +134,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_PAChatClientFilter.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="PAChatAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PAChatAI.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PAChatAI.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt_test.h">
@@ -170,6 +179,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="PAChatClientFilter.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PAChatAI.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
