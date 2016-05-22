@@ -39,6 +39,8 @@ private:
 	void PushNextReaction();
 
 	bool got_age_;
+
+	void PerformFail();
 public:
 	PAChatAI(QObject *parent = Q_NULLPTR);
 	~PAChatAI();

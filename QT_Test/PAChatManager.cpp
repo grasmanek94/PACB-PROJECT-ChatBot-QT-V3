@@ -268,3 +268,8 @@ void PAChatManager::UpdateInfoLabel()
 {
 	online_count_label_->setText(QString::number(online_count_) + " Online | " + QString::number(chats_started_) + " Started");
 }
+
+size_t PAChatManager::GetReadyToSearchSize()
+{
+	return ready_to_search.size();
+}

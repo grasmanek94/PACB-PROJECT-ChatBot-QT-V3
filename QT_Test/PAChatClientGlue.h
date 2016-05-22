@@ -10,6 +10,7 @@
 #include "PAChatAI.h"
 #include "ProxyEntry.h"
 
+class PAChatManager;
 class PAChatClientGlue: public QObject, public QListWidgetItem
 {
 	Q_OBJECT
@@ -29,6 +30,8 @@ private:
 	QPointer<QCheckBox> ai_mode_check_box_;
 	QPointer<QCheckBox> filtered_chat_end_mode_check_box_;
 
+	QPointer<PAChatManager> chat_manager_;
+
 	bool force_red;
 	int int_id_;
 	QString string_id_;
@@ -44,6 +47,7 @@ public:
 		QCheckBox* story_mode_check_box, 
 		QCheckBox* ai_mode_check_box,
 		QCheckBox* filtered_chat_end_mode_check_box,
+		PAChatManager* chat_manager,
 		QObject *parent = Q_NULLPTR);
 	~PAChatClientGlue();
 

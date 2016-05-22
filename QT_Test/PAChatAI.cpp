@@ -506,7 +506,11 @@ void PAChatAI::Stop()
 
 bool PAChatAI::Stopped()
 {
-	return !question_akser_.isActive() && !reaction_sender_.isActive() && !waiting_answer_timeout_.isActive();
+	return 
+		!question_akser_.isActive() && 
+		!reaction_sender_.isActive() && 
+		!waiting_answer_timeout_.isActive() && 
+		(state_ == PAChatAIState_Done || state_ == PAChatAIState_Failed);
 }
 
 QString PAChatAI::GetQuestion(size_t index)
@@ -563,8 +567,7 @@ void PAChatAI::ProcessMessage(QString message)
 	{
 		if (filter_->IsMessageFilteredAI(message))
 		{
-			state_ = PAChatAIState_Failed;
-			emit requestNextChat();
+			PerformFail();
 			return;
 		}
 	}
@@ -577,8 +580,7 @@ void PAChatAI::ProcessMessage(QString message)
 		{
 			if (got_age_count < 16 || got_age_count > 20)
 			{
-				state_ = PAChatAIState_Failed;
-				emit requestNextChat();
+				PerformFail();
 				return;
 			}
 		}
@@ -598,8 +600,7 @@ void PAChatAI::ProcessMessage(QString message)
 		}
 		else
 		{
-			state_ = PAChatAIState_Failed;
-			emit requestNextChat();
+			PerformFail();
 			return;
 		}
 	}
@@ -638,6 +639,12 @@ void PAChatAI::onReactionToAnswer()
 
 void PAChatAI::onWaitForAnswerTimeout()
 {
+	PerformFail();
+}
+
+void PAChatAI::PerformFail()
+{
+	Stop();
 	state_ = PAChatAIState_Failed;
 	emit requestNextChat();
 }

@@ -84,6 +84,8 @@ public:
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();
 
+	size_t GetReadyToSearchSize();
+
 private Q_SLOTS:
 	void onAutoSearcherStateChange(int state);
 	void onItemSelected(QListWidgetItem * item);

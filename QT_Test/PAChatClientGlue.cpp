@@ -1,5 +1,6 @@
 #include "PAChatClientGlue.h"
 #include "PAChatGlobalId.h"
+#include "PAChatManager.h"
 
 PAChatClientGlue::PAChatClientGlue(
 	ProxyEntry* proxy, 
@@ -8,6 +9,7 @@ PAChatClientGlue::PAChatClientGlue(
 	QCheckBox* story_mode_check_box, 
 	QCheckBox* ai_mode_check_box,
 	QCheckBox* filtered_chat_end_mode_check_box,
+	PAChatManager* chat_manager,
 	QObject *parent)
 	: QObject(parent), 
 	  proxy_(proxy), 
@@ -16,7 +18,8 @@ PAChatClientGlue::PAChatClientGlue(
 	  send_intro_message_check_box_(send_intro_message_check_box), 
 	  story_mode_check_box_(story_mode_check_box),
 	  ai_mode_check_box_(ai_mode_check_box),
-	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box)
+	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box),
+	  chat_manager_(chat_manager)
 {
 	if (proxy_)
 	{
@@ -189,19 +192,49 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 
 	if (!me)
 	{
-		// TODO !!!!!!
 		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");	
-		message_ai->ProcessMessage(message);
+		if (message_ai && !message_ai->Stopped())
+		{
+			message_ai->ProcessMessage(message);
+		}
+
 		if (message_filter && !force_red && other_message_count_ < 5)
 		{
 			force_red = message_filter->IsMessageFiltered(message);
 		}
 
-		if (auto_sender && !auto_sender->Stopped() && message.length() == 5 && message.toLower() == "#stop")
+		if (auto_sender && !auto_sender->Stopped() && message.length() > 0)
 		{
-			auto_sender->Stop();
-			client->SendMessage("Automatische berichten zijn uitgezet, wat nu?");
-		}*/
+			if (message[0] == '#')
+			{
+				QString lower_msg = message.toLower();
+				if (lower_msg.length() == 5 && lower_msg == "#stop")
+				{
+					auto_sender->Stop();
+					client->SendMessage("Automatische berichten zijn uitgezet, wat nu?");
+				}
+			}
+
+			//DBG
+			/*if (message.indexOf("!c-445!") != -1)
+			{
+				__debugbreak();
+				qDebug() << "Breakpoint Start Here! ";
+				switch (message.length())
+				{
+				case 1:
+					qDebug() << "<" << message[0].unicode() << ">";
+					break;
+				case 2:
+					qDebug() << "<" << message[0].unicode() << ":" << message[1].unicode() << ">";
+					break;
+				default:
+					qDebug() << "<" << message[0].unicode() << ":" << message[1].unicode() << ":" << message[2].unicode() << ">";
+					break;
+				}
+				qDebug() << " Breakpoint End Here!";
+			}*/
+		}
 	}
 
 	if (silence_timer.isActive())
@@ -219,11 +252,18 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 			break;
 	}
 
+	if (!me && force_red && filtered_chat_end_mode_check_box_->checkState() > 0)
+	{
+		if (filtered_chat_end_mode_check_box_->checkState() == 2 || (filtered_chat_end_mode_check_box_->checkState() == 1 && chat_manager_->GetReadyToSearchSize() == 0))
+		{
+			onRequestChatEnd();
+		}
+	}
 }
 
 void PAChatClientGlue::onChatEnd()
 {
-	/f (auto_sender)
+	if (auto_sender)
 	{
 		auto_sender->Stop();
 	}
@@ -231,6 +271,7 @@ void PAChatClientGlue::onChatEnd()
 	{
 		message_ai->Stop();
 	}
+
 	silence_timer.stop();
 	QListWidgetItem::setText(string_id_ + "Idle: Chat ended, ready for new chat");
 	SetStateColor();
@@ -310,10 +351,10 @@ void PAChatClientGlue::onSilenceTimerHit()
 
 void PAChatClientGlue::onRequestStopAutoSender()
 {
-	/*if (auto_sender)
+	if (auto_sender)
 	{
 		auto_sender->Stop();
-	}*/
+	}
 	if (message_ai)
 	{
 		message_ai->Stop();
@@ -339,10 +380,10 @@ void PAChatClientGlue::SendMessage(QString string)
 
 void PAChatClientGlue::Reconnect()
 {
-	/*if (auto_sender)
+	if (auto_sender)
 	{
 		auto_sender->Stop();
-	}*/
+	}
 	if (message_ai)
 	{
 		message_ai->Stop();
