@@ -561,7 +561,7 @@ void PAChatAI::ProcessMessage(QString message)
 
 	if (++amount_incomming_messages_ < 4)
 	{
-		if (filter_->IsMessageFiltered(message))
+		if (filter_->IsMessageFilteredAI(message))
 		{
 			state_ = PAChatAIState_Failed;
 			emit requestNextChat();

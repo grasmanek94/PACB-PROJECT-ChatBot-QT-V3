@@ -35,6 +35,9 @@ private:
 	QPointer<QCheckBox> send_intro_message_check_box_;
 	QPointer<QCheckBox> story_mode_check_box_;
 
+	QPointer<QCheckBox> ai_mode_check_box_;
+	QPointer<QCheckBox> filtered_chat_end_mode_check_box_;
+
 	QPointer<QLabel> online_count_label_;
 
 	QPointer<QTabWidget> tabs_container_;
@@ -74,6 +77,9 @@ public:
 		QPushButton* fill_with_bots_button,
 
 		QLabel* online_count_label,
+
+		QCheckBox* ai_mode_check_box,
+		QCheckBox* filtered_chat_end_mode_check_box,
 
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();

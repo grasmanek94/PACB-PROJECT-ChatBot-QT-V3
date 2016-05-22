@@ -16,8 +16,8 @@ class PAChatClientGlue: public QObject, public QListWidgetItem
 private:
 	QPointer<PAChatClient> client;
 	QPointer<PAChatClientUI> ui;
-	//QPointer<PAChatClientAutoSender> auto_sender;
-	//QPointer<PAChatClientFilter> message_filter;
+	QPointer<PAChatClientAutoSender> auto_sender;
+	QPointer<PAChatClientFilter> message_filter;
 	QPointer<PAChatAI> message_ai;
 
 	QPointer<ProxyEntry> proxy_;
@@ -25,6 +25,9 @@ private:
 
 	QPointer<QCheckBox> send_intro_message_check_box_;
 	QPointer<QCheckBox> story_mode_check_box_;
+
+	QPointer<QCheckBox> ai_mode_check_box_;
+	QPointer<QCheckBox> filtered_chat_end_mode_check_box_;
 
 	bool force_red;
 	int int_id_;
@@ -34,7 +37,14 @@ private:
 	QTimer silence_timer;
 public:
 	
-	PAChatClientGlue(ProxyEntry* proxy, QTabWidget* tabs_container_, QCheckBox* send_intro_message_check_box, QCheckBox* story_mode_check_box, QObject *parent = Q_NULLPTR);
+	PAChatClientGlue(
+		ProxyEntry* proxy, 
+		QTabWidget* tabs_container_, 
+		QCheckBox* send_intro_message_check_box, 
+		QCheckBox* story_mode_check_box, 
+		QCheckBox* ai_mode_check_box,
+		QCheckBox* filtered_chat_end_mode_check_box,
+		QObject *parent = Q_NULLPTR);
 	~PAChatClientGlue();
 
 private:
