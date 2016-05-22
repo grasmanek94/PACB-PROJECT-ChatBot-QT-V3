@@ -180,6 +180,7 @@ public:
         autoAIModeCheckBox->setObjectName(QStringLiteral("autoAIModeCheckBox"));
         autoAIModeCheckBox->setMinimumSize(QSize(250, 0));
         autoAIModeCheckBox->setMaximumSize(QSize(250, 16777215));
+        autoAIModeCheckBox->setTristate(true);
 
         botListContainerGrid->addWidget(autoAIModeCheckBox, 1, 1, 1, 1);
 
