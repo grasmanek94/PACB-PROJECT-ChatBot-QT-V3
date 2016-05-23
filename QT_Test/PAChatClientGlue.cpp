@@ -128,14 +128,26 @@ void PAChatClientGlue::onChatBegin()
 		{
 			case 0:
 				enable_auto_sender = true;
+				enable_ai = false;
+				message_ai->Stop();
 				break;
 			case 2:
 				enable_ai = true;
+				enable_auto_sender = false;
+				auto_sender->Stop();
 				break;
 			case 1:
 				switcher = !switcher;
 				enable_auto_sender = switcher;
 				enable_ai = !switcher;
+				if (enable_auto_sender)
+				{
+					message_ai->Stop();
+				}
+				else if(enable_ai)
+				{
+					auto_sender->Stop();
+				}
 				break;
 		}
 
