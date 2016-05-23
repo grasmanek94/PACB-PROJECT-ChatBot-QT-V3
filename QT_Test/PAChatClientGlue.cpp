@@ -223,7 +223,7 @@ void PAChatClientGlue::onChatBegin()
 			if (send_intro_message_check_box_->checkState())
 			{
 				client->SendTyping(true);
-				client->SendMessage(auto_sender->GetIntroMessage());
+				client->SendMessage(auto_sender->GetIntroMessage(), 1);
 			}
 			if (story_mode_check_box_->checkState())
 			{
@@ -319,13 +319,17 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 
 	switch(sender_id)
 	{
-		case 1: // AutoMessage
-			break;
-		default:
+		case 0:
 			if (me)
 			{
 				glue_state_ = PAChatClientGlueState_ChattingResponded;
 			}
+			break;
+
+		case 1: // AutoMessage
+			break;
+
+		default:
 			break;
 	}
 
