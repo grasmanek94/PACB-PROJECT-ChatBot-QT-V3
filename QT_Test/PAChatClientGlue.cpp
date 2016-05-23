@@ -285,7 +285,7 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 				if (lower_msg.length() == 5 && lower_msg == "#stop")
 				{
 					auto_sender->Stop();
-					client->SendMessage("Automatische berichten zijn uitgezet, wat nu?");
+					client->SendMessage("Automatische berichten zijn uitgezet, wat nu?", 1);
 				}
 			}
 
