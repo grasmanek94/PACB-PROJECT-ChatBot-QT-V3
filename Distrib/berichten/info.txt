@@ -1,3 +1,6 @@
-macro 1
-macro 2
-macro 3
+En wat zoek je hier?
+Wat is je leeftijd?
+In welke stad woon je?
+Beter kan niet ;)
+En hoe gaat 't met jou?
+En jij?
