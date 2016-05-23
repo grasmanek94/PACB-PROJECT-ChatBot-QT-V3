@@ -71,7 +71,7 @@ PAChatClientGlue::PAChatClientGlue(
 	SetStateColor();
 }
 
-void PAChatClientGlue::SetStateColor(bool newmessage)
+void PAChatClientGlue::SetStateColor()
 {
 	int checkedState = filter_unneeded_chat_entries_check_box_->checkState();
 	if (checkedState == 0)
@@ -96,6 +96,7 @@ void PAChatClientGlue::SetStateColor(bool newmessage)
 
 		case PAChatClientGlueState_Searching:
 		case PAChatClientGlueState_ChattingUnreadMessages:
+		case PAChatClientGlueState_ChattingResponded:
 			QListWidgetItem::setHidden(false);
 			break;
 		}
@@ -117,13 +118,14 @@ void PAChatClientGlue::SetStateColor(bool newmessage)
 		case PAChatClientGlueState_GeneratingSID:
 		case PAChatClientGlueState_ChattingNoUnreadMessages:
 		case PAChatClientGlueState_ChattingUnreadMessages:
+		case PAChatClientGlueState_ChattingResponded:
 		case PAChatClientGlueState_Searching:
 			QListWidgetItem::setHidden(false);
 			break;
 		}
 	}
 
-	QListWidgetItem::setBackgroundColor(QColor::fromRgb(GetStateColor(client ? client->State() : PAChatClientState_Disconnected, newmessage, force_red)));
+	QListWidgetItem::setBackgroundColor(QColor::fromRgb(GetStateColor(client ? client->State() : PAChatClientState_Disconnected, glue_state_ == PAChatClientGlueState_ChattingUnreadMessages, force_red)));
 }
 
 PAChatClientGlue::~PAChatClientGlue()
@@ -320,9 +322,14 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 		case 1: // AutoMessage
 			break;
 		default:
-			SetStateColor(!me);
+			if (me)
+			{
+				glue_state_ = PAChatClientGlueState_ChattingResponded;
+			}
 			break;
 	}
+
+	SetStateColor();
 
 	if (!me && force_red && filtered_chat_end_mode_check_box_->checkState() > 0)
 	{

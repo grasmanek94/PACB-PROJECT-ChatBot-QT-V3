@@ -23,6 +23,7 @@ private:
 		PAChatClientGlueState_Searching,
 		PAChatClientGlueState_ChattingNoUnreadMessages,
 		PAChatClientGlueState_ChattingUnreadMessages,
+		PAChatClientGlueState_ChattingResponded,
 		PAChatClientGlueState_EndedReadyToChat,
 		PAChatClientGlueState_Disconnected,
 		PAChatClientGlueState_ProcessInputFailed,
@@ -72,7 +73,7 @@ public:
 	~PAChatClientGlue();
 
 private:
-	void SetStateColor(bool newmessage = false);
+	void SetStateColor();
 
 public:
 
