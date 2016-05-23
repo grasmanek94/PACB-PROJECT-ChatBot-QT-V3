@@ -38,6 +38,8 @@ private:
 	QPointer<QCheckBox> ai_mode_check_box_;
 	QPointer<QCheckBox> filtered_chat_end_mode_check_box_;
 
+	QPointer<QCheckBox> filter_unneeded_chat_entries_check_box_;
+
 	QPointer<QLabel> online_count_label_;
 
 	QPointer<QTabWidget> tabs_container_;
@@ -80,6 +82,8 @@ public:
 
 		QCheckBox* ai_mode_check_box,
 		QCheckBox* filtered_chat_end_mode_check_box,
+
+		QCheckBox* filter_unneeded_chat_entries_check_box,
 
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();

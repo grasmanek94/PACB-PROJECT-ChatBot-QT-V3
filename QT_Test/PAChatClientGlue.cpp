@@ -10,6 +10,7 @@ PAChatClientGlue::PAChatClientGlue(
 	QCheckBox* ai_mode_check_box,
 	QCheckBox* filtered_chat_end_mode_check_box,
 	PAChatManager* chat_manager,
+	QCheckBox* filter_unneeded_chat_entries_check_box,
 	QObject *parent)
 	: QObject(parent), 
 	  proxy_(proxy), 
@@ -19,7 +20,8 @@ PAChatClientGlue::PAChatClientGlue(
 	  story_mode_check_box_(story_mode_check_box),
 	  ai_mode_check_box_(ai_mode_check_box),
 	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box),
-	  chat_manager_(chat_manager)
+	  chat_manager_(chat_manager),
+	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box)
 {
 	if (proxy_)
 	{
@@ -41,7 +43,10 @@ PAChatClientGlue::PAChatClientGlue(
 	connect(client, &PAChatClient::onGeneratingSID, this, &PAChatClientGlue::onGeneratingSID);
 	connect(client, &PAChatClient::onProcessInputFailed, this, &PAChatClientGlue::onProcessInputFailed);
 
-	ui = new PAChatClientUI(tabs_container_, this);
+	int_id_ = PAChatGlobalId::Get();
+	string_id_ = "(" + QString::number(int_id_) + ") ";
+
+	ui = new PAChatClientUI(tabs_container_, int_id_, this);
 
 	connect(ui, &PAChatClientUI::onRequestRemoveBot, this, &PAChatClientGlue::onRequestRemoveBot);
 	connect(ui, &PAChatClientUI::onRequestChatSendMessage, this, &PAChatClientGlue::onRequestChatSendMessage);
@@ -59,15 +64,65 @@ PAChatClientGlue::PAChatClientGlue(
 	connect(message_ai, &PAChatAI::onRequestMessage, this, &PAChatClientGlue::onAutoSenderMessage);
 	connect(message_ai, &PAChatAI::requestNextChat, this, &PAChatClientGlue::onRequestChatEnd);
 
-	int_id_ = PAChatGlobalId::Get();
-	string_id_ = "(" + QString::number(int_id_) + ") ";
+	connect(filter_unneeded_chat_entries_check_box_, &QCheckBox::stateChanged, this, &PAChatClientGlue::showInfoStateChanged);
 
 	QListWidgetItem::setText(string_id_ + "New Bot: Created");
+	glue_state_ = PAChatClientGlueState_BotCreated;
 	SetStateColor();
 }
 
 void PAChatClientGlue::SetStateColor(bool newmessage)
 {
+	int checkedState = filter_unneeded_chat_entries_check_box_->checkState();
+	if (checkedState == 0)
+	{
+		QListWidgetItem::setHidden(false);
+	}
+	else if (checkedState == 2)
+	{
+		switch (glue_state_)
+		{
+		case PAChatClientGlueState_BotCreated:
+		case PAChatClientGlueState_OpeningChat:
+		case PAChatClientGlueState_ReadyToChat:
+		case PAChatClientGlueState_ChattingNoUnreadMessages:
+		case PAChatClientGlueState_EndedReadyToChat:
+		case PAChatClientGlueState_Disconnected:
+		case PAChatClientGlueState_ProcessInputFailed:
+		case PAChatClientGlueState_GeneratingSID:
+		case PAChatClientGlueState_Connecting:
+			QListWidgetItem::setHidden(true);
+			break;
+
+		case PAChatClientGlueState_Searching:
+		case PAChatClientGlueState_ChattingUnreadMessages:
+			QListWidgetItem::setHidden(false);
+			break;
+		}
+	}
+	else if (checkedState == 1) // partial
+	{
+		switch (glue_state_)
+		{
+		case PAChatClientGlueState_BotCreated:
+		case PAChatClientGlueState_OpeningChat:
+		case PAChatClientGlueState_ReadyToChat:
+		case PAChatClientGlueState_EndedReadyToChat:
+		case PAChatClientGlueState_Disconnected:
+		case PAChatClientGlueState_ProcessInputFailed:
+		case PAChatClientGlueState_Connecting:
+			QListWidgetItem::setHidden(true);
+			break;
+
+		case PAChatClientGlueState_GeneratingSID:
+		case PAChatClientGlueState_ChattingNoUnreadMessages:
+		case PAChatClientGlueState_ChattingUnreadMessages:
+		case PAChatClientGlueState_Searching:
+			QListWidgetItem::setHidden(false);
+			break;
+		}
+	}
+
 	QListWidgetItem::setBackgroundColor(QColor::fromRgb(GetStateColor(client ? client->State() : PAChatClientState_Disconnected, newmessage, force_red)));
 }
 
@@ -82,6 +137,7 @@ PAChatClientGlue::~PAChatClientGlue()
 void PAChatClientGlue::onSocketConnected()
 {
 	QListWidgetItem::setText(string_id_ + "New Bot: Opening Chat");
+	glue_state_ = PAChatClientGlueState_OpeningChat;
 	SetStateColor();
 
 	emit onGlueSocketConnected();
@@ -90,6 +146,7 @@ void PAChatClientGlue::onSocketConnected()
 void PAChatClientGlue::onChatConnected()
 {
 	QListWidgetItem::setText(string_id_ + "Idle: Ready to chat");
+	glue_state_ = PAChatClientGlueState_ReadyToChat;
 	SetStateColor();
 
 	emit onGlueChatConnected();
@@ -98,6 +155,7 @@ void PAChatClientGlue::onChatConnected()
 void PAChatClientGlue::onChatSearch()
 {
 	QListWidgetItem::setText(string_id_ + "Searching");
+	glue_state_ = PAChatClientGlueState_Searching;
 	SetStateColor();
 
 	emit onGlueChatSearch();
@@ -109,6 +167,7 @@ void PAChatClientGlue::onChatBegin()
 	force_red = false;
 	silence_timer.start(300000);
 	QListWidgetItem::setText(string_id_ + "Chatting: No Unread Messages");
+	glue_state_ = PAChatClientGlueState_ChattingNoUnreadMessages;
 	SetStateColor();
 
 	if (ui)
@@ -205,6 +264,7 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 	if (!me)
 	{
 		QListWidgetItem::setText(string_id_ + "Chatting: Received '" + message + "'");	
+		glue_state_ = PAChatClientGlueState_ChattingUnreadMessages;
 		if (message_ai && !message_ai->Stopped())
 		{
 			message_ai->ProcessMessage(message);
@@ -286,6 +346,7 @@ void PAChatClientGlue::onChatEnd()
 
 	silence_timer.stop();
 	QListWidgetItem::setText(string_id_ + "Idle: Chat ended, ready for new chat");
+	glue_state_ = PAChatClientGlueState_EndedReadyToChat;
 	SetStateColor();
 
 	emit onGlueChatEnd();
@@ -307,6 +368,7 @@ void PAChatClientGlue::onTextInputChanged(QString text)
 void PAChatClientGlue::onSocketDisconnected()
 {
 	QListWidgetItem::setText(string_id_ + "~");
+	glue_state_ = PAChatClientGlueState_Disconnected;
 	SetStateColor();
 
 	emit onGlueSocketDisconnected();
@@ -428,23 +490,32 @@ void PAChatClientGlue::Reconnect()
 	connect(client, &PAChatClient::onProcessInputFailed, this, &PAChatClientGlue::onProcessInputFailed);
 
 	QListWidgetItem::setText(string_id_ + "New Bot: Created");
+	glue_state_ = PAChatClientGlueState_BotCreated;
 	SetStateColor();
 }
 
 void PAChatClientGlue::onProcessInputFailed()
 {
 	QListWidgetItem::setText(string_id_ + "New Bot: ProcessInput Failed");
+	glue_state_ = PAChatClientGlueState_ProcessInputFailed;
 	SetStateColor();
 }
 
 void PAChatClientGlue::onGeneratingSID()
 {
 	QListWidgetItem::setText(string_id_ + "New Bot: Generating SID (" + client->GetProxy() + ")");
+	glue_state_ = PAChatClientGlueState_GeneratingSID;
 	SetStateColor();
 }
 
 void PAChatClientGlue::onSocketConnecting()
 {
 	QListWidgetItem::setText(string_id_ + "New Bot: Opening Socket");
+	glue_state_ = PAChatClientGlueState_Connecting;
+	SetStateColor();
+}
+
+void PAChatClientGlue::showInfoStateChanged(int state)
+{
 	SetStateColor();
 }

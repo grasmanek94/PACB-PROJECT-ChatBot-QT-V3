@@ -20,6 +20,7 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.onlineCountLabel,
 		ui.autoAIModeCheckBox,
 		ui.endFilteredChatsState,
+		ui.unneededChatsHiderState,
 		this);
 }
 

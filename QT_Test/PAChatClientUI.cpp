@@ -1,6 +1,6 @@
 #include "PAChatClientUI.h"
 
-PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
+PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, int show_id, QObject *parent)
 	: QObject(parent), tabs_container_(tabs_container)
 {
 	QString suffix = QString::number((size_t)this, 16);
@@ -87,7 +87,7 @@ PAChatClientUI::PAChatClientUI(QTabWidget* tabs_container, QObject *parent)
 
 	if (tabs_container_)
 	{
-		tab_number_ = tabs_container_->addTab(tab_, "");
+		tab_number_ = tabs_container_->addTab(tab_, show_id == -1 ? "" : QString::number(show_id));
 	}
 	else
 	{

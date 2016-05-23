@@ -36,7 +36,7 @@ private:
 	QPointer<QTabWidget> tabs_container_;
 	int tab_number_;
 public:
-	PAChatClientUI(QTabWidget* tabs_container, QObject *parent = Q_NULLPTR);
+	PAChatClientUI(QTabWidget* tabs_container, int show_id = -1, QObject *parent = Q_NULLPTR);
 	~PAChatClientUI();
 
 	void ScrollToBottom();

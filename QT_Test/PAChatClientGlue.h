@@ -15,6 +15,21 @@ class PAChatClientGlue: public QObject, public QListWidgetItem
 {
 	Q_OBJECT
 private:
+	enum PAChatClientGlueState
+	{
+		PAChatClientGlueState_BotCreated,
+		PAChatClientGlueState_OpeningChat,
+		PAChatClientGlueState_ReadyToChat,
+		PAChatClientGlueState_Searching,
+		PAChatClientGlueState_ChattingNoUnreadMessages,
+		PAChatClientGlueState_ChattingUnreadMessages,
+		PAChatClientGlueState_EndedReadyToChat,
+		PAChatClientGlueState_Disconnected,
+		PAChatClientGlueState_ProcessInputFailed,
+		PAChatClientGlueState_GeneratingSID,
+		PAChatClientGlueState_Connecting,
+	};
+
 	QPointer<PAChatClient> client;
 	QPointer<PAChatClientUI> ui;
 	QPointer<PAChatClientAutoSender> auto_sender;
@@ -30,7 +45,11 @@ private:
 	QPointer<QCheckBox> ai_mode_check_box_;
 	QPointer<QCheckBox> filtered_chat_end_mode_check_box_;
 
+	QPointer<QCheckBox> filter_unneeded_chat_entries_check_box_;
+
 	QPointer<PAChatManager> chat_manager_;
+
+	PAChatClientGlueState glue_state_;
 
 	bool force_red;
 	int int_id_;
@@ -48,6 +67,7 @@ public:
 		QCheckBox* ai_mode_check_box,
 		QCheckBox* filtered_chat_end_mode_check_box,
 		PAChatManager* chat_manager,
+		QCheckBox* filter_unneeded_chat_entries_check_box,
 		QObject *parent = Q_NULLPTR);
 	~PAChatClientGlue();
 
@@ -95,5 +115,6 @@ private Q_SLOTS:
 	void onSilenceTimerHit();
 	void onRequestStopAutoSender();
 	void onAutoSenderMessage(QString string, bool last_message);
+	void showInfoStateChanged(int state);
 };
  
