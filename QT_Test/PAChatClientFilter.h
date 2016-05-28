@@ -14,5 +14,6 @@ public:
 
 	bool IsMessageFiltered(QString message);
 	bool IsMessageFilteredAI(QString message);
-	void Reload();
 };
+
+void ReadFilterData(bool reload = false);

@@ -33,10 +33,11 @@ public:
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout_2;
     QGridLayout *proxyListContainerGrid;
-    QLabel *onlineCountLabel;
     QLineEdit *chatProxyInput;
+    QLabel *onlineCountLabel;
     QListWidget *chatProxyList;
     QPushButton *chatProxySubmit;
+    QPushButton *reloadFiltersSubmit;
     QGridLayout *botListContainerGrid;
     QPushButton *chatManagerRequestNewChat;
     QCheckBox *autoSenderState;
@@ -74,17 +75,17 @@ public:
         proxyListContainerGrid->setSpacing(6);
         proxyListContainerGrid->setObjectName(QStringLiteral("proxyListContainerGrid"));
         proxyListContainerGrid->setSizeConstraint(QLayout::SetMinimumSize);
-        onlineCountLabel = new QLabel(centralWidget);
-        onlineCountLabel->setObjectName(QStringLiteral("onlineCountLabel"));
-
-        proxyListContainerGrid->addWidget(onlineCountLabel, 3, 0, 1, 1);
-
         chatProxyInput = new QLineEdit(centralWidget);
         chatProxyInput->setObjectName(QStringLiteral("chatProxyInput"));
         chatProxyInput->setMinimumSize(QSize(159, 20));
         chatProxyInput->setMaximumSize(QSize(159, 16777215));
 
-        proxyListContainerGrid->addWidget(chatProxyInput, 1, 0, 1, 1);
+        proxyListContainerGrid->addWidget(chatProxyInput, 2, 0, 1, 1);
+
+        onlineCountLabel = new QLabel(centralWidget);
+        onlineCountLabel->setObjectName(QStringLiteral("onlineCountLabel"));
+
+        proxyListContainerGrid->addWidget(onlineCountLabel, 4, 0, 1, 1);
 
         chatProxyList = new QListWidget(centralWidget);
         chatProxyList->setObjectName(QStringLiteral("chatProxyList"));
@@ -101,7 +102,12 @@ public:
         chatProxySubmit->setMinimumSize(QSize(159, 23));
         chatProxySubmit->setMaximumSize(QSize(159, 16777215));
 
-        proxyListContainerGrid->addWidget(chatProxySubmit, 2, 0, 1, 1);
+        proxyListContainerGrid->addWidget(chatProxySubmit, 3, 0, 1, 1);
+
+        reloadFiltersSubmit = new QPushButton(centralWidget);
+        reloadFiltersSubmit->setObjectName(QStringLiteral("reloadFiltersSubmit"));
+
+        proxyListContainerGrid->addWidget(reloadFiltersSubmit, 1, 0, 1, 1);
 
 
         horizontalLayout_2->addLayout(proxyListContainerGrid);
@@ -238,6 +244,7 @@ public:
         QT_TestClass->setWindowTitle(QApplication::translate("QT_TestClass", "PA ChatBot", 0));
         onlineCountLabel->setText(QApplication::translate("QT_TestClass", "0 Online | 0 Started", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
+        reloadFiltersSubmit->setText(QApplication::translate("QT_TestClass", "Reload Filters", 0));
         chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));
         autoSenderState->setText(QApplication::translate("QT_TestClass", "Story Mode", 0));
         autoAIModeCheckBox->setText(QApplication::translate("QT_TestClass", "AI Mode", 0));

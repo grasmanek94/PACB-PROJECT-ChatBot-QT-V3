@@ -44,6 +44,8 @@ private:
 
 	QPointer<QTabWidget> tabs_container_;
 
+	QPointer<QPushButton> reload_filter_button_;
+
 	bool auto_search_enabled;
 
 	void PopClient2(PAChatClientGlue*);
@@ -85,6 +87,8 @@ public:
 
 		QCheckBox* filter_unneeded_chat_entries_check_box,
 
+		QPushButton* reload_filter_button,
+
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();
 
@@ -105,4 +109,5 @@ private Q_SLOTS:
 	void PopClient();
 	void PushClientsFull();
 	void onOnlineCountUpdate(int online_count);
+	void onFilterReload();
 };

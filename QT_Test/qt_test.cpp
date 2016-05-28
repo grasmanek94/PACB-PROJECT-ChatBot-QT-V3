@@ -21,6 +21,7 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.autoAIModeCheckBox,
 		ui.endFilteredChatsState,
 		ui.unneededChatsHiderState,
+		ui.reloadFiltersSubmit,
 		this);
 }
 

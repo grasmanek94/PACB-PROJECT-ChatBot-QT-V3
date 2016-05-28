@@ -28,6 +28,8 @@ PAChatManager::PAChatManager(
 
 	QCheckBox* filter_unneeded_chat_entries_check_box,
 
+	QPushButton* reload_filter_button,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -49,7 +51,8 @@ PAChatManager::PAChatManager(
 	  online_count_(0),
 	  ai_mode_check_box_(ai_mode_check_box),
 	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box),
-	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box)
+	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box),
+	  reload_filter_button_(reload_filter_button)
 {
 
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
@@ -63,6 +66,8 @@ PAChatManager::PAChatManager(
 
 	chat_macros_ = new PAChatClientMacro(macro_list_, this);
 	connect(chat_macros_, &PAChatClientMacro::onMacroRequested, this, &PAChatManager::onMacroRequested);
+
+	connect(reload_filter_button_, &QPushButton::clicked, this, &PAChatManager::onFilterReload);
 
 	QFile f1("cc.txt");
 
@@ -275,4 +280,9 @@ void PAChatManager::UpdateInfoLabel()
 size_t PAChatManager::GetReadyToSearchSize()
 {
 	return ready_to_search.size();
+}
+
+void PAChatManager::onFilterReload()
+{
+	ReadFilterData(true);
 }

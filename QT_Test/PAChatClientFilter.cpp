@@ -7,7 +7,7 @@ QStringList disallowed_contents_ai;
 QStringList disallowed_begins;
 QStringList disallowed_begins_ai;
 
-static void ReadData(bool reload = false)
+void ReadFilterData(bool reload)
 {
 	static bool loaded = false;
 	if (!loaded || reload)
@@ -39,7 +39,7 @@ static void ReadData(bool reload = false)
 PAChatClientFilter::PAChatClientFilter(QObject *parent)
 	: QObject(parent)
 {
-	ReadData();
+	ReadFilterData();
 }
 
 PAChatClientFilter::~PAChatClientFilter()
