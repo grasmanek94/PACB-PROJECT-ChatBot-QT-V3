@@ -285,4 +285,5 @@ size_t PAChatManager::GetReadyToSearchSize()
 void PAChatManager::onFilterReload()
 {
 	ReadFilterData(true);
+	ReadAutoSenderData(true);
 }

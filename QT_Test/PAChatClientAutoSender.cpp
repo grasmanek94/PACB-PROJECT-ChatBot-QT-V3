@@ -5,10 +5,10 @@
 QString introduction_message;
 QStringList story_messages;
 
-static void ReadData()
+void ReadAutoSenderData(bool reload)
 {
 	static bool loaded = false;
-	if (!loaded)
+	if (!loaded || reload)
 	{
 		loaded = true;
 
@@ -29,7 +29,7 @@ static void ReadData()
 PAChatClientAutoSender::PAChatClientAutoSender(QObject *parent)
 	: QObject(parent)
 {
-	ReadData();
+	ReadAutoSenderData();
 	connect(&message_sender_, &QTimer::timeout, this, &PAChatClientAutoSender::processNextMessage);
 }
 
