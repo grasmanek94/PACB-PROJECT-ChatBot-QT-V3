@@ -26,6 +26,7 @@ QString SmartReplaceNumbers(QString input)
 		nm("drie", 3),
 
 		nm("vier", 4),
+		nm("veer", 4),
 		nm("fier", 4),
 
 		nm("vijf", 5),
@@ -59,15 +60,22 @@ QString SmartReplaceNumbers(QString input)
 		nm("ngen", 9),
 		nm("negn", 9),
 		nm("nein", 9),
-
 	};
 
 	static const std::vector<nm> number_tens_replace =
 	{
+		nm("elf", 11),
+		nm("elv", 11),
+		nm("twaal", 12),
+		nm("twal", 12),
+		nm("dertien", 13),
+
 		nm("tien", 10),
+
 		nm("twin", 20),
 		nm("twnt", 20),
-		nm("der", 30),
+
+		nm("dertig", 30),
 
 		nm("veer", 40),
 
@@ -578,7 +586,7 @@ void PAChatAI::ProcessMessage(QString message)
 		IsGoodAnswer(0, message, &got_age_, &got_age_count);
 		if (got_age_)
 		{
-			if (got_age_count < 16 || got_age_count > 20)
+			if (got_age_count < 16)
 			{
 				PerformFail();
 				return;
@@ -609,6 +617,10 @@ void PAChatAI::ProcessMessage(QString message)
 void PAChatAI::onAskNextQuestion()
 {
 	question_akser_.stop();
+	if (got_age_ && current_index_ == 1)
+	{
+		++current_index_;
+	}
 	emit onRequestMessage(GetQuestion(current_index_), false);
 	state_ = PAChatAIState_WaitingForAnswer;
 	waiting_answer_timeout_.start(60000);
