@@ -286,4 +286,5 @@ void PAChatManager::onFilterReload()
 {
 	ReadFilterData(true);
 	ReadAutoSenderData(true);
+	chat_macros_->Reload();
 }

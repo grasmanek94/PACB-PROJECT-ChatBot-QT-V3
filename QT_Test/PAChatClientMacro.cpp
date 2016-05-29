@@ -5,10 +5,10 @@
 
 QStringList macro_messages;
 
-static bool ReadData()
+static bool ReadData(bool reload = false)
 {
 	static bool loaded = false;
-	if (!loaded)
+	if (!loaded || reload)
 	{
 		loaded = true;
 
@@ -28,13 +28,7 @@ static bool ReadData()
 PAChatClientMacro::PAChatClientMacro(QListWidget* macro_list, QObject *parent)
 	: QObject(parent), macro_list_(macro_list)
 {
-	if (ReadData() && macro_list_)
-	{
-		for (auto& message : macro_messages)
-		{
-			macro_list_->addItem(message);
-		}
-	}
+	Load();
 
 	if (macro_list_)
 	{
@@ -45,6 +39,33 @@ PAChatClientMacro::PAChatClientMacro(QListWidget* macro_list, QObject *parent)
 PAChatClientMacro::~PAChatClientMacro()
 {
 
+}
+
+bool PAChatClientMacro::Load()
+{
+	if (ReadData() && macro_list_)
+	{
+		for (auto& message : macro_messages)
+		{
+			macro_list_->addItem(message);
+		}
+		return true;
+	}
+	return false;
+}
+
+bool PAChatClientMacro::Reload()
+{
+	if (ReadData(true) && macro_list_)
+	{
+		macro_list_->clear();
+		for (auto& message : macro_messages)
+		{
+			macro_list_->addItem(message);
+		}
+		return true;
+	}
+	return false;
 }
 
 void PAChatClientMacro::onItemDoubleClicked(QListWidgetItem * item)
