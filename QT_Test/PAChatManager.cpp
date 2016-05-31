@@ -126,7 +126,7 @@ void PAChatManager::PushClient()
 		return;
 	}
 
-	PAChatClientGlue* glue = new PAChatClientGlue(entry, tabs_container_, send_intro_message_check_box_, story_mode_check_box_, ai_mode_check_box_, filtered_chat_end_mode_check_box_, this, filter_unneeded_chat_entries_check_box_);
+	PAChatClientGlue* glue = new PAChatClientGlue(entry, tabs_container_, send_intro_message_check_box_, story_mode_check_box_, ai_mode_check_box_, filtered_chat_end_mode_check_box_, this, filter_unneeded_chat_entries_check_box_, logging_checkbox_, this);
 	clients.insert(glue);
 	list_view_->addItem(glue);
 

@@ -11,6 +11,7 @@ PAChatClientGlue::PAChatClientGlue(
 	QCheckBox* filtered_chat_end_mode_check_box,
 	PAChatManager* chat_manager,
 	QCheckBox* filter_unneeded_chat_entries_check_box,
+	QCheckBox* logging_checkbox,
 	QObject *parent)
 	: QObject(parent), 
 	  proxy_(proxy), 
@@ -21,7 +22,8 @@ PAChatClientGlue::PAChatClientGlue(
 	  ai_mode_check_box_(ai_mode_check_box),
 	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box),
 	  chat_manager_(chat_manager),
-	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box)
+	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box),
+	  logging_checkbox_(logging_checkbox)
 {
 	if (proxy_)
 	{
@@ -69,6 +71,8 @@ PAChatClientGlue::PAChatClientGlue(
 	QListWidgetItem::setText(string_id_ + "New Bot: Created");
 	glue_state_ = PAChatClientGlueState_BotCreated;
 	SetStateColor();
+
+	chat_logging_ = false;
 }
 
 void PAChatClientGlue::SetStateColor()
@@ -171,6 +175,8 @@ void PAChatClientGlue::onChatBegin()
 	QListWidgetItem::setText(string_id_ + "Chatting: No Unread Messages");
 	glue_state_ = PAChatClientGlueState_ChattingNoUnreadMessages;
 	SetStateColor();
+
+	chat_logging_ = logging_checkbox_->checkState() == 2;
 
 	if (ui)
 	{

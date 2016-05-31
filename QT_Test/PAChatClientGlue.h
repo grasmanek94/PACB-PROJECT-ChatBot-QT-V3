@@ -32,6 +32,8 @@ private:
 
 	QPointer<QCheckBox> filter_unneeded_chat_entries_check_box_;
 
+	QPointer<QCheckBox> logging_checkbox_;
+
 	QPointer<PAChatManager> chat_manager_;
 
 public:
@@ -55,6 +57,7 @@ private:
 	PAChatClientGlueState glue_state_;
 
 	bool force_red;
+	bool chat_logging_;
 	int int_id_;
 	QString string_id_;
 	int other_message_count_;
@@ -71,6 +74,7 @@ public:
 		QCheckBox* filtered_chat_end_mode_check_box,
 		PAChatManager* chat_manager,
 		QCheckBox* filter_unneeded_chat_entries_check_box,
+		QCheckBox* logging_checkbox,
 		QObject *parent = Q_NULLPTR);
 	~PAChatClientGlue();
 
