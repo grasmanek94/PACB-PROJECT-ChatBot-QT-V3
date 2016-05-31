@@ -15,22 +15,6 @@ class PAChatClientGlue: public QObject, public QListWidgetItem
 {
 	Q_OBJECT
 private:
-	enum PAChatClientGlueState
-	{
-		PAChatClientGlueState_BotCreated,
-		PAChatClientGlueState_OpeningChat,
-		PAChatClientGlueState_ReadyToChat,
-		PAChatClientGlueState_Searching,
-		PAChatClientGlueState_ChattingNoUnreadMessages,
-		PAChatClientGlueState_ChattingUnreadMessages,
-		PAChatClientGlueState_ChattingResponded,
-		PAChatClientGlueState_EndedReadyToChat,
-		PAChatClientGlueState_Disconnected,
-		PAChatClientGlueState_ProcessInputFailed,
-		PAChatClientGlueState_GeneratingSID,
-		PAChatClientGlueState_Connecting,
-	};
-
 	QPointer<PAChatClient> client;
 	QPointer<PAChatClientUI> ui;
 	QPointer<PAChatClientAutoSender> auto_sender;
@@ -50,6 +34,24 @@ private:
 
 	QPointer<PAChatManager> chat_manager_;
 
+public:
+	enum PAChatClientGlueState
+	{
+		PAChatClientGlueState_BotCreated,
+		PAChatClientGlueState_OpeningChat,
+		PAChatClientGlueState_ReadyToChat,
+		PAChatClientGlueState_Searching,
+		PAChatClientGlueState_ChattingNoUnreadMessages,
+		PAChatClientGlueState_ChattingUnreadMessages,
+		PAChatClientGlueState_ChattingResponded,
+		PAChatClientGlueState_EndedReadyToChat,
+		PAChatClientGlueState_Disconnected,
+		PAChatClientGlueState_ProcessInputFailed,
+		PAChatClientGlueState_GeneratingSID,
+		PAChatClientGlueState_Connecting,
+	};
+
+private:
 	PAChatClientGlueState glue_state_;
 
 	bool force_red;
@@ -59,7 +61,7 @@ private:
 
 	QTimer silence_timer;
 public:
-	
+
 	PAChatClientGlue(
 		ProxyEntry* proxy, 
 		QTabWidget* tabs_container_, 
@@ -77,6 +79,7 @@ private:
 
 public:
 
+	PAChatClientGlueState GetGlueState();
 	bool ReadyForSearch();
 	bool Search();
 	QWidget* GetTab();

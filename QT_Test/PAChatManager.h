@@ -46,6 +46,8 @@ private:
 
 	QPointer<QPushButton> reload_filter_button_;
 
+	QPointer<QLabel> stats_label_;
+
 	bool auto_search_enabled;
 
 	void PopClient2(PAChatClientGlue*);
@@ -60,6 +62,8 @@ private:
 	int online_count_;
 
 	void UpdateInfoLabel();
+
+	void RemoveFromSearch(PAChatClientGlue* glue);
 public:
 	PAChatManager(
 		QListWidget* proxy_entry_item_list_widget, 
@@ -88,6 +92,8 @@ public:
 		QCheckBox* filter_unneeded_chat_entries_check_box,
 
 		QPushButton* reload_filter_button,
+
+		QLabel* stats_label,
 
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();

@@ -226,6 +226,8 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 			pinger_->start(26000);
 			online_count_update_->start(10000);
 
+			onOnlineCountUpdate();
+
 			connected_ = true;
 
 			process_timeout_->stop();

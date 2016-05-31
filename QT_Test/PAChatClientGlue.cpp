@@ -505,6 +505,11 @@ void PAChatClientGlue::Reconnect()
 	SetStateColor();
 }
 
+PAChatClientGlue::PAChatClientGlueState PAChatClientGlue::GetGlueState()
+{
+	return glue_state_;
+}
+
 void PAChatClientGlue::onProcessInputFailed()
 {
 	QListWidgetItem::setText(string_id_ + "New Bot: ProcessInput Failed");

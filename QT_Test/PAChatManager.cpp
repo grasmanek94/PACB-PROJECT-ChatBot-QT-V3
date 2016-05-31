@@ -30,6 +30,8 @@ PAChatManager::PAChatManager(
 
 	QPushButton* reload_filter_button,
 
+	QLabel* stats_label,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -52,7 +54,8 @@ PAChatManager::PAChatManager(
 	  ai_mode_check_box_(ai_mode_check_box),
 	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box),
 	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box),
-	  reload_filter_button_(reload_filter_button)
+	  reload_filter_button_(reload_filter_button),
+	  stats_label_(stats_label)
 {
 
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
@@ -175,12 +178,16 @@ void PAChatManager::PopClient2(PAChatClientGlue* glue)
 
 void PAChatManager::onSocketConnected()
 {
-	onChatBegin();
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+
+	RemoveFromSearch(glue);
 }
 
 void PAChatManager::onSocketDisconnected()
 {
-	onChatBegin();
+	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+
+	RemoveFromSearch(glue);
 	PopClient();
 }
 
@@ -198,6 +205,7 @@ void PAChatManager::searchTimeout()
 	if (current_searching_)
 	{
 		PopClient2(current_searching_);
+		current_searching_->Reconnect();
 		if (ready_to_search.size())
 		{
 			PrepareSearch(*ready_to_search.begin());
@@ -215,7 +223,7 @@ void PAChatManager::PrepareSearch(PAChatClientGlue* glue)
 		if (current_searching_)
 		{
 			current_searching_->Search();
-			search_timer.start(2000);
+			search_timer.start(15000);
 		}
 	}
 }
@@ -225,6 +233,11 @@ void PAChatManager::onChatBegin()
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
 
 	++chats_started_;
+	RemoveFromSearch(glue);
+}
+
+void PAChatManager::RemoveFromSearch(PAChatClientGlue* glue)
+{
 	UpdateInfoLabel();
 
 	ready_to_search.erase(glue);
@@ -242,12 +255,14 @@ void PAChatManager::onChatBegin()
 void PAChatManager::onChatConnected()
 {
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	UpdateInfoLabel();
 	PrepareSearch(glue);
 }
 
 void PAChatManager::onChatSearch()
 {
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	UpdateInfoLabel();
 	ready_to_search.erase(glue);
 }
 
@@ -255,6 +270,7 @@ void PAChatManager::onChatSearch()
 void PAChatManager::onChatEnd()
 {
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
+	UpdateInfoLabel();
 	PrepareSearch(glue);
 }
 
@@ -274,6 +290,51 @@ void PAChatManager::onOnlineCountUpdate(int online_count)
 
 void PAChatManager::UpdateInfoLabel()
 {
+	//incase this should be "bad", finish class "PAChatClientStats" and replace the code below
+	int online_bots = 0;
+	int total_bots = clients.size();
+	int chatting_bots = 0;
+	int idle_bots = 0;
+	int people_online = 0;
+	float encounter_chance = 0.0f;
+
+	for (auto& client : clients)
+	{
+		switch (client->GetGlueState())
+		{
+		case PAChatClientGlue::PAChatClientGlueState_BotCreated:
+		case PAChatClientGlue::PAChatClientGlueState_OpeningChat:
+		case PAChatClientGlue::PAChatClientGlueState_Disconnected:
+		case PAChatClientGlue::PAChatClientGlueState_ProcessInputFailed:
+		case PAChatClientGlue::PAChatClientGlueState_GeneratingSID:
+		case PAChatClientGlue::PAChatClientGlueState_Connecting:
+			break;
+
+		case PAChatClientGlue::PAChatClientGlueState_ChattingNoUnreadMessages:
+		case PAChatClientGlue::PAChatClientGlueState_ChattingUnreadMessages:
+		case PAChatClientGlue::PAChatClientGlueState_ChattingResponded:
+			++online_bots;
+			++chatting_bots;
+			break;
+
+		case PAChatClientGlue::PAChatClientGlueState_ReadyToChat:
+		case PAChatClientGlue::PAChatClientGlueState_EndedReadyToChat:
+		case PAChatClientGlue::PAChatClientGlueState_Searching:
+			++online_bots;
+			++idle_bots;
+			break;
+		}
+	}
+
+	people_online = online_count_ - total_bots;
+
+	int chance_people = (people_online - 1);
+	if (chance_people != 0)
+	{
+		encounter_chance = ((float)idle_bots / (float)chance_people) * 100.0f;
+	}
+	                    //"                                    "
+	stats_label_->setText(QString::number(people_online) + " People | " + QString::number(total_bots) + " Bots\n" + QString::number(chatting_bots) + " Chatting | " + QString::number(idle_bots) + " Idle | " + QString::number((int)encounter_chance) + "% Chance");
 	online_count_label_->setText(QString::number(online_count_) + " Online | " + QString::number(chats_started_) + " Started");
 }
 
