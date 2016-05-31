@@ -22,7 +22,6 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.endFilteredChatsState,
 		ui.unneededChatsHiderState,
 		ui.reloadFiltersSubmit,
-		ui.statsLabel,
 		this);
 }
 

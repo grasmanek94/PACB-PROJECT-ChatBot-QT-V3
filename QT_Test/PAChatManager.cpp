@@ -30,8 +30,6 @@ PAChatManager::PAChatManager(
 
 	QPushButton* reload_filter_button,
 
-	QLabel* stats_label,
-
 	QObject *parent
 )
 	: QObject(parent),
@@ -54,8 +52,7 @@ PAChatManager::PAChatManager(
 	  ai_mode_check_box_(ai_mode_check_box),
 	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box),
 	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box),
-	  reload_filter_button_(reload_filter_button),
-	  stats_label_(stats_label)
+	  reload_filter_button_(reload_filter_button)
 {
 
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
@@ -333,9 +330,16 @@ void PAChatManager::UpdateInfoLabel()
 	{
 		encounter_chance = ((float)idle_bots / (float)chance_people) * 100.0f;
 	}
-	                    //"                                    "
-	stats_label_->setText(QString::number(people_online) + " People | " + QString::number(total_bots) + " Bots\n" + QString::number(chatting_bots) + " Chatting | " + QString::number(idle_bots) + " Idle | " + QString::number((int)encounter_chance) + "% Ratio");
-	online_count_label_->setText(QString::number(online_count_) + " Online | " + QString::number(chats_started_) + " Started");
+
+	online_count_label_->setText(
+		QString::number(people_online) + " People | " + 
+		QString::number(total_bots) + " Bots\n" + 
+		QString::number(chatting_bots) + " Chatting | " + 
+		QString::number(idle_bots) + " Idle | " + 
+		QString::number((int)encounter_chance) + "% Ratio\n" + 
+		QString::number(online_count_) + " Online | " + 
+		QString::number(chats_started_) + " Started"
+	);
 }
 
 size_t PAChatManager::GetReadyToSearchSize()
