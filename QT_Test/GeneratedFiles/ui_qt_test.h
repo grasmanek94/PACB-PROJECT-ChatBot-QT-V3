@@ -33,11 +33,12 @@ public:
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout_2;
     QGridLayout *proxyListContainerGrid;
-    QPushButton *reloadFiltersSubmit;
-    QListWidget *chatProxyList;
     QLineEdit *chatProxyInput;
+    QListWidget *chatProxyList;
     QLabel *onlineCountLabel;
     QPushButton *chatProxySubmit;
+    QCheckBox *logginOptionCheckBox;
+    QPushButton *reloadFiltersSubmit;
     QGridLayout *botListContainerGrid;
     QPushButton *chatManagerRequestNewChat;
     QCheckBox *autoSenderState;
@@ -75,10 +76,12 @@ public:
         proxyListContainerGrid->setSpacing(6);
         proxyListContainerGrid->setObjectName(QStringLiteral("proxyListContainerGrid"));
         proxyListContainerGrid->setSizeConstraint(QLayout::SetMinimumSize);
-        reloadFiltersSubmit = new QPushButton(centralWidget);
-        reloadFiltersSubmit->setObjectName(QStringLiteral("reloadFiltersSubmit"));
+        chatProxyInput = new QLineEdit(centralWidget);
+        chatProxyInput->setObjectName(QStringLiteral("chatProxyInput"));
+        chatProxyInput->setMinimumSize(QSize(0, 20));
+        chatProxyInput->setMaximumSize(QSize(16777215, 16777215));
 
-        proxyListContainerGrid->addWidget(reloadFiltersSubmit, 1, 0, 1, 1);
+        proxyListContainerGrid->addWidget(chatProxyInput, 2, 0, 1, 1);
 
         chatProxyList = new QListWidget(centralWidget);
         chatProxyList->setObjectName(QStringLiteral("chatProxyList"));
@@ -90,17 +93,10 @@ public:
 
         proxyListContainerGrid->addWidget(chatProxyList, 0, 0, 1, 1);
 
-        chatProxyInput = new QLineEdit(centralWidget);
-        chatProxyInput->setObjectName(QStringLiteral("chatProxyInput"));
-        chatProxyInput->setMinimumSize(QSize(0, 20));
-        chatProxyInput->setMaximumSize(QSize(16777215, 16777215));
-
-        proxyListContainerGrid->addWidget(chatProxyInput, 2, 0, 1, 1);
-
         onlineCountLabel = new QLabel(centralWidget);
         onlineCountLabel->setObjectName(QStringLiteral("onlineCountLabel"));
 
-        proxyListContainerGrid->addWidget(onlineCountLabel, 4, 0, 1, 1);
+        proxyListContainerGrid->addWidget(onlineCountLabel, 6, 0, 1, 1);
 
         chatProxySubmit = new QPushButton(centralWidget);
         chatProxySubmit->setObjectName(QStringLiteral("chatProxySubmit"));
@@ -108,6 +104,17 @@ public:
         chatProxySubmit->setMaximumSize(QSize(16777215, 16777215));
 
         proxyListContainerGrid->addWidget(chatProxySubmit, 3, 0, 1, 1);
+
+        logginOptionCheckBox = new QCheckBox(centralWidget);
+        logginOptionCheckBox->setObjectName(QStringLiteral("logginOptionCheckBox"));
+        logginOptionCheckBox->setTristate(true);
+
+        proxyListContainerGrid->addWidget(logginOptionCheckBox, 5, 0, 1, 1);
+
+        reloadFiltersSubmit = new QPushButton(centralWidget);
+        reloadFiltersSubmit->setObjectName(QStringLiteral("reloadFiltersSubmit"));
+
+        proxyListContainerGrid->addWidget(reloadFiltersSubmit, 4, 0, 1, 1);
 
 
         horizontalLayout_2->addLayout(proxyListContainerGrid);
@@ -242,11 +249,12 @@ public:
     void retranslateUi(QMainWindow *QT_TestClass)
     {
         QT_TestClass->setWindowTitle(QApplication::translate("QT_TestClass", "PA ChatBot", 0));
-        reloadFiltersSubmit->setText(QApplication::translate("QT_TestClass", "Reload Filters", 0));
         onlineCountLabel->setText(QApplication::translate("QT_TestClass", "0 People | 0 Bots\n"
 "0 Chatting | 0 Idle | 0% Ratio\n"
 "0 Online | 0 Started", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
+        logginOptionCheckBox->setText(QApplication::translate("QT_TestClass", "Logging (Nothing/Stats/Stats+Chats)", 0));
+        reloadFiltersSubmit->setText(QApplication::translate("QT_TestClass", "Reload Filters", 0));
         chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));
         autoSenderState->setText(QApplication::translate("QT_TestClass", "Story Mode", 0));
         autoAIModeCheckBox->setText(QApplication::translate("QT_TestClass", "AI Mode", 0));

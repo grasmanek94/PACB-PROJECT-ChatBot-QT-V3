@@ -11,6 +11,7 @@
 #include "PAChatClientGlue.h"
 #include "PAChatClientMacro.h"
 #include "ProxyList.h"
+#include "PAStatisticsLogger.h"
 
 class PAChatManager : public QObject
 {
@@ -45,6 +46,10 @@ private:
 	QPointer<QTabWidget> tabs_container_;
 
 	QPointer<QPushButton> reload_filter_button_;
+
+	QPointer<QCheckBox> logging_checkbox_;
+
+	PAStatisticsLogger stats_logger_;
 
 	bool auto_search_enabled;
 
@@ -90,6 +95,8 @@ public:
 		QCheckBox* filter_unneeded_chat_entries_check_box,
 
 		QPushButton* reload_filter_button,
+
+		QCheckBox* logging_checkbox,
 
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();

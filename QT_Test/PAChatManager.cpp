@@ -30,6 +30,8 @@ PAChatManager::PAChatManager(
 
 	QPushButton* reload_filter_button,
 
+	QCheckBox* logging_checkbox,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -52,7 +54,9 @@ PAChatManager::PAChatManager(
 	  ai_mode_check_box_(ai_mode_check_box),
 	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box),
 	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box),
-	  reload_filter_button_(reload_filter_button)
+	  reload_filter_button_(reload_filter_button),
+	  logging_checkbox_(logging_checkbox),
+	  stats_logger_(this)
 {
 
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
@@ -293,8 +297,8 @@ void PAChatManager::UpdateInfoLabel()
 	int chatting_bots = 0;
 	int idle_bots = 0;
 	int people_online = 0;
-	float encounter_chance = 0.0f;
-
+	float f_encounter_chance = 0.0f;
+	int encounter_chance = 0;
 	for (auto& client : clients)
 	{
 		switch (client->GetGlueState())
@@ -328,7 +332,8 @@ void PAChatManager::UpdateInfoLabel()
 	int chance_people = (people_online - (chatting_bots + 1));
 	if (chance_people != 0)
 	{
-		encounter_chance = ((float)idle_bots / (float)chance_people) * 100.0f;
+		f_encounter_chance = ((float)idle_bots / (float)chance_people) * 100.0f;
+		encounter_chance = (int)f_encounter_chance;
 	}
 
 	online_count_label_->setText(
@@ -336,10 +341,15 @@ void PAChatManager::UpdateInfoLabel()
 		QString::number(total_bots) + " Bots\n" + 
 		QString::number(chatting_bots) + " Chatting | " + 
 		QString::number(idle_bots) + " Idle | " + 
-		QString::number((int)encounter_chance) + "% Ratio\n" + 
+		QString::number(encounter_chance) + "% Ratio\n" + 
 		QString::number(online_count_) + " Online | " + 
 		QString::number(chats_started_) + " Started"
 	);
+
+	if (logging_checkbox_->checkState() != 0)
+	{
+		stats_logger_.Log(people_online, total_bots, chatting_bots, idle_bots, encounter_chance, online_count_);
+	}
 }
 
 size_t PAChatManager::GetReadyToSearchSize()
