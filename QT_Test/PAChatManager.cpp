@@ -328,13 +328,13 @@ void PAChatManager::UpdateInfoLabel()
 
 	people_online = online_count_ - total_bots;
 
-	int chance_people = (people_online - 1);
+	int chance_people = (people_online - (chatting_bots + 1));
 	if (chance_people != 0)
 	{
 		encounter_chance = ((float)idle_bots / (float)chance_people) * 100.0f;
 	}
 	                    //"                                    "
-	stats_label_->setText(QString::number(people_online) + " People | " + QString::number(total_bots) + " Bots\n" + QString::number(chatting_bots) + " Chatting | " + QString::number(idle_bots) + " Idle | " + QString::number((int)encounter_chance) + "% Turnover");
+	stats_label_->setText(QString::number(people_online) + " People | " + QString::number(total_bots) + " Bots\n" + QString::number(chatting_bots) + " Chatting | " + QString::number(idle_bots) + " Idle | " + QString::number((int)encounter_chance) + "% Ratio");
 	online_count_label_->setText(QString::number(online_count_) + " Online | " + QString::number(chats_started_) + " Started");
 }
 

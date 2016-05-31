@@ -253,7 +253,7 @@ public:
         reloadFiltersSubmit->setText(QApplication::translate("QT_TestClass", "Reload Filters", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
         statsLabel->setText(QApplication::translate("QT_TestClass", "0 People | 0 Bots\n"
-"0 Chatting | 0 Idle | 0% Chance", 0));
+"0 Chatting | 0 Idle | 0% Ratio", 0));
         chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));
         autoSenderState->setText(QApplication::translate("QT_TestClass", "Story Mode", 0));
         autoAIModeCheckBox->setText(QApplication::translate("QT_TestClass", "AI Mode", 0));

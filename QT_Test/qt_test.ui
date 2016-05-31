@@ -119,7 +119,7 @@
         </property>
         <property name="text">
          <string>0 People | 0 Bots
-0 Chatting | 0 Idle | 0% Chance</string>
+0 Chatting | 0 Idle | 0% Ratio</string>
         </property>
        </widget>
       </item>
