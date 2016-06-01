@@ -48,7 +48,6 @@ public:
 		PAChatClientGlueState_ChattingResponded,
 		PAChatClientGlueState_EndedReadyToChat,
 		PAChatClientGlueState_Disconnected,
-		PAChatClientGlueState_ProcessInputFailed,
 		PAChatClientGlueState_GeneratingSID,
 		PAChatClientGlueState_Connecting,
 	};
@@ -103,7 +102,6 @@ Q_SIGNALS:
 	void onOnlineCountUpdate(int online_count);
 
 private Q_SLOTS:
-	void onProcessInputFailed();
 	void onGeneratingSID();
 	void onSocketConnecting();
 	void onSocketConnected();

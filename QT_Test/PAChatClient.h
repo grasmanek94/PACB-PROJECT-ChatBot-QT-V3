@@ -5,6 +5,9 @@
 #include <QtCore/QTimer>
 #include <QtWidgets/QListWidget>
 #include <QtCore/QPointer>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkAccessManager>
+
 #include <array>
 
 enum PAChatClientState
@@ -47,10 +50,10 @@ private:
 	int online_count_;
 
 	QPointer<QWebSocket> webSocket_;
-	QPointer<QProcess> process_;
 	QPointer<QTimer> process_timeout_;
 	QPointer<QTimer> pinger_;
 	QPointer<QTimer> online_count_update_;
+	QPointer<QNetworkAccessManager> netman_;
 
 	QString proxy_host_;
 	ushort proxy_port_;
@@ -88,7 +91,6 @@ Q_SIGNALS:
 	void onChatEnd();
 	void onChatOnlineCount(int online_count);
 	void onSocketDisconnected();
-	void onProcessInputFailed();
 	void onProxyNotWorking();
 
 private Q_SLOTS:
@@ -97,5 +99,5 @@ private Q_SLOTS:
 	void onTextMessageReceived(QString message);
 	void onPing();
 	void onOnlineCountUpdate();
-	void onProcessInput();
+	void onNetworkReply(QNetworkReply* reply);
 };

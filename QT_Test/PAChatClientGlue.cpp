@@ -43,7 +43,6 @@ PAChatClientGlue::PAChatClientGlue(
 	connect(client, &PAChatClient::onSocketDisconnected, this, &PAChatClientGlue::onSocketDisconnected);
 	connect(client, &PAChatClient::onSocketConnecting, this, &PAChatClientGlue::onSocketConnecting);
 	connect(client, &PAChatClient::onGeneratingSID, this, &PAChatClientGlue::onGeneratingSID);
-	connect(client, &PAChatClient::onProcessInputFailed, this, &PAChatClientGlue::onProcessInputFailed);
 
 	int_id_ = PAChatGlobalId::Get();
 	string_id_ = "(" + QString::number(int_id_) + ") ";
@@ -92,7 +91,6 @@ void PAChatClientGlue::SetStateColor()
 		case PAChatClientGlueState_ChattingNoUnreadMessages:
 		case PAChatClientGlueState_EndedReadyToChat:
 		case PAChatClientGlueState_Disconnected:
-		case PAChatClientGlueState_ProcessInputFailed:
 		case PAChatClientGlueState_GeneratingSID:
 		case PAChatClientGlueState_Connecting:
 			QListWidgetItem::setHidden(true);
@@ -114,7 +112,6 @@ void PAChatClientGlue::SetStateColor()
 		case PAChatClientGlueState_ReadyToChat:
 		case PAChatClientGlueState_EndedReadyToChat:
 		case PAChatClientGlueState_Disconnected:
-		case PAChatClientGlueState_ProcessInputFailed:
 		case PAChatClientGlueState_Connecting:
 			QListWidgetItem::setHidden(true);
 			break;
@@ -504,7 +501,6 @@ void PAChatClientGlue::Reconnect()
 	connect(client, &PAChatClient::onSocketDisconnected, this, &PAChatClientGlue::onSocketDisconnected);
 	connect(client, &PAChatClient::onSocketConnecting, this, &PAChatClientGlue::onSocketConnecting);
 	connect(client, &PAChatClient::onGeneratingSID, this, &PAChatClientGlue::onGeneratingSID);
-	connect(client, &PAChatClient::onProcessInputFailed, this, &PAChatClientGlue::onProcessInputFailed);
 
 	QListWidgetItem::setText(string_id_ + "New Bot: Created");
 	glue_state_ = PAChatClientGlueState_BotCreated;
@@ -514,13 +510,6 @@ void PAChatClientGlue::Reconnect()
 PAChatClientGlue::PAChatClientGlueState PAChatClientGlue::GetGlueState()
 {
 	return glue_state_;
-}
-
-void PAChatClientGlue::onProcessInputFailed()
-{
-	QListWidgetItem::setText(string_id_ + "New Bot: ProcessInput Failed");
-	glue_state_ = PAChatClientGlueState_ProcessInputFailed;
-	SetStateColor();
 }
 
 void PAChatClientGlue::onGeneratingSID()

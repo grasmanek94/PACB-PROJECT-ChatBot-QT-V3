@@ -2,7 +2,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
-
+#include <QtNetwork/QNetworkCookie>
 #include "PAChatClient.h"
 
 QT_USE_NAMESPACE
@@ -18,12 +18,12 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 	is_typing_ = false;
 	is_other_typing_ = false;
 	online_count_ = 0;
-	process_ = nullptr;
 
 	webSocket_ = new QWebSocket("http://ws.praatanoniem.nl");
 	pinger_ = new QTimer(this);
 	online_count_update_ = new QTimer(this);
 	process_timeout_ = new QTimer(this);
+	netman_ = new QNetworkAccessManager(this);
 
 	connect(webSocket_, &QWebSocket::connected, this, &PAChatClient::onConnected);
 	connect(webSocket_, &QWebSocket::disconnected, this, &PAChatClient::onDisconnected);
@@ -33,71 +33,64 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 	connect(online_count_update_, &QTimer::timeout, this, &PAChatClient::onOnlineCountUpdate);
 	connect(process_timeout_, &QTimer::timeout, this, &PAChatClient::onDisconnected);
 
+	connect(netman_, &QNetworkAccessManager::finished, this, &PAChatClient::onNetworkReply);
+
 	StartGeneratingSID();
 }
 
 void PAChatClient::StartGeneratingSID()
 {
-	if (process_)
-	{
-		disconnect(process_, 0, 0, 0);
-		process_->kill();
-		process_->close();
-		delete process_;
-	}
+	QUrl url("http://ws.praatanoniem.nl/socket.io/?EIO=3&transport=polling&t=" + QString::number(QDateTime::currentMSecsSinceEpoch()) + "-0");
+	QNetworkRequest request(url);
 
-	process_ = new QProcess(this);
-
-	connect(process_, &QProcess::readyReadStandardOutput, this, &PAChatClient::onProcessInput);
-	connect(process_, &QProcess::readyReadStandardError, this, &PAChatClient::onProcessInput);
-
-	QDir dir = QFileInfo(QCoreApplication::applicationFilePath()).absoluteDir();
-
-	process_->setProcessChannelMode(QProcess::MergedChannels);
-	process_->setWorkingDirectory(dir.absolutePath());
+	request.setRawHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+	request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0");
+	request.setRawHeader("Accept-Language", "en-US,en;q=0.5");
+	request.setRawHeader("Accept-Encoding", "gzip, deflate");
+	request.setRawHeader("Referer", "http://www.praatanoniem.nl");
+	request.setRawHeader("Origin", "http://www.praatanoniem.nl");
+	request.setRawHeader("Cookie", "");
+	request.setRawHeader("Connection", "keep-alive");
 
 	if (proxy_host_.length())
 	{
-		process_->start(dir.absolutePath() + "/sid_alive.exe -t socks5 -h " + proxy_host_ + ":" + QString::number(proxy_port_));
-	}
-	else
-	{
-		process_->start(dir.absolutePath() + "/sid_alive.exe");
+		QNetworkProxy proxy;
+		proxy.setHostName(proxy_host_);
+		proxy.setPort(proxy_port_);
+		proxy.setType(QNetworkProxy::ProxyType::Socks5Proxy);
+		netman_->setProxy(proxy);
 	}
 
+	netman_->get(request);
+
 	process_timeout_->start(30000);
+
 	state_ = PAChatClientState_GeneratingSID;
 	emit onGeneratingSID();
 }
 
-void PAChatClient::onProcessInput()
+void PAChatClient::onNetworkReply(QNetworkReply* reply)
 {
 	bool done = false;
 
-	QString out = process_->readAllStandardOutput();
-	QString process_read_buffer_;
+	QVariant cookieVar = reply->header(QNetworkRequest::SetCookieHeader);
 
-	for (int i = 0; i < out.size(); ++i)
+	if(cookieVar.isValid())
 	{
-		if (out[i] != '\r')
+		QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie>>(cookieVar);
+		QString SID;
+		for (auto& cookie : cookies)
 		{
-			if (out[i] == '\n')
+			if (QString(cookie.name()) == QString("io"))
 			{
+				SID = QString(cookie.value());
 				done = true;
-				break;
-			}
-			else
-			{
-				process_read_buffer_.append(out[i]);
 			}
 		}
-	}
 
-	if (done)
-	{
-		if (process_read_buffer_ != "0" && process_read_buffer_.length() != 0)
+		if (done)
 		{
-			QUrl url("ws://ws.praatanoniem.nl/socket.io/?EIO=3&transport=websocket&sid=" + process_read_buffer_);
+			QUrl url("ws://ws.praatanoniem.nl/socket.io/?EIO=3&transport=websocket&sid=" + SID);
 
 			if (proxy_host_.length())
 			{
@@ -113,27 +106,19 @@ void PAChatClient::onProcessInput()
 			state_ = PAChatClientState_SocketConnecting;
 			emit onSocketConnecting();
 		}
-		else
-		{
-			emit onProxyNotWorking();
-			onDisconnected();
-		}
-		process_read_buffer_.clear();
 	}
-	else
+
+	if(!done)
 	{
-		//(probably) unreachable
-		emit onProcessInputFailed();
+		emit onProxyNotWorking();
+		onDisconnected();
 	}
 }
 
 PAChatClient::~PAChatClient()
 {
 	disconnect(webSocket_);
-	disconnect(process_);
 	disconnect(this, 0, 0, 0);
-	//webSocket_.disconnect();
-	process_->kill();
 }
 
 void PAChatClient::onPing()
@@ -169,7 +154,6 @@ void PAChatClient::onDisconnected()
 	online_count_ = 0;
 	pinger_->stop();
 	online_count_update_->stop();
-	process_->kill();
 
 	emit onSocketDisconnected();
 
@@ -231,7 +215,6 @@ void PAChatClient::onTextMessageReceived(QString incomming_message)
 			connected_ = true;
 
 			process_timeout_->stop();
-			process_->kill();
 
 			state_ = PAChatClientState_Idle;
 			//OnConnected
@@ -403,7 +386,6 @@ void PAChatClient::Reconnect()
 	online_count_ = 0;
 	pinger_->stop();
 	online_count_update_->stop();
-	process_->kill();
 
 	connected_ = false;
 	searching_ = false;

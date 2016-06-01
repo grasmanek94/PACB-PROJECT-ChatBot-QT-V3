@@ -306,7 +306,6 @@ void PAChatManager::UpdateInfoLabel()
 		case PAChatClientGlue::PAChatClientGlueState_BotCreated:
 		case PAChatClientGlue::PAChatClientGlueState_OpeningChat:
 		case PAChatClientGlue::PAChatClientGlueState_Disconnected:
-		case PAChatClientGlue::PAChatClientGlueState_ProcessInputFailed:
 		case PAChatClientGlue::PAChatClientGlueState_GeneratingSID:
 		case PAChatClientGlue::PAChatClientGlueState_Connecting:
 			break;
