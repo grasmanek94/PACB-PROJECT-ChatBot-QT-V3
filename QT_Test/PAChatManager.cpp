@@ -293,7 +293,6 @@ void PAChatManager::UpdateInfoLabel()
 {
 	//incase this should be "bad", finish class "PAChatClientStats" and replace the code below
 	int online_bots = 0;
-	int online_bots = 0;
 	int chatting_bots = 0;
 	int total_bots = clients.size();
 	int idle_bots = 0;
