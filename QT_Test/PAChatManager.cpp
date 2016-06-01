@@ -189,7 +189,8 @@ void PAChatManager::onSocketDisconnected()
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
 	UpdateInfoLabel();
 	RemoveFromSearch(glue);
-	PopClient();
+	//PopClient();
+	glue->Reconnect();
 }
 
 void PAChatManager::onAutoSearcherStateChange(int state)

@@ -178,7 +178,7 @@ void PAChatClient::onDisconnected()
 	emit onSocketDisconnected();
 
 	//Reconnect?
-	StartGeneratingSID();
+	//StartGeneratingSID();
 }
 
 void PAChatClient::onTextMessageReceived(QString incomming_message)
