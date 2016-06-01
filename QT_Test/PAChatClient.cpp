@@ -133,9 +133,6 @@ void PAChatClient::onNetworkReply(QNetworkReply* reply)
 		emit onProxyNotWorking(proxy_, sid_gen_retries_, max_sid_gen_retries_);
 		onDisconnected();
 	}
-
-	//seems if this is not here the app leaks memory?
-	delete reply;
 }
 
 PAChatClient::~PAChatClient()
