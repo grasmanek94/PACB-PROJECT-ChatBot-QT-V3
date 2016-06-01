@@ -30,7 +30,7 @@ PAChatClientGlue::PAChatClientGlue(
 		proxy_->PushUseCount();
 	}
 
-	client = new PAChatClient(proxy_->GetHost(), proxy_->GetPort(), this);
+	client = new PAChatClient(proxy_, 5, this);
 
 	connect(client, &PAChatClient::onSocketConnected, this, &PAChatClientGlue::onSocketConnected);
 	connect(client, &PAChatClient::onChatConnected, this, &PAChatClientGlue::onChatConnected);
@@ -488,7 +488,7 @@ void PAChatClientGlue::Reconnect()
 		ui->RemoveMessages();
 	}
 
-	client = new PAChatClient(proxy_->GetHost(), proxy_->GetPort(), this);
+	client = new PAChatClient(proxy_, 5, this);
 
 	connect(client, &PAChatClient::onSocketConnected, this, &PAChatClientGlue::onSocketConnected);
 	connect(client, &PAChatClient::onChatConnected, this, &PAChatClientGlue::onChatConnected);
@@ -514,7 +514,7 @@ PAChatClientGlue::PAChatClientGlueState PAChatClientGlue::GetGlueState()
 
 void PAChatClientGlue::onGeneratingSID()
 {
-	QListWidgetItem::setText(string_id_ + "New Bot: Generating SID (" + client->GetProxy() + ")");
+	QListWidgetItem::setText(string_id_ + "New Bot: Generating SID (" + client->GetProxy()->ToString() + ")");
 	glue_state_ = PAChatClientGlueState_GeneratingSID;
 	SetStateColor();
 }

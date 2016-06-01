@@ -108,4 +108,34 @@ void ProxyList::InputSubmit(bool checked)
 			}
 		}
 	}
+	proxy_list = data.split("\n");
+	for (auto& entry : proxy_list)
+	{
+		auto proxy_entry = entry.split(':');
+		bool succeeded = false;
+		if (proxy_entry.size() == 2)
+		{
+			QString host = proxy_entry[0];
+			ushort port = proxy_entry[1].toInt(&succeeded);
+			if (succeeded)
+			{
+				Add(new ProxyEntry(host, port, this));
+			}
+		}
+	}
+	proxy_list = data.split(" ");
+	for (auto& entry : proxy_list)
+	{
+		auto proxy_entry = entry.split(':');
+		bool succeeded = false;
+		if (proxy_entry.size() == 2)
+		{
+			QString host = proxy_entry[0];
+			ushort port = proxy_entry[1].toInt(&succeeded);
+			if (succeeded)
+			{
+				Add(new ProxyEntry(host, port, this));
+			}
+		}
+	}
 }

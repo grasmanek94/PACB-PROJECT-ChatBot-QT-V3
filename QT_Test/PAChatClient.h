@@ -9,6 +9,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 
 #include <array>
+#include "ProxyEntry.h"
 
 enum PAChatClientState
 {
@@ -49,20 +50,21 @@ private:
 	bool is_other_typing_;
 	int online_count_;
 
+	int sid_gen_retries_;
+	int max_sid_gen_retries_;
+
 	QPointer<QWebSocket> webSocket_;
 	QPointer<QTimer> process_timeout_;
 	QPointer<QTimer> pinger_;
 	QPointer<QTimer> online_count_update_;
 	QPointer<QNetworkAccessManager> netman_;
-
-	QString proxy_host_;
-	ushort proxy_port_;
+	QPointer<ProxyEntry> proxy_;
 
 	PAChatClientState state_;
 
 	void StartGeneratingSID();
 public:
-	PAChatClient(const QString& proxy_host = "", ushort port = 1080, QObject *parent = Q_NULLPTR);
+	PAChatClient(ProxyEntry* proxy = nullptr, int max_sid_gen_attempts = 5, QObject *parent = Q_NULLPTR);
 	~PAChatClient();
 
 	bool Search();
@@ -76,7 +78,8 @@ public:
 
 	void Reconnect();
 	PAChatClientState State();
-	QString GetProxy();
+	ProxyEntry* GetProxy();
+	void ResetRetries();
 
 Q_SIGNALS:
 	void onGeneratingSID();
@@ -91,7 +94,8 @@ Q_SIGNALS:
 	void onChatEnd();
 	void onChatOnlineCount(int online_count);
 	void onSocketDisconnected();
-	void onProxyNotWorking();
+	void onProxyNotWorking(ProxyEntry* proxy, int current_retry_count, int max_retry_count);
+	void onSidGenRetryCountExceeded(ProxyEntry* proxy, int max_retry_count);
 
 private Q_SLOTS:
 	void onConnected();

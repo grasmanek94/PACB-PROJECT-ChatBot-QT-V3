@@ -7,10 +7,10 @@
 
 QT_USE_NAMESPACE
 
-PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *parent)
+PAChatClient::PAChatClient(ProxyEntry* proxy, int max_sid_gen_attempts, QObject *parent)
 	: QObject(parent),
-	proxy_host_(proxy_host),
-	proxy_port_(port)
+	proxy_(proxy),
+	max_sid_gen_retries_(max_sid_gen_attempts)
 {
 	connected_ = false;
 	searching_ = false;
@@ -18,12 +18,12 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 	is_typing_ = false;
 	is_other_typing_ = false;
 	online_count_ = 0;
+	sid_gen_retries_ = 0;
 
 	webSocket_ = new QWebSocket("http://ws.praatanoniem.nl");
 	pinger_ = new QTimer(this);
 	online_count_update_ = new QTimer(this);
 	process_timeout_ = new QTimer(this);
-	netman_ = new QNetworkAccessManager(this);
 
 	connect(webSocket_, &QWebSocket::connected, this, &PAChatClient::onConnected);
 	connect(webSocket_, &QWebSocket::disconnected, this, &PAChatClient::onDisconnected);
@@ -33,40 +33,60 @@ PAChatClient::PAChatClient(const QString& proxy_host, ushort port, QObject *pare
 	connect(online_count_update_, &QTimer::timeout, this, &PAChatClient::onOnlineCountUpdate);
 	connect(process_timeout_, &QTimer::timeout, this, &PAChatClient::onDisconnected);
 
-	connect(netman_, &QNetworkAccessManager::finished, this, &PAChatClient::onNetworkReply);
-
 	StartGeneratingSID();
 }
 
 void PAChatClient::StartGeneratingSID()
 {
-	QUrl url("http://ws.praatanoniem.nl/socket.io/?EIO=3&transport=polling&t=" + QString::number(QDateTime::currentMSecsSinceEpoch()) + "-0");
-	QNetworkRequest request(url);
-
-	request.setRawHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-	request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0");
-	request.setRawHeader("Accept-Language", "en-US,en;q=0.5");
-	request.setRawHeader("Accept-Encoding", "gzip, deflate");
-	request.setRawHeader("Referer", "http://www.praatanoniem.nl");
-	request.setRawHeader("Origin", "http://www.praatanoniem.nl");
-	request.setRawHeader("Cookie", "");
-	request.setRawHeader("Connection", "keep-alive");
-
-	if (proxy_host_.length())
+	// fix another memory leak? - or well connection/timeout leak
+	if (netman_)
 	{
-		QNetworkProxy proxy;
-		proxy.setHostName(proxy_host_);
-		proxy.setPort(proxy_port_);
-		proxy.setType(QNetworkProxy::ProxyType::Socks5Proxy);
-		netman_->setProxy(proxy);
+		delete netman_;
+		netman_ = new QNetworkAccessManager(this);
+		connect(netman_, &QNetworkAccessManager::finished, this, &PAChatClient::onNetworkReply);
+	}
+	else if (!netman_)
+	{
+		netman_ = new QNetworkAccessManager(this);
+		connect(netman_, &QNetworkAccessManager::finished, this, &PAChatClient::onNetworkReply);
 	}
 
-	netman_->get(request);
+	if (sid_gen_retries_ <= max_sid_gen_retries_)
+	{
+		++sid_gen_retries_;
+		//
+		QUrl url("http://ws.praatanoniem.nl/socket.io/?EIO=3&transport=polling&t=" + QString::number(QDateTime::currentMSecsSinceEpoch()) + "-0");
+		QNetworkRequest request(url);
 
-	process_timeout_->start(30000);
+		request.setRawHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+		request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0");
+		request.setRawHeader("Accept-Language", "en-US,en;q=0.5");
+		request.setRawHeader("Accept-Encoding", "gzip, deflate");
+		request.setRawHeader("Referer", "http://www.praatanoniem.nl");
+		request.setRawHeader("Origin", "http://www.praatanoniem.nl");
+		request.setRawHeader("Cookie", "");
+		request.setRawHeader("Connection", "keep-alive");
 
-	state_ = PAChatClientState_GeneratingSID;
-	emit onGeneratingSID();
+		if (proxy_->GetHost().length())
+		{
+			QNetworkProxy proxy;
+			proxy.setHostName(proxy_->GetHost());
+			proxy.setPort(proxy_->GetPort());
+			proxy.setType(QNetworkProxy::ProxyType::Socks5Proxy);
+			netman_->setProxy(proxy);
+		}
+
+		netman_->get(request);
+
+		process_timeout_->start(30000);
+
+		state_ = PAChatClientState_GeneratingSID;
+		emit onGeneratingSID();
+	}
+	else
+	{
+		emit onSidGenRetryCountExceeded(proxy_, max_sid_gen_retries_);
+	}
 }
 
 void PAChatClient::onNetworkReply(QNetworkReply* reply)
@@ -92,11 +112,11 @@ void PAChatClient::onNetworkReply(QNetworkReply* reply)
 		{
 			QUrl url("ws://ws.praatanoniem.nl/socket.io/?EIO=3&transport=websocket&sid=" + SID);
 
-			if (proxy_host_.length())
+			if (proxy_->GetHost().length())
 			{
 				QNetworkProxy proxy;
-				proxy.setHostName(proxy_host_);
-				proxy.setPort(proxy_port_);
+				proxy.setHostName(proxy_->GetHost());
+				proxy.setPort(proxy_->GetPort());
 				proxy.setType(QNetworkProxy::ProxyType::Socks5Proxy);
 				webSocket_->setProxy(proxy);
 			}
@@ -110,9 +130,12 @@ void PAChatClient::onNetworkReply(QNetworkReply* reply)
 
 	if(!done)
 	{
-		emit onProxyNotWorking();
+		emit onProxyNotWorking(proxy_, sid_gen_retries_, max_sid_gen_retries_);
 		onDisconnected();
 	}
+
+	//seems if this is not here the app leaks memory?
+	delete reply;
 }
 
 PAChatClient::~PAChatClient()
@@ -394,10 +417,12 @@ void PAChatClient::Reconnect()
 	is_other_typing_ = false;
 	online_count_ = 0;
 
+	sid_gen_retries_ = 0;
+
 	StartGeneratingSID();
 }
 
-QString PAChatClient::GetProxy()
+ProxyEntry* PAChatClient::GetProxy()
 {
-	return proxy_host_ + ":" + QString::number(proxy_port_);
+	return proxy_;
 }
