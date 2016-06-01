@@ -193,30 +193,27 @@ void PAChatClientGlue::onChatBegin()
 			case 0:
 				enable_auto_sender = true;
 				enable_ai = false;
-				message_ai->Stop();
 				break;
 			case 2:
 				enable_ai = true;
 				enable_auto_sender = false;
-				auto_sender->Stop();
 				break;
 			case 1:
 				switcher = !switcher;
 				enable_auto_sender = switcher;
 				enable_ai = !switcher;
-				if (enable_auto_sender)
-				{
-					message_ai->Stop();
-				}
-				else if(enable_ai)
-				{
-					auto_sender->Stop();
-				}
 				break;
+		}
+
+		//shouldn't be possible but eh.. weird stuff happens
+		if (enable_auto_sender == enable_ai)
+		{
+			enable_auto_sender = !enable_ai;
 		}
 
 		if (enable_ai && story_mode_check_box_->checkState() && message_ai)
 		{
+			auto_sender->Stop();
 			client->SendTyping(true);
 			message_ai->Start();
 		}
@@ -230,6 +227,7 @@ void PAChatClientGlue::onChatBegin()
 			}
 			if (story_mode_check_box_->checkState())
 			{
+				message_ai->Stop();
 				client->SendTyping(true);
 				auto_sender->Start();
 			}
