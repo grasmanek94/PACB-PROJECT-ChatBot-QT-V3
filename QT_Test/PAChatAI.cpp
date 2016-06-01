@@ -387,7 +387,7 @@ std::vector<qp> questions_answers =
 		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = { "valt", "mee", "kom", "graag", "grag", "ja", "yes", "ok", "nee", "nah", "niet", "mis", "may", "mab", "jup", "mwah", "waarom", "mis", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
+			const static QStringList possible_answers = { "red", "valt", "mee", "kom", "graag", "grag", "ja", "yes", "ok", "nee", "nah", "niet", "mis", "may", "mab", "jup", "mwah", "waarom", "mis", "mischien", "hoezo", "nooit", "altijd", "hangt", "te ", "zou", "ver", "kan", "kun", "helaas", "prim", "top", "goed", "luk" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -399,7 +399,7 @@ std::vector<qp> questions_answers =
 		},	
 		[&](QString answer, bool*, int*)
 		{
-			const static QStringList possible_answers = { "nee", "nah", "niet", "misschien", "waarom", "mis", "may", "mab", "nooit", "niet te ver", "kan", "kunnen" };
+			const static QStringList possible_answers = { "red", "nee", "nah", "niet", "misschien", "waarom", "mis", "may", "mab", "nooit", "niet te ver", "kan", "kunnen" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -420,7 +420,7 @@ std::vector<qp> questions_answers =
 		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
 		{
-			const static QStringList possible_answers = { "durf", "wel", "ken", "graag", "grag", "ja", "yes", "ok", "nee", "may", "mab", "nah", "niet", "mis", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
+			const static QStringList possible_answers = { "cond", "durf", "wel", "ken", "graag", "grag", "ja", "yes", "ok", "nee", "may", "mab", "nah", "niet", "mis", "jup", "mwah", "waarom", "mischien", "hoezo", "nooit", "altijd", "hangt", "kan", "zou", "kun", "helaas", "prim", "top", "goed" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -432,7 +432,7 @@ std::vector<qp> questions_answers =
 		},
 		[&](QString answer, bool*, int*)
 		{
-			const static QStringList possible_answers = { "durf", "wel", "graag", "grag", "ja", "yes", "ok", "mis", "may", "mab" };
+			const static QStringList possible_answers = { "cond", "durf", "wel", "graag", "grag", "ja", "yes", "ok", "mis", "may", "mab" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
@@ -586,7 +586,7 @@ void PAChatAI::ProcessMessage(QString message)
 		IsGoodAnswer(0, message, &got_age_, &got_age_count);
 		if (got_age_)
 		{
-			if (got_age_count < 16)
+			if (got_age_count < 16 || got_age_count > 20)
 			{
 				PerformFail();
 				return;
