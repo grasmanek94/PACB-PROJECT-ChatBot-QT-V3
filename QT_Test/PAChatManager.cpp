@@ -342,8 +342,8 @@ void PAChatManager::UpdateInfoLabel()
 
 	online_count_label_->setText(
 		QString::number(people_online) + " People | " + 
-		QString::number(online_bots) + " Online Bots " + 
-		QString::number(total_bots) + " Total Bots\n" +
+		QString::number(online_bots) + " Chat Bots " + 
+		QString::number(total_bots) + " | Total Bots\n" +
 		QString::number(chatting_bots) + " Chatting | " + 
 		QString::number(idle_bots) + " Idle | " + 
 		QString::number(encounter_chance) + "% Ratio\n" + 
