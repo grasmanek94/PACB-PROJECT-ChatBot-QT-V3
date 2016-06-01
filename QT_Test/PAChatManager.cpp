@@ -293,8 +293,9 @@ void PAChatManager::UpdateInfoLabel()
 {
 	//incase this should be "bad", finish class "PAChatClientStats" and replace the code below
 	int online_bots = 0;
-	int total_bots = clients.size();
+	int online_bots = 0;
 	int chatting_bots = 0;
+	int total_bots = clients.size();
 	int idle_bots = 0;
 	int people_online = 0;
 	float f_encounter_chance = 0.0f;
@@ -304,7 +305,6 @@ void PAChatManager::UpdateInfoLabel()
 		switch (client->GetGlueState())
 		{
 		case PAChatClientGlue::PAChatClientGlueState_BotCreated:
-		case PAChatClientGlue::PAChatClientGlueState_OpeningChat:
 		case PAChatClientGlue::PAChatClientGlueState_Disconnected:
 		case PAChatClientGlue::PAChatClientGlueState_GeneratingSID:
 		case PAChatClientGlue::PAChatClientGlueState_Connecting:
@@ -315,6 +315,7 @@ void PAChatManager::UpdateInfoLabel()
 		case PAChatClientGlue::PAChatClientGlueState_ChattingResponded:
 			++online_bots;
 			++chatting_bots;
+			++online_bots;
 			break;
 
 		case PAChatClientGlue::PAChatClientGlueState_ReadyToChat:
@@ -322,11 +323,16 @@ void PAChatManager::UpdateInfoLabel()
 		case PAChatClientGlue::PAChatClientGlueState_Searching:
 			++online_bots;
 			++idle_bots;
+			++online_bots;
+			break;
+
+		case PAChatClientGlue::PAChatClientGlueState_OpeningChat:
+			++online_bots;
 			break;
 		}
 	}
 
-	people_online = online_count_ - total_bots;
+	people_online = online_count_ - online_bots;
 
 	int chance_people = (people_online - (chatting_bots + 1));
 	if (chance_people != 0)
@@ -337,7 +343,8 @@ void PAChatManager::UpdateInfoLabel()
 
 	online_count_label_->setText(
 		QString::number(people_online) + " People | " + 
-		QString::number(total_bots) + " Bots\n" + 
+		QString::number(online_bots) + " Online Bots " + 
+		QString::number(total_bots) + " Total Bots\n" +
 		QString::number(chatting_bots) + " Chatting | " + 
 		QString::number(idle_bots) + " Idle | " + 
 		QString::number(encounter_chance) + "% Ratio\n" + 
@@ -347,7 +354,7 @@ void PAChatManager::UpdateInfoLabel()
 
 	if (logging_checkbox_->checkState() != 0)
 	{
-		stats_logger_.Log(people_online, total_bots, chatting_bots, idle_bots, encounter_chance, online_count_);
+		stats_logger_.Log(people_online, online_bots, chatting_bots, idle_bots, encounter_chance, online_count_);
 	}
 }
 
