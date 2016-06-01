@@ -78,8 +78,11 @@ void PAChatClient::StartGeneratingSID()
 
 		netman_->get(request);
 
+#ifndef _DEBUG
 		process_timeout_->start(30000);
-
+#else
+		process_timeout_->start(300000);
+#endif
 		state_ = PAChatClientState_GeneratingSID;
 		emit onGeneratingSID();
 	}

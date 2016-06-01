@@ -162,7 +162,7 @@ void PAChatManager::PopClient()
 
 void PAChatManager::PopClient2(PAChatClientGlue* glue)
 {
-	/*bool eq = current_active_ == glue;
+	//bool eq = current_active_ == glue;
 
 	ready_to_search.erase(glue);
 	clients.erase(glue);
@@ -170,11 +170,10 @@ void PAChatManager::PopClient2(PAChatClientGlue* glue)
 	tabs_container_->removeTab(tabs_container_->indexOf(glue->GetTab()));
 	delete glue;
 
-	if (eq)
+	/*if (eq && clients.size())
 	{
 		onItemSelected(*clients.begin());
 	}*/
-	//glue->Reconnect();
 }
 
 void PAChatManager::onSocketConnected()
@@ -189,8 +188,7 @@ void PAChatManager::onSocketDisconnected()
 	PAChatClientGlue* glue = dynamic_cast<PAChatClientGlue*>(QObject::sender());
 	UpdateInfoLabel();
 	RemoveFromSearch(glue);
-	//PopClient();
-	glue->Reconnect();
+	PopClient();
 }
 
 void PAChatManager::onAutoSearcherStateChange(int state)
