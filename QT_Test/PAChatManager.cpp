@@ -314,7 +314,6 @@ void PAChatManager::UpdateInfoLabel()
 		case PAChatClientGlue::PAChatClientGlueState_ChattingResponded:
 			++online_bots;
 			++chatting_bots;
-			++online_bots;
 			break;
 
 		case PAChatClientGlue::PAChatClientGlueState_ReadyToChat:
@@ -322,7 +321,6 @@ void PAChatManager::UpdateInfoLabel()
 		case PAChatClientGlue::PAChatClientGlueState_Searching:
 			++online_bots;
 			++idle_bots;
-			++online_bots;
 			break;
 
 		case PAChatClientGlue::PAChatClientGlueState_OpeningChat:
