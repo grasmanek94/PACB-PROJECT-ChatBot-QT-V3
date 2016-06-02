@@ -171,6 +171,8 @@ void PAChatManager::PopClient2(PAChatClientGlue* glue)
 	clients.erase(glue);
 	list_view_->removeItemWidget(glue);
 	glue->GetTab()->setHidden(true);
+	glue->GetTab()->hide();
+
 	//tabs_container_-
 	//delete glue->GetTab();
 	//delete glue;
