@@ -438,7 +438,17 @@ bool PAChatClient::SendImageHash(QString hash, int sender_id)
 
 	emit onChatImage(true, hash, sender_id);
 
-	SendTyping(false);
+	return true;
+}
+
+bool PAChatClient::SendRaw(QString bytes)
+{
+	if (!connected_ || searching_ || !chatting_ || bytes.length() < 1)
+	{
+		return false;
+	}
+
+	webSocket_->sendTextMessage(bytes);
 
 	return true;
 }

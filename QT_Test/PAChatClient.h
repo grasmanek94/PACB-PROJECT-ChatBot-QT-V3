@@ -74,6 +74,7 @@ public:
 	bool Chatting();
 	bool SendMessage(QString messge, int sender_id = 0);
 	bool SendImageHash(QString hash, int sender_id = 0);
+	bool SendRaw(QString bytes);
 	bool SendTyping(bool typing);
 	bool EndChat();
 	int OnlineCount();
