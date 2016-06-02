@@ -165,7 +165,8 @@ void PAChatManager::PopClient()
 
 void PAChatManager::PopClient2(PAChatClientGlue* glue)
 {
-	//bool eq = current_active_ == glue;
+	glue->Reconnect(2500);
+	/*bool eq = current_active_ == glue;
 
 	ready_to_search.erase(glue);
 	clients.erase(glue);
@@ -177,7 +178,7 @@ void PAChatManager::PopClient2(PAChatClientGlue* glue)
 	//delete glue->GetTab();
 	//delete glue;
 
-	/*if (eq && clients.size())
+	if (eq && clients.size())
 	{
 		onItemSelected(*clients.begin());
 	}*/

@@ -7,11 +7,16 @@
 
 QT_USE_NAMESPACE
 
-PAChatClient::PAChatClient(ProxyEntry* proxy, int max_sid_gen_attempts, QObject *parent)
-	: QObject(parent),
-	proxy_(proxy),
-	max_sid_gen_retries_(max_sid_gen_attempts)
+void PAChatClient::Initialize()
 {
+	if (webSocket_)
+	{
+		delete webSocket_;
+		delete pinger_;
+		delete online_count_update_;
+		delete process_timeout_;
+	}
+
 	connected_ = false;
 	searching_ = false;
 	chatting_ = false;
@@ -34,6 +39,15 @@ PAChatClient::PAChatClient(ProxyEntry* proxy, int max_sid_gen_attempts, QObject 
 	connect(process_timeout_, &QTimer::timeout, this, &PAChatClient::onDisconnected);
 
 	StartGeneratingSID();
+}
+
+PAChatClient::PAChatClient(ProxyEntry* proxy, int max_sid_gen_attempts, QObject *parent)
+	: QObject(parent),
+	proxy_(proxy),
+	max_sid_gen_retries_(max_sid_gen_attempts),
+	webSocket_(nullptr)
+{
+	Initialize();
 }
 
 void PAChatClient::StartGeneratingSID()
@@ -89,6 +103,8 @@ void PAChatClient::StartGeneratingSID()
 	else
 	{
 		emit onSidGenRetryCountExceeded(proxy_, max_sid_gen_retries_);
+		// TODO remove this in release
+		Reconnect(2500);
 	}
 }
 
@@ -182,6 +198,7 @@ void PAChatClient::onDisconnected()
 
 	//Reconnect?
 	//StartGeneratingSID();
+	//QTimer::singleShot(0, this, &PAChatClient::Initialize);
 }
 
 void PAChatClient::onTextMessageReceived(QString incomming_message)
@@ -396,30 +413,9 @@ bool PAChatClient::EndChat()
 }
 
 //doesn't work...
-void PAChatClient::Reconnect()
+void PAChatClient::Reconnect(int delay)
 {
-	webSocket_->disconnect();
-
-	state_ = PAChatClientState_Disconnected;
-	connected_ = false;
-	searching_ = false;
-	chatting_ = false;
-	is_typing_ = false;
-	is_other_typing_ = false;
-	online_count_ = 0;
-	pinger_->stop();
-	online_count_update_->stop();
-
-	connected_ = false;
-	searching_ = false;
-	chatting_ = false;
-	is_typing_ = false;
-	is_other_typing_ = false;
-	online_count_ = 0;
-
-	sid_gen_retries_ = 0;
-
-	StartGeneratingSID();
+	QTimer::singleShot(delay, this, &PAChatClient::Initialize);
 }
 
 ProxyEntry* PAChatClient::GetProxy()

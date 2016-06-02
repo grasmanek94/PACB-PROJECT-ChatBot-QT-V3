@@ -88,7 +88,7 @@ public:
 	QWidget* GetTab();
 	void FocusInputText();
 	void SendMessage(QString string);
-	void Reconnect();
+	void Reconnect(int delay = 0);
 
 Q_SIGNALS:
 	void onGlueSocketConnected();

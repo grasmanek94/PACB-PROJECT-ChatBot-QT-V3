@@ -63,6 +63,7 @@ private:
 	PAChatClientState state_;
 
 	void StartGeneratingSID();
+	void Initialize();
 public:
 	PAChatClient(ProxyEntry* proxy = nullptr, int max_sid_gen_attempts = 5, QObject *parent = Q_NULLPTR);
 	~PAChatClient();
@@ -76,7 +77,7 @@ public:
 	bool EndChat();
 	int OnlineCount();
 
-	void Reconnect();
+	void Reconnect(int delay = 0);
 	PAChatClientState State();
 	ProxyEntry* GetProxy();
 	void ResetRetries();

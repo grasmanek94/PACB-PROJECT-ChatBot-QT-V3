@@ -464,7 +464,7 @@ void PAChatClientGlue::SendMessage(QString string)
 	}
 }
 
-void PAChatClientGlue::Reconnect()
+void PAChatClientGlue::Reconnect(int delay)
 {
 	if (auto_sender)
 	{
@@ -475,10 +475,10 @@ void PAChatClientGlue::Reconnect()
 		message_ai->Stop();
 	}
 
-	disconnect(client, 0, 0, 0);
-	//client->Reconnect();
-	delete client;
-	client = nullptr;
+	//disconnect(client, 0, 0, 0);
+	client->Reconnect(delay);
+	//delete client;
+	//client = nullptr;
 
 	if (ui)
 	{
@@ -486,7 +486,7 @@ void PAChatClientGlue::Reconnect()
 		ui->RemoveMessages();
 	}
 
-	client = new PAChatClient(proxy_, 5, this);
+	/*client = new PAChatClient(proxy_, 5, this);
 
 	connect(client, &PAChatClient::onSocketConnected, this, &PAChatClientGlue::onSocketConnected);
 	connect(client, &PAChatClient::onChatConnected, this, &PAChatClientGlue::onChatConnected);
@@ -498,7 +498,7 @@ void PAChatClientGlue::Reconnect()
 	connect(client, &PAChatClient::onChatOnlineCount, this, &PAChatClientGlue::onChatOnlineCount);
 	connect(client, &PAChatClient::onSocketDisconnected, this, &PAChatClientGlue::onSocketDisconnected);
 	connect(client, &PAChatClient::onSocketConnecting, this, &PAChatClientGlue::onSocketConnecting);
-	connect(client, &PAChatClient::onGeneratingSID, this, &PAChatClientGlue::onGeneratingSID);
+	connect(client, &PAChatClient::onGeneratingSID, this, &PAChatClientGlue::onGeneratingSID);*/
 
 	QListWidgetItem::setText(string_id_ + "New Bot: Created");
 	glue_state_ = PAChatClientGlueState_BotCreated;
