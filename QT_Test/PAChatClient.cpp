@@ -422,3 +422,23 @@ ProxyEntry* PAChatClient::GetProxy()
 {
 	return proxy_;
 }
+
+bool PAChatClient::SendImageHash(QString hash, int sender_id)
+{
+	if (!connected_ || searching_ || !chatting_ || hash.length() < 1)
+	{
+		return false;
+	}
+
+	//120
+	//{"hash":"ad32a067f076eaf409c1776f22c0df9dc28a58fc372c4ea13a7b1205cca0a8a9f895433e21e33b490fbae07e50e953f719c60a966b3176d35f8f98e7","expire":1462710282}
+	QString format("42[\"image\",{\"hash\":\"%1\",\"expire\":%2}]");
+
+	webSocket_->sendTextMessage(format.arg(QString(hash)).arg((QDateTime::currentMSecsSinceEpoch()/1000)+120));
+
+	emit onChatImage(true, hash, sender_id);
+
+	SendTyping(false);
+
+	return true;
+}

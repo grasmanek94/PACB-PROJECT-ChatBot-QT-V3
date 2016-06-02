@@ -73,6 +73,7 @@ public:
 	bool Connected();
 	bool Chatting();
 	bool SendMessage(QString messge, int sender_id = 0);
+	bool SendImageHash(QString hash, int sender_id = 0);
 	bool SendTyping(bool typing);
 	bool EndChat();
 	int OnlineCount();
