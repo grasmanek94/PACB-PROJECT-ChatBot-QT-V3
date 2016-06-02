@@ -62,6 +62,7 @@ PAChatManager::PAChatManager(
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
 	connect(automatic_search_check_box_, &QCheckBox::stateChanged, this, &PAChatManager::onAutoSearcherStateChange);
 	connect(&search_timer, &QTimer::timeout, this, &PAChatManager::searchTimeout);
+	connect(&search_watch_dog_, &QTimer::timeout, this, &PAChatManager::onSearchWatchDog);
 	connect(list_view_, &QListWidget::itemClicked, this, &PAChatManager::onItemSelected);
 	connect(list_view_, &QListWidget::itemPressed, this, &PAChatManager::onItemSelected);
 	connect(list_view_, &QListWidget::itemActivated, this, &PAChatManager::onItemSelected);
@@ -87,6 +88,8 @@ PAChatManager::PAChatManager(
 	}
 
 	f1.close();
+
+	search_watch_dog_.start(5000);
 }
 
 PAChatManager::~PAChatManager()
@@ -167,8 +170,10 @@ void PAChatManager::PopClient2(PAChatClientGlue* glue)
 	ready_to_search.erase(glue);
 	clients.erase(glue);
 	list_view_->removeItemWidget(glue);
-	tabs_container_->removeTab(tabs_container_->indexOf(glue->GetTab()));
-	delete glue;
+	glue->GetTab()->setHidden(true);
+	//tabs_container_-
+	//delete glue->GetTab();
+	//delete glue;
 
 	/*if (eq && clients.size())
 	{
@@ -249,6 +254,14 @@ void PAChatManager::RemoveFromSearch(PAChatClientGlue* glue)
 		{
 			PrepareSearch(*ready_to_search.begin());
 		}
+	}
+}
+
+void PAChatManager::onSearchWatchDog()
+{
+	if (!current_searching_ && auto_search_enabled && ready_to_search.size())
+	{
+		PrepareSearch(*ready_to_search.begin());
 	}
 }
 

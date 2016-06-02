@@ -56,6 +56,7 @@ private:
 	void PopClient2(PAChatClientGlue*);
 
 	QTimer search_timer;
+	QTimer search_watch_dog_;
 
 	std::set<PAChatClientGlue*> ready_to_search;
 
@@ -119,4 +120,5 @@ private Q_SLOTS:
 	void PushClientsFull();
 	void onOnlineCountUpdate(int online_count);
 	void onFilterReload();
+	void onSearchWatchDog();
 };
