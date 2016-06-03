@@ -49,6 +49,8 @@ private:
 
 	QPointer<QCheckBox> logging_checkbox_;
 
+	QPointer<QCheckBox> allow_stop_check_box_;
+
 	PAStatisticsLogger stats_logger_;
 
 	bool auto_search_enabled;
@@ -98,6 +100,8 @@ public:
 		QPushButton* reload_filter_button,
 
 		QCheckBox* logging_checkbox,
+
+		QCheckBox* allow_stop_check_box,
 
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();

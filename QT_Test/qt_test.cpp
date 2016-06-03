@@ -23,6 +23,7 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.unneededChatsHiderState,
 		ui.reloadFiltersSubmit,
 		ui.logginOptionCheckBox,
+		ui.allowStopCheckBox,
 		this);
 }
 

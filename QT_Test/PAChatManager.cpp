@@ -31,6 +31,7 @@ PAChatManager::PAChatManager(
 	QPushButton* reload_filter_button,
 
 	QCheckBox* logging_checkbox,
+	QCheckBox* allow_stop_check_box,
 
 	QObject *parent
 )
@@ -56,7 +57,8 @@ PAChatManager::PAChatManager(
 	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box),
 	  reload_filter_button_(reload_filter_button),
 	  logging_checkbox_(logging_checkbox),
-	  stats_logger_(this)
+	  stats_logger_(this),
+	  allow_stop_check_box_(allow_stop_check_box)
 {
 
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
@@ -129,7 +131,7 @@ void PAChatManager::PushClient()
 		return;
 	}
 
-	PAChatClientGlue* glue = new PAChatClientGlue(entry, tabs_container_, send_intro_message_check_box_, story_mode_check_box_, ai_mode_check_box_, filtered_chat_end_mode_check_box_, this, filter_unneeded_chat_entries_check_box_, logging_checkbox_, this);
+	PAChatClientGlue* glue = new PAChatClientGlue(entry, tabs_container_, send_intro_message_check_box_, story_mode_check_box_, ai_mode_check_box_, filtered_chat_end_mode_check_box_, this, filter_unneeded_chat_entries_check_box_, logging_checkbox_, allow_stop_check_box_, this);
 	clients.insert(glue);
 	list_view_->addItem(glue);
 

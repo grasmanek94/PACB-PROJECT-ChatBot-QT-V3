@@ -33,6 +33,7 @@ private:
 	QPointer<QCheckBox> filter_unneeded_chat_entries_check_box_;
 
 	QPointer<QCheckBox> logging_checkbox_;
+	QPointer<QCheckBox> allow_stop_check_box_;
 
 	QPointer<PAChatManager> chat_manager_;
 
@@ -74,6 +75,7 @@ public:
 		PAChatManager* chat_manager,
 		QCheckBox* filter_unneeded_chat_entries_check_box,
 		QCheckBox* logging_checkbox,
+		QCheckBox* allow_stop_check_box,
 		QObject *parent = Q_NULLPTR);
 	~PAChatClientGlue();
 

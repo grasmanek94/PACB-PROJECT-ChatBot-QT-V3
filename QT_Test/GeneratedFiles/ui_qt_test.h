@@ -37,21 +37,24 @@ public:
     QListWidget *chatProxyList;
     QLabel *onlineCountLabel;
     QPushButton *chatProxySubmit;
-    QCheckBox *logginOptionCheckBox;
-    QPushButton *reloadFiltersSubmit;
     QGridLayout *botListContainerGrid;
     QPushButton *chatManagerRequestNewChat;
-    QCheckBox *autoSenderState;
     QListWidget *preparedTextsBox;
-    QCheckBox *autoAIModeCheckBox;
     QListWidget *chatBoxPeers;
-    QCheckBox *autoSearchCheckBox;
-    QPushButton *chatManagerFillBots;
-    QCheckBox *autoSendIntroductionMessage;
     QPushButton *chatManagerAddBot;
-    QHBoxLayout *horizontalLayout;
-    QCheckBox *endFilteredChatsState;
+    QPushButton *chatManagerFillBots;
+    QHBoxLayout *horizontalLayout_3;
+    QCheckBox *autoSearchCheckBox;
+    QCheckBox *autoSendIntroductionMessage;
+    QCheckBox *logginOptionCheckBox;
+    QHBoxLayout *horizontalLayout_5;
     QCheckBox *unneededChatsHiderState;
+    QCheckBox *endFilteredChatsState;
+    QHBoxLayout *horizontalLayout_4;
+    QCheckBox *autoAIModeCheckBox;
+    QCheckBox *allowStopCheckBox;
+    QCheckBox *autoSenderState;
+    QPushButton *reloadFiltersSubmit;
     QTabWidget *chatBotTabs;
 
     void setupUi(QMainWindow *QT_TestClass)
@@ -105,17 +108,6 @@ public:
 
         proxyListContainerGrid->addWidget(chatProxySubmit, 3, 0, 1, 1);
 
-        logginOptionCheckBox = new QCheckBox(centralWidget);
-        logginOptionCheckBox->setObjectName(QStringLiteral("logginOptionCheckBox"));
-        logginOptionCheckBox->setTristate(true);
-
-        proxyListContainerGrid->addWidget(logginOptionCheckBox, 5, 0, 1, 1);
-
-        reloadFiltersSubmit = new QPushButton(centralWidget);
-        reloadFiltersSubmit->setObjectName(QStringLiteral("reloadFiltersSubmit"));
-
-        proxyListContainerGrid->addWidget(reloadFiltersSubmit, 4, 0, 1, 1);
-
 
         horizontalLayout_2->addLayout(proxyListContainerGrid);
 
@@ -132,14 +124,6 @@ public:
 
         botListContainerGrid->addWidget(chatManagerRequestNewChat, 4, 0, 1, 1);
 
-        autoSenderState = new QCheckBox(centralWidget);
-        autoSenderState->setObjectName(QStringLiteral("autoSenderState"));
-        autoSenderState->setMinimumSize(QSize(250, 0));
-        autoSenderState->setMaximumSize(QSize(250, 16777215));
-        autoSenderState->setChecked(true);
-
-        botListContainerGrid->addWidget(autoSenderState, 4, 1, 1, 1);
-
         preparedTextsBox = new QListWidget(centralWidget);
         preparedTextsBox->setObjectName(QStringLiteral("preparedTextsBox"));
         preparedTextsBox->setMinimumSize(QSize(250, 250));
@@ -147,14 +131,6 @@ public:
         preparedTextsBox->setFont(font);
 
         botListContainerGrid->addWidget(preparedTextsBox, 0, 1, 1, 1);
-
-        autoAIModeCheckBox = new QCheckBox(centralWidget);
-        autoAIModeCheckBox->setObjectName(QStringLiteral("autoAIModeCheckBox"));
-        autoAIModeCheckBox->setMinimumSize(QSize(250, 0));
-        autoAIModeCheckBox->setMaximumSize(QSize(250, 16777215));
-        autoAIModeCheckBox->setTristate(true);
-
-        botListContainerGrid->addWidget(autoAIModeCheckBox, 2, 1, 1, 1);
 
         chatBoxPeers = new QListWidget(centralWidget);
         chatBoxPeers->setObjectName(QStringLiteral("chatBoxPeers"));
@@ -169,13 +145,12 @@ public:
 
         botListContainerGrid->addWidget(chatBoxPeers, 0, 0, 1, 1);
 
-        autoSearchCheckBox = new QCheckBox(centralWidget);
-        autoSearchCheckBox->setObjectName(QStringLiteral("autoSearchCheckBox"));
-        autoSearchCheckBox->setMinimumSize(QSize(250, 0));
-        autoSearchCheckBox->setMaximumSize(QSize(250, 16777215));
-        autoSearchCheckBox->setChecked(true);
+        chatManagerAddBot = new QPushButton(centralWidget);
+        chatManagerAddBot->setObjectName(QStringLiteral("chatManagerAddBot"));
+        chatManagerAddBot->setMinimumSize(QSize(250, 0));
+        chatManagerAddBot->setMaximumSize(QSize(500, 16777215));
 
-        botListContainerGrid->addWidget(autoSearchCheckBox, 5, 1, 1, 1);
+        botListContainerGrid->addWidget(chatManagerAddBot, 3, 0, 1, 1);
 
         chatManagerFillBots = new QPushButton(centralWidget);
         chatManagerFillBots->setObjectName(QStringLiteral("chatManagerFillBots"));
@@ -184,41 +159,77 @@ public:
 
         botListContainerGrid->addWidget(chatManagerFillBots, 5, 0, 1, 1);
 
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        autoSearchCheckBox = new QCheckBox(centralWidget);
+        autoSearchCheckBox->setObjectName(QStringLiteral("autoSearchCheckBox"));
+        autoSearchCheckBox->setChecked(true);
+
+        horizontalLayout_3->addWidget(autoSearchCheckBox);
+
         autoSendIntroductionMessage = new QCheckBox(centralWidget);
         autoSendIntroductionMessage->setObjectName(QStringLiteral("autoSendIntroductionMessage"));
-        autoSendIntroductionMessage->setMinimumSize(QSize(250, 0));
-        autoSendIntroductionMessage->setMaximumSize(QSize(250, 16777215));
         autoSendIntroductionMessage->setChecked(true);
 
-        botListContainerGrid->addWidget(autoSendIntroductionMessage, 3, 1, 1, 1);
+        horizontalLayout_3->addWidget(autoSendIntroductionMessage);
 
-        chatManagerAddBot = new QPushButton(centralWidget);
-        chatManagerAddBot->setObjectName(QStringLiteral("chatManagerAddBot"));
-        chatManagerAddBot->setMinimumSize(QSize(250, 0));
-        chatManagerAddBot->setMaximumSize(QSize(500, 16777215));
 
-        botListContainerGrid->addWidget(chatManagerAddBot, 3, 0, 1, 1);
+        botListContainerGrid->addLayout(horizontalLayout_3, 2, 1, 1, 1);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        logginOptionCheckBox = new QCheckBox(centralWidget);
+        logginOptionCheckBox->setObjectName(QStringLiteral("logginOptionCheckBox"));
+        logginOptionCheckBox->setTristate(true);
+
+        botListContainerGrid->addWidget(logginOptionCheckBox, 4, 1, 1, 1);
+
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setSpacing(6);
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        unneededChatsHiderState = new QCheckBox(centralWidget);
+        unneededChatsHiderState->setObjectName(QStringLiteral("unneededChatsHiderState"));
+        unneededChatsHiderState->setTristate(true);
+
+        horizontalLayout_5->addWidget(unneededChatsHiderState);
+
         endFilteredChatsState = new QCheckBox(centralWidget);
         endFilteredChatsState->setObjectName(QStringLiteral("endFilteredChatsState"));
-        endFilteredChatsState->setMinimumSize(QSize(200, 0));
         endFilteredChatsState->setMaximumSize(QSize(500, 16777215));
         endFilteredChatsState->setTristate(true);
 
-        horizontalLayout->addWidget(endFilteredChatsState);
-
-        unneededChatsHiderState = new QCheckBox(centralWidget);
-        unneededChatsHiderState->setObjectName(QStringLiteral("unneededChatsHiderState"));
-        unneededChatsHiderState->setMinimumSize(QSize(200, 0));
-        unneededChatsHiderState->setTristate(true);
-
-        horizontalLayout->addWidget(unneededChatsHiderState);
+        horizontalLayout_5->addWidget(endFilteredChatsState);
 
 
-        botListContainerGrid->addLayout(horizontalLayout, 2, 0, 1, 1);
+        botListContainerGrid->addLayout(horizontalLayout_5, 5, 1, 1, 1);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        autoAIModeCheckBox = new QCheckBox(centralWidget);
+        autoAIModeCheckBox->setObjectName(QStringLiteral("autoAIModeCheckBox"));
+        autoAIModeCheckBox->setTristate(true);
+
+        horizontalLayout_4->addWidget(autoAIModeCheckBox);
+
+        allowStopCheckBox = new QCheckBox(centralWidget);
+        allowStopCheckBox->setObjectName(QStringLiteral("allowStopCheckBox"));
+        allowStopCheckBox->setChecked(true);
+
+        horizontalLayout_4->addWidget(allowStopCheckBox);
+
+        autoSenderState = new QCheckBox(centralWidget);
+        autoSenderState->setObjectName(QStringLiteral("autoSenderState"));
+        autoSenderState->setChecked(true);
+
+        horizontalLayout_4->addWidget(autoSenderState);
+
+
+        botListContainerGrid->addLayout(horizontalLayout_4, 3, 1, 1, 1);
+
+        reloadFiltersSubmit = new QPushButton(centralWidget);
+        reloadFiltersSubmit->setObjectName(QStringLiteral("reloadFiltersSubmit"));
+
+        botListContainerGrid->addWidget(reloadFiltersSubmit, 2, 0, 1, 1);
 
         botListContainerGrid->setColumnMinimumWidth(0, 250);
         botListContainerGrid->setColumnMinimumWidth(1, 250);
@@ -253,17 +264,18 @@ public:
 "0 Chatting | 0 Idle | 0% Ratio\n"
 "0 Online | 0 Started", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
-        logginOptionCheckBox->setText(QApplication::translate("QT_TestClass", "Logging (Nothing/Stats/Stats+Chats)", 0));
-        reloadFiltersSubmit->setText(QApplication::translate("QT_TestClass", "Reload Filters", 0));
         chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));
-        autoSenderState->setText(QApplication::translate("QT_TestClass", "Story Mode", 0));
-        autoAIModeCheckBox->setText(QApplication::translate("QT_TestClass", "AI Mode", 0));
-        autoSearchCheckBox->setText(QApplication::translate("QT_TestClass", "Automatic Search", 0));
-        chatManagerFillBots->setText(QApplication::translate("QT_TestClass", "Fill Bots", 0));
-        autoSendIntroductionMessage->setText(QApplication::translate("QT_TestClass", "Send Intro Message", 0));
         chatManagerAddBot->setText(QApplication::translate("QT_TestClass", "Add New Bot", 0));
-        endFilteredChatsState->setText(QApplication::translate("QT_TestClass", "End Filtered Chats", 0));
+        chatManagerFillBots->setText(QApplication::translate("QT_TestClass", "Fill Bots", 0));
+        autoSearchCheckBox->setText(QApplication::translate("QT_TestClass", "Automatic Search", 0));
+        autoSendIntroductionMessage->setText(QApplication::translate("QT_TestClass", "Send Intro Message", 0));
+        logginOptionCheckBox->setText(QApplication::translate("QT_TestClass", "Logging (Nothing/Stats/Stats+Chats)", 0));
         unneededChatsHiderState->setText(QApplication::translate("QT_TestClass", "Hide Unneeded Chats", 0));
+        endFilteredChatsState->setText(QApplication::translate("QT_TestClass", "End Filtered Chats", 0));
+        autoAIModeCheckBox->setText(QApplication::translate("QT_TestClass", "AI Mode", 0));
+        allowStopCheckBox->setText(QApplication::translate("QT_TestClass", "Allow #stop", 0));
+        autoSenderState->setText(QApplication::translate("QT_TestClass", "Story Mode", 0));
+        reloadFiltersSubmit->setText(QApplication::translate("QT_TestClass", "Reload Filters", 0));
     } // retranslateUi
 
 };

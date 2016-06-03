@@ -12,6 +12,7 @@ PAChatClientGlue::PAChatClientGlue(
 	PAChatManager* chat_manager,
 	QCheckBox* filter_unneeded_chat_entries_check_box,
 	QCheckBox* logging_checkbox,
+	QCheckBox* allow_stop_check_box,
 	QObject *parent)
 	: QObject(parent), 
 	  proxy_(proxy), 
@@ -23,7 +24,8 @@ PAChatClientGlue::PAChatClientGlue(
 	  filtered_chat_end_mode_check_box_(filtered_chat_end_mode_check_box),
 	  chat_manager_(chat_manager),
 	  filter_unneeded_chat_entries_check_box_(filter_unneeded_chat_entries_check_box),
-	  logging_checkbox_(logging_checkbox)
+	  logging_checkbox_(logging_checkbox),
+	  allow_stop_check_box_(allow_stop_check_box)
 {
 	if (proxy_)
 	{
@@ -283,7 +285,7 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 			if (message[0] == '#')
 			{
 				QString lower_msg = message.toLower();
-				if (lower_msg.length() == 5 && lower_msg == "#stop")
+				if (lower_msg.length() == 5 && lower_msg == "#stop" && allow_stop_check_box_->checkState())
 				{
 					auto_sender->Stop();
 					client->SendMessage("Automatische berichten zijn uitgezet, wat nu?", 1);
