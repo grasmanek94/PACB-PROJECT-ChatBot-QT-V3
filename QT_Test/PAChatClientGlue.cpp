@@ -115,10 +115,10 @@ void PAChatClientGlue::SetStateColor()
 		case PAChatClientGlueState_EndedReadyToChat:
 		case PAChatClientGlueState_Disconnected:
 		case PAChatClientGlueState_Connecting:
+		case PAChatClientGlueState_GeneratingSID:
 			QListWidgetItem::setHidden(true);
 			break;
 
-		case PAChatClientGlueState_GeneratingSID:
 		case PAChatClientGlueState_ChattingNoUnreadMessages:
 		case PAChatClientGlueState_ChattingUnreadMessages:
 		case PAChatClientGlueState_ChattingResponded:
