@@ -530,3 +530,8 @@ void PAChatClientGlue::showInfoStateChanged(int state)
 {
 	SetStateColor();
 }
+
+PAChatClient* PAChatClientGlue::Client()
+{
+	return client;
+}

@@ -91,6 +91,7 @@ public:
 	void FocusInputText();
 	void SendMessage(QString string);
 	void Reconnect(int delay = 0);
+	PAChatClient* Client();
 
 Q_SIGNALS:
 	void onGlueSocketConnected();

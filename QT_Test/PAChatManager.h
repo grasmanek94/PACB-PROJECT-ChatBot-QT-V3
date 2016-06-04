@@ -51,6 +51,8 @@ private:
 
 	QPointer<QCheckBox> allow_stop_check_box_;
 
+	QPointer<QPushButton> clean_proxy_list_button_;
+
 	PAStatisticsLogger stats_logger_;
 
 	bool auto_search_enabled;
@@ -103,6 +105,8 @@ public:
 
 		QCheckBox* allow_stop_check_box,
 
+		QPushButton* clean_proxy_list_button,
+
 		QObject *parent = Q_NULLPTR);
 	~PAChatManager();
 
@@ -125,4 +129,5 @@ private Q_SLOTS:
 	void onOnlineCountUpdate(int online_count);
 	void onFilterReload();
 	void onSearchWatchDog();
+	void onRequestCleanProxyList();
 };

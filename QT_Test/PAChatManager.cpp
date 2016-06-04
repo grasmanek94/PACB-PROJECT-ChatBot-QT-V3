@@ -33,6 +33,8 @@ PAChatManager::PAChatManager(
 	QCheckBox* logging_checkbox,
 	QCheckBox* allow_stop_check_box,
 
+	QPushButton* clean_proxy_list_button,
+
 	QObject *parent
 )
 	: QObject(parent),
@@ -58,7 +60,8 @@ PAChatManager::PAChatManager(
 	  reload_filter_button_(reload_filter_button),
 	  logging_checkbox_(logging_checkbox),
 	  stats_logger_(this),
-	  allow_stop_check_box_(allow_stop_check_box)
+	  allow_stop_check_box_(allow_stop_check_box),
+	  clean_proxy_list_button_(clean_proxy_list_button)
 {
 
 	connect(add_new_bot_button_, &QPushButton::clicked, this, &PAChatManager::PushClient); // god createh ,me,
@@ -75,6 +78,8 @@ PAChatManager::PAChatManager(
 	connect(chat_macros_, &PAChatClientMacro::onMacroRequested, this, &PAChatManager::onMacroRequested);
 
 	connect(reload_filter_button_, &QPushButton::clicked, this, &PAChatManager::onFilterReload);
+
+	connect(clean_proxy_list_button_, &QPushButton::clicked, this, &PAChatManager::onRequestCleanProxyList);
 
 	QFile f1("cc.txt");
 
@@ -157,6 +162,41 @@ void PAChatManager::PushClientsFull()
 	{
 		PushClient();
 	}
+}
+
+void PAChatManager::onRequestCleanProxyList()
+{
+	QString good_proxies = "";
+	std::set<ProxyEntry*> good_proxy_list;
+
+	for (auto& client : clients)
+	{
+		switch (client->GetGlueState())
+		{
+		case PAChatClientGlue::PAChatClientGlueState_BotCreated:
+		case PAChatClientGlue::PAChatClientGlueState_Disconnected:
+		case PAChatClientGlue::PAChatClientGlueState_GeneratingSID:
+		case PAChatClientGlue::PAChatClientGlueState_Connecting:
+		case PAChatClientGlue::PAChatClientGlueState_OpeningChat:
+			break;
+
+		case PAChatClientGlue::PAChatClientGlueState_ChattingNoUnreadMessages:
+		case PAChatClientGlue::PAChatClientGlueState_ChattingUnreadMessages:
+		case PAChatClientGlue::PAChatClientGlueState_ChattingResponded:
+		case PAChatClientGlue::PAChatClientGlueState_ReadyToChat:
+		case PAChatClientGlue::PAChatClientGlueState_EndedReadyToChat:
+		case PAChatClientGlue::PAChatClientGlueState_Searching:
+			good_proxy_list.insert(client->Client()->GetProxy());
+			break;
+		}
+	}
+
+	for (auto& proxy_entry : good_proxy_list)
+	{
+		good_proxies += proxy_entry->GetProxy() + ";\n";
+	}
+
+	proxy_list_.SetText(good_proxies);
 }
 
 void PAChatManager::PopClient()

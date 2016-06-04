@@ -24,6 +24,7 @@ QT_Test::QT_Test(QWidget *parent)
 		ui.reloadFiltersSubmit,
 		ui.logginOptionCheckBox,
 		ui.allowStopCheckBox,
+		ui.cleanProxyListButton,
 		this);
 }
 

@@ -37,6 +37,7 @@ public:
     QListWidget *chatProxyList;
     QLabel *onlineCountLabel;
     QPushButton *chatProxySubmit;
+    QPushButton *cleanProxyListButton;
     QGridLayout *botListContainerGrid;
     QPushButton *chatManagerRequestNewChat;
     QListWidget *preparedTextsBox;
@@ -99,7 +100,7 @@ public:
         onlineCountLabel = new QLabel(centralWidget);
         onlineCountLabel->setObjectName(QStringLiteral("onlineCountLabel"));
 
-        proxyListContainerGrid->addWidget(onlineCountLabel, 6, 0, 1, 1);
+        proxyListContainerGrid->addWidget(onlineCountLabel, 7, 0, 1, 1);
 
         chatProxySubmit = new QPushButton(centralWidget);
         chatProxySubmit->setObjectName(QStringLiteral("chatProxySubmit"));
@@ -107,6 +108,11 @@ public:
         chatProxySubmit->setMaximumSize(QSize(16777215, 16777215));
 
         proxyListContainerGrid->addWidget(chatProxySubmit, 3, 0, 1, 1);
+
+        cleanProxyListButton = new QPushButton(centralWidget);
+        cleanProxyListButton->setObjectName(QStringLiteral("cleanProxyListButton"));
+
+        proxyListContainerGrid->addWidget(cleanProxyListButton, 4, 0, 1, 1);
 
 
         horizontalLayout_2->addLayout(proxyListContainerGrid);
@@ -264,6 +270,7 @@ public:
 "0 Chatting | 0 Idle | 0% Ratio\n"
 "0 Online | 0 Started", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
+        cleanProxyListButton->setText(QApplication::translate("QT_TestClass", "Clean Proxy List", 0));
         chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));
         chatManagerAddBot->setText(QApplication::translate("QT_TestClass", "Add New Bot", 0));
         chatManagerFillBots->setText(QApplication::translate("QT_TestClass", "Fill Bots", 0));

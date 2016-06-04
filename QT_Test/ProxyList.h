@@ -31,4 +31,6 @@ public:
 
 	ProxyEntry* GetLowestCountEntry();
 	bool IsFull(size_t max_count = 2);
+
+	void SetText(const QString& text);
 };

@@ -139,3 +139,8 @@ void ProxyList::InputSubmit(bool checked)
 		}
 	}
 }
+
+void ProxyList::SetText(const QString& text)
+{
+	input_area_->setText(text);
+}
