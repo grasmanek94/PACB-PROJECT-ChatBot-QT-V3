@@ -381,8 +381,8 @@ std::vector<qp> questions_answers =
 	),
 
 	qp(
-		QStringList{ "te ver voor je om te ontmoeten?" },
-		QStringList{ "ik kan elke afstand hebben" },
+		QStringList{ "zin om naar mij te komen om te ontmoeten?" },
+		QStringList{ "haha top", "topperd", "nice", "neat", "prima", "good!" },
 		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
@@ -399,23 +399,23 @@ std::vector<qp> questions_answers =
 		},	
 		[&](QString answer, bool*, int*)
 		{
-			const static QStringList possible_answers = { "red", "nee", "nah", "niet", "misschien", "waarom", "mis", "may", "mab", "nooit", "niet te ver", "kan", "kunnen" };
+			const static QStringList possible_answers = { "red", "nee", "nah", "niet", "misschien", "waarom", "mis", "may", "mab", "nooit", "te ver" };
 			for (auto& possible_answer : possible_answers)
 			{
 				if (answer.indexOf(possible_answer) != -1)
 				{
-					return true;
+					return false;
 				}
 			}
-			return false;
+			return true;
 		},
 		3000,
 		3000
 	),
 
 	qp(
-		QStringList{ "zoek je iemand om mee te daten?", "wil je 'n x in 't echt ontmoeten?", "wil je een keertje echt ontmoeten?", "zou je durven te ontmoeten voor een date?", "zou je mij misschien als vriendje willen?", "wil je misschien een sexdate?" },
-		QStringList{ "want ik wel met jou" },
+		QStringList{ "en je zoekt iemand om mee te daten?", "zou je durven te ontmoeten voor een date?", "zou je mij misschien als vriendje willen?", "wil je misschien een sexdate?" },
+		QStringList{ "oke", "ok", "oki", "okay" },
 		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		QStringList{ "", " :)", "", " :P", "", " ;)", "", " :D", "", " ;D", "", " ;P", "" },
 		[&](QString answer)
