@@ -245,3 +245,4 @@ ModelManifest.xml
 .fake/
 
 cc.txt
+QT_Test/GeneratedFiles/ui_qt_test.h
