@@ -246,3 +246,4 @@ ModelManifest.xml
 
 cc.txt
 QT_Test/GeneratedFiles/ui_qt_test.h
+stats_logs_*.csv
