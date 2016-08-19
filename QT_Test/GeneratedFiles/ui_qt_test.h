@@ -271,7 +271,7 @@ public:
 "0 Online | 0 Started", 0));
         chatProxySubmit->setText(QApplication::translate("QT_TestClass", "Add Proxies", 0));
         cleanProxyListButton->setText(QApplication::translate("QT_TestClass", "Clean Proxy List", 0));
-        chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "New Chat", 0));
+        chatManagerRequestNewChat->setText(QApplication::translate("QT_TestClass", "K.i.L.L.", 0));
         chatManagerAddBot->setText(QApplication::translate("QT_TestClass", "Add New Bot", 0));
         chatManagerFillBots->setText(QApplication::translate("QT_TestClass", "Fill Bots", 0));
         autoSearchCheckBox->setText(QApplication::translate("QT_TestClass", "Automatic Search", 0));

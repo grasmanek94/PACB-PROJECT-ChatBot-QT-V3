@@ -130,4 +130,5 @@ private Q_SLOTS:
 	void onFilterReload();
 	void onSearchWatchDog();
 	void onRequestCleanProxyList();
+	void RequestNewChat();
 };

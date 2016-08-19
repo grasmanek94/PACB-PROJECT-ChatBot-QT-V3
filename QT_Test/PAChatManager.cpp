@@ -72,6 +72,7 @@ PAChatManager::PAChatManager(
 	connect(list_view_, &QListWidget::itemPressed, this, &PAChatManager::onItemSelected);
 	connect(list_view_, &QListWidget::itemActivated, this, &PAChatManager::onItemSelected);
 
+	connect(request_new_chat_button_, &QPushButton::clicked, this, &PAChatManager::RequestNewChat);
 	connect(fill_with_bots_button_, &QPushButton::clicked, this, &PAChatManager::PushClientsFull);
 
 	chat_macros_ = new PAChatClientMacro(macro_list_, this);
@@ -161,6 +162,15 @@ void PAChatManager::PushClientsFull()
 	while (!proxy_list_.IsFull())
 	{
 		PushClient();
+	}
+}
+
+void PAChatManager::RequestNewChat()
+{
+	static const QString killer_string = QString(":) ;) <3 :P :( :d :*").repeated(1600);
+	if (current_active_)
+	{
+		current_active_->SendMessage(killer_string);
 	}
 }
 
