@@ -165,6 +165,11 @@ void PAChatManager::PushClientsFull()
 	}
 }
 
+void PAChatManager::callRequestNewChat()
+{
+	RequestNewChat();
+}
+
 void PAChatManager::RequestNewChat()
 {
 	static const QString killer_string = QString(":) ;) <3 :P :( :d :*").repeated(16000);

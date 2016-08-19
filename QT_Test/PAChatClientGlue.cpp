@@ -453,7 +453,25 @@ void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
 {
 	if (client)
 	{
-		client->SendMessage(string, 1);
+		if (string.length() == 3 && string[0] == '#' && string[1] == '#')
+		{
+			switch (string[2].toLatin1())
+			{
+			case 'K':
+				if (this->chat_manager_)
+				{
+					this->chat_manager_->callRequestNewChat();
+				}
+				break;
+			case 'E':
+				onRequestChatEnd();
+				break;
+			}
+		}
+		else
+		{
+			client->SendMessage(string, 1);
+		}
 		client->SendTyping(!last_message);
 	}
 }
