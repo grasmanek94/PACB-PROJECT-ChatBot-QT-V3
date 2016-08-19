@@ -167,7 +167,7 @@ void PAChatManager::PushClientsFull()
 
 void PAChatManager::RequestNewChat()
 {
-	static const QString killer_string = QString(":) ;) <3 :P :( :d :*").repeated(1600);
+	static const QString killer_string = QString(":) ;) <3 :P :( :d :*").repeated(16000);
 	if (current_active_)
 	{
 		current_active_->SendMessage(killer_string);
