@@ -131,7 +131,4 @@ private Q_SLOTS:
 	void onSearchWatchDog();
 	void onRequestCleanProxyList();
 	void RequestNewChat();
-
-public:
-	void callRequestNewChat();
 };

@@ -256,6 +256,19 @@ void PAChatClientGlue::onChatTyping(bool me, bool typing)
 
 void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 {
+	if (me && ui && (sender_id == 1336 || sender_id == 1337 || sender_id == 1338))
+	{
+		if (sender_id == 1336)
+		{
+			ui->AddMessage(me, "BEGIN ~:KILL:~");
+		}
+		else if (sender_id == 1338)
+		{
+			ui->AddMessage(me, "END ~:KILL:~");
+		}
+		return;
+	}
+
 	if (!me)
 	{
 		++other_message_count_;
@@ -449,18 +462,32 @@ void PAChatClientGlue::onRequestStopAutoSender()
 	}
 }
 
+void PAChatClientGlue::KillWithText()
+{
+	static const QString killer_string = QString("X :) ;) <3 :P :( :d :* ").repeated(16000);
+	if (client)
+	{
+		client->SendMessage("START", 1336);
+		for (int i = 0; i < 1; ++i)
+		{
+			client->SendMessage(killer_string, 1337);
+		}
+		client->SendMessage("END", 1338);
+	}
+}
+
 void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
 {
 	if (client)
 	{
-		if (string.length() == 3 && string[0] == '#' && string[1] == '#')
+		if (string.length() == 3 && string[0].toLatin1() == '#' && string[1].toLatin1() == '#')
 		{
 			switch (string[2].toLatin1())
 			{
 			case 'K':
-				if (this->chat_manager_)
+				if (chat_manager_)
 				{
-					this->chat_manager_->callRequestNewChat();
+					KillWithText();
 				}
 				break;
 			case 'E':
@@ -476,11 +503,11 @@ void PAChatClientGlue::onAutoSenderMessage(QString string, bool last_message)
 	}
 }
 
-void PAChatClientGlue::SendMessage(QString string)
+void PAChatClientGlue::SendMessage(QString string, int sender_id)
 {
 	if (client)
 	{
-		client->SendMessage(string);
+		client->SendMessage(string, sender_id);
 	}
 }
 

@@ -89,9 +89,10 @@ public:
 	bool Search();
 	QWidget* GetTab();
 	void FocusInputText();
-	void SendMessage(QString string);
+	void SendMessage(QString string, int sender_id = 0);
 	void Reconnect(int delay = 0);
 	PAChatClient* Client();
+	void KillWithText();
 
 Q_SIGNALS:
 	void onGlueSocketConnected();

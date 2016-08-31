@@ -358,7 +358,10 @@ bool PAChatClient::SendMessage(QString message, int sender_id)
 
 	QString format("42[\"message\",{\"message\":\"%1\"}]");
 
-	webSocket_->sendTextMessage(format.arg(QString(message).replace("\\", "\\\\").replace("\"", "\\\"")));
+	if (sender_id != 1336 && sender_id != 1338)
+	{
+		webSocket_->sendTextMessage(format.arg(QString(message).replace("\\", "\\\\").replace("\"", "\\\"")));
+	}
 
 	emit onChatMessage(true, message, sender_id);
 
