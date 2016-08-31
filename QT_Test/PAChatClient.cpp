@@ -73,7 +73,7 @@ void PAChatClient::StartGeneratingSID()
 		QNetworkRequest request(url);
 
 		request.setRawHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0");
+		request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
 		request.setRawHeader("Accept-Language", "en-US,en;q=0.5");
 		request.setRawHeader("Accept-Encoding", "gzip, deflate");
 		request.setRawHeader("Referer", "http://www.praatanoniem.nl");
