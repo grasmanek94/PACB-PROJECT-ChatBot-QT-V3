@@ -2,9 +2,11 @@
 #include <QtCore/QFile>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
+#include <utility>
 #include "PAChatClientAutoSender.h"
 
-QList<QStringList> story_messages;
+using story_message = std::pair<int, QStringList>;
+QList<story_message> story_messages;
 
 void ReadAutoSenderData(bool reload)
 {
@@ -19,11 +21,21 @@ void ReadAutoSenderData(bool reload)
 
 		QTextStream s1(&f1);
 
+		story_messages.clear();
 		QStringList story_messages_premade = s1.readAll().split('\n');
 		for (auto &elem : story_messages_premade)
 		{
 			QStringList list = elem.split(" | ");
-			story_messages.append(list);
+			if (list.size() >= 2)
+			{
+				int milliseconds = list[0].toInt();
+				if (milliseconds < 1)
+				{
+					milliseconds = 1;
+				}
+				list.removeAt(0);
+				story_messages.append(story_message(milliseconds, list));
+			}
 		}
 	}
 }
@@ -53,7 +65,12 @@ void PAChatClientAutoSender::Start(int current_story)
 {
 	current_story_ = current_story;
 	current_index_ = 1;
-	message_sender_.start(3500);
+	int start_time = 3500;
+	if (story_messages.size())
+	{
+		start_time = story_messages[current_index_].first;
+	}
+	message_sender_.start(start_time);
 }
 
 void PAChatClientAutoSender::Stop()
@@ -71,8 +88,15 @@ void PAChatClientAutoSender::processNextMessage()
 	if (current_index_ < story_messages.size())
 	{
 		size_t l_index = current_index_++;
+		size_t n_index = l_index + 1;
 
-		emit onRequestNewMessage(GetMessage(l_index), !(current_index_ < story_messages.size()));
+		bool last = !(current_index_ < story_messages.size());
+		emit onRequestNewMessage(GetMessage(l_index), last);
+
+		if (!last && n_index < story_messages.size())
+		{
+			message_sender_.setInterval(story_messages[n_index].first);
+		}
 	}
 	else
 	{
@@ -92,7 +116,7 @@ QString PAChatClientAutoSender::GetMessage(size_t index)
 		return "";
 	}
 
-	QStringList* list = &story_messages[index];
+	QStringList* list = &story_messages[index].second;
 
 	if (list->size() == 0)
 	{
