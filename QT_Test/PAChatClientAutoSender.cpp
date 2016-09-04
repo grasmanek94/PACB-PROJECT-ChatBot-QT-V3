@@ -20,6 +20,7 @@ void ReadAutoSenderData(bool reload)
 		f1.open(QIODevice::ReadOnly | QIODevice::Text);
 
 		QTextStream s1(&f1);
+		s1.setCodec("UTF-8");
 
 		story_messages.clear();
 		QStringList story_messages_premade = s1.readAll().split('\n');
