@@ -304,27 +304,20 @@ void PAChatClientGlue::onChatMessage(bool me, QString message, int sender_id)
 					client->SendMessage("Automatische berichten zijn uitgezet, wat nu?", 1);
 				}
 			}
-
-			//DBG
-			/*if (message.indexOf("!c-445!") != -1)
-			{
-				__debugbreak();
-				qDebug() << "Breakpoint Start Here! ";
-				switch (message.length())
-				{
-				case 1:
-					qDebug() << "<" << message[0].unicode() << ">";
-					break;
-				case 2:
-					qDebug() << "<" << message[0].unicode() << ":" << message[1].unicode() << ">";
-					break;
-				default:
-					qDebug() << "<" << message[0].unicode() << ":" << message[1].unicode() << ":" << message[2].unicode() << ">";
-					break;
-				}
-				qDebug() << " Breakpoint End Here!";
-			}*/
 		}
+
+		/*if (auto_sender && auto_sender->Stopped() && message.length() > 4)
+		{
+			if (message.startsWith("!!@>"))
+			{
+				client->SendImageHash(message.mid(4), 1);
+			}
+			else if (message.startsWith("!!@:"))
+			{
+				client->SendRaw(message.mid(4));
+			}
+		}*/
+
 	}
 
 	if (silence_timer.isActive())
