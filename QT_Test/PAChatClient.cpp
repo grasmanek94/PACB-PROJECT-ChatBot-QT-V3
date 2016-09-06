@@ -455,3 +455,15 @@ bool PAChatClient::SendRaw(QString bytes)
 
 	return true;
 }
+
+bool PAChatClient::Report(QString reason, int sender_id)
+{
+	if (!connected_ || searching_ || !chatting_)
+	{
+		return false;
+	}
+
+	webSocket_->sendTextMessage("42[\"report\"]");
+
+	return true;
+}
