@@ -44,7 +44,7 @@ PAChatClient::PAChatClient(QString proxy_host, ushort proxy_port, QObject *paren
 
 	reply_manager_ = netman_->get(request);
 
-	process_timeout_->start(1025);
+	process_timeout_->start(1500);
 }
 
 void PAChatClient::onNetworkReply(QNetworkReply* reply)

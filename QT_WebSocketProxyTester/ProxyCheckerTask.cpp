@@ -9,7 +9,7 @@
 ProxyCheckerTask::ProxyCheckerTask(QObject *parent) 
 	: QObject(parent) ,
 	current_running(0),
-	max_running(256)
+	max_running(64)
 {
 
 }
