@@ -59,6 +59,7 @@ private:
 	QPointer<QTimer> online_count_update_;
 	QPointer<QNetworkAccessManager> netman_;
 	QPointer<ProxyEntry> proxy_;
+	QPointer<QNetworkReply> reply_manager_;
 
 	PAChatClientState state_;
 

@@ -45,7 +45,12 @@ PAChatClient::PAChatClient(ProxyEntry* proxy, int max_sid_gen_attempts, QObject 
 	: QObject(parent),
 	proxy_(proxy),
 	max_sid_gen_retries_(max_sid_gen_attempts),
-	webSocket_(nullptr)
+	webSocket_(nullptr),
+	netman_(nullptr),
+	pinger_(nullptr),
+	online_count_update_(nullptr),
+	process_timeout_(nullptr),
+	reply_manager_(nullptr)
 {
 	Initialize();
 }
@@ -90,7 +95,7 @@ void PAChatClient::StartGeneratingSID()
 			netman_->setProxy(proxy);
 		}
 
-		netman_->get(request);
+		reply_manager_ = netman_->get(request);
 
 #ifndef _DEBUG
 		process_timeout_->start(30000);
@@ -152,11 +157,17 @@ void PAChatClient::onNetworkReply(QNetworkReply* reply)
 		emit onProxyNotWorking(proxy_, sid_gen_retries_, max_sid_gen_retries_);
 		onDisconnected();
 	}
+	reply_manager_->deleteLater();
 }
 
 PAChatClient::~PAChatClient()
 {
 	disconnect(webSocket_);
+	if (reply_manager_)
+	{
+		delete reply_manager_;
+		reply_manager_ = nullptr;
+	}
 	disconnect(this, 0, 0, 0);
 }
 
@@ -191,6 +202,12 @@ void PAChatClient::onDisconnected()
 	is_typing_ = false;
 	is_other_typing_ = false;
 	online_count_ = 0;
+	if (reply_manager_)
+	{
+		delete reply_manager_;
+		reply_manager_ = nullptr;
+	}
+
 	pinger_->stop();
 	online_count_update_->stop();
 
