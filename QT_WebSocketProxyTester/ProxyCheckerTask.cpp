@@ -16,7 +16,7 @@ ProxyCheckerTask::ProxyCheckerTask(QObject *parent)
 
 bool remove_character(char c)
 {
-	if (c == ':' || (c >= '0' && c <= '9'))
+	if (c == ':' || c == '.' || (c >= '0' && c <= '9'))
 	{
 		return false;
 	}

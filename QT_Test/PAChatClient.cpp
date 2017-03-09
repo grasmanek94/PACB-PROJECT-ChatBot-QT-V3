@@ -157,7 +157,7 @@ void PAChatClient::onNetworkReply(QNetworkReply* reply)
 		emit onProxyNotWorking(proxy_, sid_gen_retries_, max_sid_gen_retries_);
 		onDisconnected();
 	}
-	reply_manager_->deleteLater();
+	//reply_manager_->deleteLater();
 }
 
 PAChatClient::~PAChatClient()
@@ -202,11 +202,12 @@ void PAChatClient::onDisconnected()
 	is_typing_ = false;
 	is_other_typing_ = false;
 	online_count_ = 0;
-	if (reply_manager_)
+	/*if (reply_manager_)
 	{
 		delete reply_manager_;
 		reply_manager_ = nullptr;
-	}
+	}*/
+	reply_manager_->deleteLater();
 
 	pinger_->stop();
 	online_count_update_->stop();

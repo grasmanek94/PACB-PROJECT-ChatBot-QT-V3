@@ -49,6 +49,7 @@ PAChatClient::PAChatClient(QString proxy_host, ushort proxy_port, QObject *paren
 
 void PAChatClient::onNetworkReply(QNetworkReply* reply)
 {
+	process_timeout_->stop();
 	bool done = false;
 
 	QVariant cookieVar = reply->header(QNetworkRequest::SetCookieHeader);
@@ -63,7 +64,6 @@ void PAChatClient::onNetworkReply(QNetworkReply* reply)
 			{
 				SID = QString(cookie.value());
 				done = true;
-				process_timeout_->stop();
 			}
 		}
 
@@ -77,13 +77,21 @@ void PAChatClient::onNetworkReply(QNetworkReply* reply)
 	{
 		onTimeout();
 	}
-	reply_manager_->deleteLater();
+
+	/*if (reply_manager_)
+	{
+		delete reply_manager_;
+		reply_manager_ = nullptr;
+	}*/
 }
 
 PAChatClient::~PAChatClient()
 {
 	delete netman_;
+	netman_ = nullptr;
 	delete process_timeout_;
+	process_timeout_ = nullptr;
+
 	if (reply_manager_)
 	{
 		delete reply_manager_;
@@ -99,11 +107,12 @@ std::pair<QString, ushort> PAChatClient::GetProxy()
 
 void PAChatClient::onTimeout()
 {
-	if (reply_manager_)
+	/*if (reply_manager_)
 	{
 		delete reply_manager_;
 		reply_manager_ = nullptr;
-	}
-
+	}*/
+	reply_manager_->deleteLater();
+	
 	emit onProxyNotWorking();
 }
