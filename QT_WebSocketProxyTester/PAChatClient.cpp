@@ -14,11 +14,6 @@ PAChatClient::PAChatClient(ProxyEntry* proxy, QObject *parent)
 	process_timeout_(nullptr),
 	netman_(nullptr)
 {
-	if (process_timeout_)
-	{
-		delete process_timeout_;
-	}
-
 	process_timeout_ = new QTimer(this);
 	connect(process_timeout_, &QTimer::timeout, this, &PAChatClient::onTimeout);
 
