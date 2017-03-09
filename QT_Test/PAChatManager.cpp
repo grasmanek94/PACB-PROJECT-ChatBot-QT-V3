@@ -159,7 +159,7 @@ void PAChatManager::PushClient()
 
 void PAChatManager::PushClientsFull()
 {
-	while (!proxy_list_.IsFull())
+	while (!proxy_list_.IsFull(1))
 	{
 		PushClient();
 	}
