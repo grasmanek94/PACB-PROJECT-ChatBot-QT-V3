@@ -6,22 +6,20 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
 
-#include <array>
-#include "ProxyEntry.h"
-
 class PAChatClient : public QObject
 {
 	Q_OBJECT
 private:
 	QPointer<QTimer> process_timeout_;
 	QPointer<QNetworkAccessManager> netman_;
-	QPointer<ProxyEntry> proxy_;
 	QPointer<QNetworkReply> reply_manager_;
+	QString proxy_host;
+	ushort proxy_port;
 public:
-	PAChatClient(ProxyEntry* proxy, QObject *parent = Q_NULLPTR);
+	PAChatClient(QString proxy_host, ushort proxy_port, QObject *parent = Q_NULLPTR);
 	~PAChatClient();
 
-	ProxyEntry* GetProxy();
+	std::pair<QString, ushort> GetProxy();
 Q_SIGNALS:
 	void onProxyWorking();
 	void onProxyNotWorking();

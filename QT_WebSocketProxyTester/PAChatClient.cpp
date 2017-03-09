@@ -8,11 +8,12 @@
 
 QT_USE_NAMESPACE
 
-PAChatClient::PAChatClient(ProxyEntry* proxy, QObject *parent)
+PAChatClient::PAChatClient(QString proxy_host, ushort proxy_port, QObject *parent)
 	: QObject(parent),
-	proxy_(proxy),
 	process_timeout_(nullptr),
-	netman_(nullptr)
+	netman_(nullptr),
+	proxy_host(proxy_host),
+	proxy_port(proxy_port)
 {
 	process_timeout_ = new QTimer(this);
 	connect(process_timeout_, &QTimer::timeout, this, &PAChatClient::onTimeout);
@@ -32,11 +33,11 @@ PAChatClient::PAChatClient(ProxyEntry* proxy, QObject *parent)
 	request.setRawHeader("Cookie", "");
 	request.setRawHeader("Connection", "keep-alive");
 
-	if (proxy_->GetHost().length())
+	if (proxy_host.length() && proxy_port)
 	{
 		QNetworkProxy proxy;
-		proxy.setHostName(proxy_->GetHost());
-		proxy.setPort(proxy_->GetPort());
+		proxy.setHostName(proxy_host);
+		proxy.setPort(proxy_port);
 		proxy.setType(QNetworkProxy::ProxyType::Socks5Proxy);
 		netman_->setProxy(proxy);
 	}
@@ -83,7 +84,6 @@ PAChatClient::~PAChatClient()
 {
 	delete netman_;
 	delete process_timeout_;
-	delete proxy_;
 	if (reply_manager_)
 	{
 		delete reply_manager_;
@@ -92,9 +92,9 @@ PAChatClient::~PAChatClient()
 	disconnect(this, 0, 0, 0);
 }
 
-ProxyEntry* PAChatClient::GetProxy()
+std::pair<QString, ushort> PAChatClient::GetProxy()
 {
-	return proxy_;
+	return std::pair<QString, ushort>(proxy_host, proxy_port);
 }
 
 void PAChatClient::onTimeout()

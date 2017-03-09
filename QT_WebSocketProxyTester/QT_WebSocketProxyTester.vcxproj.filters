@@ -32,17 +32,8 @@
     <ClCompile Include="PAChatClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProxyEntry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_PAChatClient.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ProxyEntry.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ProxyEntry.cpp">
-      <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_PAChatClient.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -59,9 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="PAChatClient.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ProxyEntry.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ProxyCheckerTask.h">
