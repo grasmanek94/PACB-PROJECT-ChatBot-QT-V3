@@ -30,7 +30,7 @@ public:
 	bool Remove(ProxyEntry* entry);
 
 	ProxyEntry* GetLowestCountEntry();
-	bool IsFull(size_t max_count = 1);
+	bool IsFull(size_t max_count = 2);
 
 	void SetText(const QString& text);
 };
