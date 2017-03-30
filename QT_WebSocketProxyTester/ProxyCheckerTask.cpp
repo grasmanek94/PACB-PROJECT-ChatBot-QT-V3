@@ -33,7 +33,6 @@ void ProxyCheckerTask::checkNextProxy()
 		PAChatClient* client = new PAChatClient(proxy.first, proxy.second, this);
 		connect(client, &PAChatClient::onProxyNotWorking, this, &ProxyCheckerTask::onProxyNotWorking);
 		connect(client, &PAChatClient::onProxyWorking, this, &ProxyCheckerTask::onProxyWorking);
-		
 	}
 }
 
